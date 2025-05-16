@@ -1,0 +1,133 @@
+.about-banner {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 50px;
+  font-weight: bold;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.about-banner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: -1;
+}
+.info-banner {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  color: rgb(0, 0, 0);
+  overflow: hidden;
+  z-index: 1;
+}
+
+.title-banner {
+  font-size: 50px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.des-banner {
+  font-size: 20px;
+  max-width: 700px;
+  line-height: 1.6;
+}
+
+.des-banner span {
+  font-weight: bold;
+  color: #dc5a26;
+}
+
+.info-team {
+  background-color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
+  height: 500px;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
+.info-team img {
+  width: 700px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.des-team {
+  flex: 1;
+  min-width: 300px;
+}
+
+.title-info-team {
+  text-align: left;
+  font-size: 40px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 15px;
+  position: relative;
+  padding-bottom: 8px;
+}
+.team-slider {
+  width: 700px;
+  height: 280px;
+  overflow: hidden;
+  position: relative;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+.slide-track {
+  display: flex;
+  width: calc(280px * 2);
+  animation: scroll 1s linear infinite;
+}
+.slide-track img {
+  width: 700px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.title-info-team:hover {
+  color: #dc5a26;
+}
+
+.des-info-team {
+  text-align: left;
+  font-size: 20px;
+  line-height: 1.7;
+  color: #fff;
+  max-width: 600px;
+}
+.des-info-team span {
+  font-weight: bold;
+  color: #dc5a26;
+}
