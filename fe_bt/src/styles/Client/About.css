@@ -131,3 +131,47 @@
   font-weight: bold;
   color: #dc5a26;
 }
+.team-members {
+  background-color: #555;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  padding: 50px;
+}
+
+.member-card {
+  width: 300px;
+  height: 330px;
+  text-align: center;
+  color: rgb(0, 0, 0);
+  background-color: #fff;
+  -webkit-border-top-left-radius: 30px;
+  -webkit-border-top-right-radius: 30px;
+  -moz-border-radius-topleft: 30px;
+  -moz-border-radius-topright: 30px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.member-card img {
+  width: 100%;
+  height: 200px;
+  -webkit-border-top-left-radius: 30px;
+  -webkit-border-top-right-radius: 30px;
+  -moz-border-radius-topleft: 30px;
+  -moz-border-radius-topright: 30px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  object-fit: cover;
+}
+
+.member-card p {
+  margin-top: 8px;
+  font-weight: 600;
+  font-size: 25px;
+}
+.member-card .position {
+  font-size: 15px;
+  color: #555;
+}

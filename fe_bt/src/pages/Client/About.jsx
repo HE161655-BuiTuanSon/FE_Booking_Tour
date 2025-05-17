@@ -6,6 +6,12 @@ import background from "../../assets/background.png";
 import team1 from "../../assets/team.png";
 import team2 from "../../assets/team2.png";
 import TeamSlider from "../../components/slider/TeamSlider";
+import Footer from "../../components/footer/Footer";
+import member1 from "../../assets/member1.png";
+import member2 from "../../assets/member2.png";
+import member3 from "../../assets/member3.png";
+import member4 from "../../assets/member4.png";
+import member5 from "../../assets/member5.png";
 function About(props) {
   const images = [team1, team2];
   return (
@@ -15,7 +21,7 @@ function About(props) {
         className="about-banner"
         style={{ backgroundImage: `url(${aboutBanner})` }}
       >
-        Chúng tôi
+        About Us
       </div>
       <div
         className="info-banner"
@@ -41,6 +47,34 @@ function About(props) {
           </div>
         </div>
       </div>
+      <div className="team-members">
+        <div className="member-card">
+          <img src={member1} alt="Jisoo" />
+          <p>Jisoo</p>
+          <div className="position">Trưởng nhóm</div>
+        </div>
+        <div className="member-card">
+          <img src={member2} alt="Jennie" />
+          <p>Jennie</p>
+          <div className="position">Rapper chính</div>
+        </div>
+        <div className="member-card">
+          <img src={member4} alt="Rosé" />
+          <p>Rosé</p>
+          <div className="position">Giọng ca chính</div>
+        </div>
+        <div className="member-card">
+          <img src={member3} alt="Lisa" />
+          <p>Lisa</p>
+          <div className="position">Nhảy chính</div>
+        </div>
+        <div className="member-card">
+          <img src={member5} alt="You" />
+          <p>Bạn🌸</p>
+          <div className="position">Thành viên đặc biệt</div>
+        </div>
+      </div>
+      <Footer />
     </div>
   );
 }
