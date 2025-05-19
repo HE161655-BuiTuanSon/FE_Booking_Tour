@@ -4,10 +4,11 @@ import Home from "./pages/Client/Home";
 import Tours from "./pages/Client/Tours";
 import About from "./pages/Client/About";
 import Posts from "./pages/Client/Posts";
-import Videos from "./pages/Client/Videos";
 import Shop from "./pages/Client/Shop";
 import Contact from "./pages/Client/Contact";
 import Dashboard from "./pages/Admin/Dashboard";
+import Authorization from "./components/authorization/Authorization";
+import BookedTour from "./pages/Client/BookedTour";
 
 function App() {
   return (
@@ -17,10 +18,11 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/tours" element={<Tours />} />
         <Route path="/posts" element={<Posts />} />
-        <Route path="/videos" element={<Videos />} />
+        <Route path="/booked" element={<BookedTour />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/authorization" element={<Authorization />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </div>
