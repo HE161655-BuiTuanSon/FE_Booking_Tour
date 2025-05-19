@@ -133,3 +133,57 @@
   display: flex;
   flex-direction: column;
 }
+.user-section {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-login {
+  padding: 10px 20px;
+  font-weight: bold;
+  background-color: #dc5a26;
+  text-decoration: none;
+  border: none;
+  border-radius: 4px;
+  color: #ffffff;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+.btn-register {
+  padding: 10px 20px;
+  font-weight: bold;
+  background-color: #fff;
+  text-decoration: none;
+  border: none;
+  border: #dc5a26 1px solid;
+  border-radius: 4px;
+  color: #dc5a26;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+.btn-logout {
+  padding: 10px 20px;
+  font-weight: bold;
+  background-color: #ff0000;
+  text-decoration: none;
+  border: none;
+  border-radius: 4px;
+  color: #ffffff;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.btn-login:hover,
+.btn-register:hover,
+.btn-logout:hover {
+  padding: 15px 25px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #333;
+  font-weight: bold;
+}

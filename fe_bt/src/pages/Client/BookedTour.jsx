@@ -2,7 +2,7 @@ import React from "react";
 import Header from "../../components/header/Header";
 import aboutBanner from "../../assets/about_banner.jpg";
 import Footer from "../../components/footer/Footer";
-function Videos(props) {
+function BookedTour(props) {
   return (
     <div>
       <Header></Header>
@@ -10,11 +10,11 @@ function Videos(props) {
         className="about-banner"
         style={{ backgroundImage: `url(${aboutBanner})` }}
       >
-        Videos
+        Booked Tour
       </div>
       <Footer></Footer>
     </div>
   );
 }
 
-export default Videos;
+export default BookedTour;
