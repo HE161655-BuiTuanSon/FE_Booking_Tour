@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./LoginRegisterPopup.css";
 import { login } from "../../services/Client/loginService";
 import { register } from "../../services/Client/registerService";
+import Swal from "sweetalert2";
 function LoginRegisterPopup({ onClose }) {
   const [signInEmail, setSignInEmail] = useState("");
   const [signInPassword, setSignInPassword] = useState("");
@@ -10,7 +11,6 @@ function LoginRegisterPopup({ onClose }) {
   const [signUpPassword, setSignUpPassword] = useState("");
   const [signUpPhone, setSignUpPhone] = useState("");
   const [signUpAddress, setSignUpAddress] = useState("");
-
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -44,6 +44,12 @@ function LoginRegisterPopup({ onClose }) {
       const data = await login(signInEmail, signInPassword);
       console.log("Login successful:", data);
       onClose();
+      Swal.fire({
+        icon: "success",
+        title: "Đăng nhập thành công!",
+        confirmButtonText: "OK",
+      });
+      localStorage.setItem("token", data.token);
     } catch (err) {
       console.error("Login failed:", err);
       setError("Login failed. Please check your credentials.");
@@ -61,13 +67,20 @@ function LoginRegisterPopup({ onClose }) {
         signUpPhone,
         signUpAddress
       );
-      console.log("Register successful:", data);
-      onClose();
+      Swal.fire({
+        icon: "success",
+        title: "Đăng ký thành công!",
+        text: "Bây giờ bạn có thể đăng nhập.",
+        confirmButtonText: "OK",
+      }).then(() => {
+        const signInButton = document.getElementById("signIn");
+        if (signInButton) signInButton.click();
+      });
     } catch (err) {
       console.error("Register failed:", err);
 
       if (err.response && err.response.data) {
-        setError(err.response.data.message || "Registration failed.");
+        setError(err.response.data || "Registration failed.");
       } else {
         setError("Something went wrong. Please try again.");
       }
@@ -84,7 +97,7 @@ function LoginRegisterPopup({ onClose }) {
         <div className="container" id="container">
           {/* Form đăng ký */}
           <div className="form-container sign-up-container">
-            <form onSubmit={handleSignUpSubmit}>
+            <form className="form" onSubmit={handleSignUpSubmit}>
               <h1>Create Account</h1>
               <span>or use your email for registration</span>
               <input
@@ -121,12 +134,15 @@ function LoginRegisterPopup({ onClose }) {
                 onChange={(e) => setSignUpAddress(e.target.value)}
               />
               <button type="submit">Sign Up</button>
+              {error && (
+                <p style={{ color: "red", marginTop: "10px" }}>{error}</p>
+              )}
             </form>
           </div>
 
           {/* Form đăng nhập */}
           <div className="form-container sign-in-container">
-            <form onSubmit={handleSignInSubmit}>
+            <form className="form" onSubmit={handleSignInSubmit}>
               <h1>Sign in</h1>
               <span>or use your account</span>
               <input

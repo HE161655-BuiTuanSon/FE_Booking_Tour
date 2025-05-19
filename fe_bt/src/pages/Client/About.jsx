@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../../components/header/Header";
 import "../../styles/Client/About.css";
 import aboutBanner from "../../assets/about_banner.jpg";
@@ -12,11 +12,18 @@ import member2 from "../../assets/member2.png";
 import member3 from "../../assets/member3.png";
 import member4 from "../../assets/member4.png";
 import member5 from "../../assets/member5.png";
+import LoginRegisterPopup from "../../components/authorization/LoginRegisterPopup";
 function About(props) {
   const images = [team1, team2];
+  const [showPopup, setShowPopup] = useState(false);
   return (
     <div>
-      <Header />
+      <Header
+        onLoginClick={() => setShowPopup(true)}
+        onRegisterClick={() => setShowPopup(true)}
+      />
+
+      {showPopup && <LoginRegisterPopup onClose={() => setShowPopup(false)} />}
       <div
         className="about-banner"
         style={{ backgroundImage: `url(${aboutBanner})` }}
