@@ -1,7 +1,7 @@
 .sticky-header {
   position: sticky;
   top: 0;
-  max-width: 100vw;
+  max-width: 100%;
   background-color: #fbf6f2;
   display: flex;
   justify-content: space-between;
