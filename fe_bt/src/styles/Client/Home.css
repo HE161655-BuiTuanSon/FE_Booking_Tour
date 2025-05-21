@@ -129,11 +129,6 @@ section h2 {
   color: #666;
   margin-bottom: 0.75rem;
 }
-.tour-card .meta span::before {
-  content: "★";
-  color: #f1c40f;
-  margin-right: 0.3rem;
-}
 .sidebar .article-card {
   margin-bottom: 2rem;
 }
@@ -194,13 +189,6 @@ section h2 {
   font-size: 0.9rem;
   color: #666;
 }
-footer {
-  background-color: #fbf6f2;
-  color: #666;
-  padding: 2rem 0;
-  text-align: center;
-  border-top: 1px solid #eee;
-}
 @media (max-width: 1024px) {
   .container {
     flex-direction: column;
@@ -241,7 +229,74 @@ footer {
   .banner h2 {
     font-size: 1.8rem;
   }
-  .popup-content {
+  .popup-content,
+  .promo-popup-content {
     padding: 1.5rem;
   }
+}
+.promo-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+}
+.promo-popup-content {
+  background-color: #ffff;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  animation: slideIn 0.3s ease-out;
+}
+.promo-popup-content {
+  background: linear-gradient(135deg, #fbf6f2, #ffff);
+  border: 2px solid #dc5a26;
+}
+.promo-popup-content button {
+  background: linear-gradient(135deg, #dc5a26, #e67e22);
+  color: #ffff;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: opacity 0.3s;
+  font-weight: 600;
+}
+.promo-popup-content button:hover {
+  opacity: 0.9;
+}
+.promo-popup-content h2 {
+  color: #dc5a26;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.promo-popup-content p {
+  color: #666;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+.promo-image {
+  width: 100%;
+}
+.meta {
+  display: flex;
+  flex-direction: column;
+}
+.meta span {
+  font-size: 16px;
+  font-weight: bold;
+}
+.view-detail-btn:hover {
+  color: #dc5a26;
+  background-color: white;
+  cursor: pointer;
 }

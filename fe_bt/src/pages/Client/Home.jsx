@@ -1,12 +1,47 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import LoginRegisterPopup from "../../components/authorization/LoginRegisterPopup";
 import ImageBanner from "../../components/ImageBanner";
 import "../../styles/Client/Home.css";
 import hoian from "../../assets/hoian.png";
+import { Navigate, useNavigate } from "react-router-dom";
+import tour from "../../assets/tour.png";
 function Home(props) {
   const [showPopup, setShowPopup] = useState(false);
+  const [showPromoPopup, setShowPromoPopup] = useState(false);
+  useEffect(() => {
+    if (sessionStorage.getItem("promoPopupShown")) {
+      return;
+    }
+
+    let timeoutId;
+
+    const resetTimer = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setShowPromoPopup(true);
+        sessionStorage.setItem("promoPopupShown", "true");
+      }, 3000);
+    };
+
+    const handleInteraction = () => {
+      resetTimer();
+    };
+
+    resetTimer();
+
+    window.addEventListener("click", handleInteraction);
+    window.addEventListener("scroll", handleInteraction);
+    window.addEventListener("mousemove", handleInteraction);
+
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener("click", handleInteraction);
+      window.removeEventListener("scroll", handleInteraction);
+      window.removeEventListener("mousemove", handleInteraction);
+    };
+  }, []);
   const mockDB = {
     tours: [
       {
@@ -14,45 +49,54 @@ function Home(props) {
         title: "Hanoi City Tour",
         image:
           "https://d3h1lg3ksw6i6b.cloudfront.net/media/image/2024/05/15/50acecd6ea5d4c899a2caf59e00ce64f_2-days-in-hanoi_%287%29.jpg",
-        price: 99,
+        price: 990000,
         description:
-          "Explore the vibrant capital, visiting Hoan Kiem Lake, Old Quarter, and historic temples.",
-        duration: "2 days",
-        rating: 4.8,
+          "Khám phá thủ đô Hà Nội với Hồ Hoàn Kiếm, phố cổ và những ngôi chùa lịch sử.",
+        duration: "2 ngày",
+        departure: "Hà Nội",
+        startDate: "25/06/2025",
+        transportation: "Xe du lịch",
       },
       {
         id: 2,
         title: "Ha Long Bay Cruise",
         image:
           "https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1200,h_630/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/qmgtdjekctlyucr8itqw/%C4%90%E1%BA%B7t%20tour%20%C4%91i%20V%E1%BB%8Bnh%20H%E1%BA%A1%20Long%20t%E1%BB%AB%20H%C3%A0%20N%E1%BB%99i.jpg",
-        price: 149,
+        price: 1490000,
         description:
-          "Sail through stunning limestone karsts and emerald waters, with kayaking and cave tours.",
-        duration: "3 days",
-        rating: 4.9,
+          "Du ngoạn vịnh Hạ Long với cảnh sắc hùng vĩ, chèo kayak và tham quan hang động.",
+        duration: "3 ngày",
+        departure: "Hà Nội",
+        startDate: "30/06/2025",
+        transportation: "Xe du lịch + Tàu",
       },
       {
         id: 3,
         title: "Sapa Trekking Adventure",
         image: "https://images.unsplash.com/photo-1521336575822-6da63fb45455",
-        price: 120,
+        price: 1200000,
         description:
-          "Trek through terraced rice fields and ethnic villages, meeting local communities.",
-        duration: "4 days",
-        rating: 4.7,
+          "Trekking qua những thửa ruộng bậc thang và bản làng dân tộc tại Sapa.",
+        duration: "4 ngày",
+        departure: "Hà Nội",
+        startDate: "02/07/2025",
+        transportation: "Xe giường nằm",
       },
       {
         id: 4,
         title: "Hoi An Ancient Town",
         image:
           "https://cleverlearnvietnam.com/wp-content/uploads/2019/05/hoian-e1559273078151.jpg",
-        price: 89,
+        price: 890000,
         description:
-          "Discover the charm of Hoi An with its lantern-lit streets and ancient architecture.",
-        duration: "2 days",
-        rating: 4.6,
+          "Dạo bước phố cổ Hội An rực rỡ đèn lồng và những ngôi nhà cổ kính.",
+        duration: "2 ngày",
+        departure: "Đà Nẵng",
+        startDate: "28/06/2025",
+        transportation: "Xe du lịch",
       },
     ],
+
     articles: [
       {
         id: 1,
@@ -146,20 +190,37 @@ function Home(props) {
       </p>
     </div>
   );
-  const TourCard = ({ tour }) => (
-    <div className="tour-card">
-      <img src={tour.image} alt={tour.title} />
-      <div className="content">
-        <h3>{tour.title}</h3>
-        <p>{tour.description}</p>
-        <div className="meta">
-          <span>Rating: {tour.rating}</span>
-          <span>Duration: {tour.duration}</span>
+  const TourCard = ({ tour }) => {
+    const navigate = useNavigate();
+
+    const handleViewDetail = () => {
+      navigate(`/tours/${tour.id}`);
+    };
+
+    return (
+      <div className="tour-card">
+        <img src={tour.image} alt={tour.title} className="tour-image" />
+
+        <div className="content">
+          <h3>{tour.title}</h3>
+          <p className="short-description">{tour.description}</p>
+
+          <div className="meta">
+            <span>🕒 {tour.duration}</span>
+            <span>📍 Khởi hành: {tour.departure}</span>
+            <span>🗓️ Ngày khởi hành: {tour.startDate}</span>
+            <span>🚌 Phương tiện: {tour.transportation}</span>
+          </div>
+
+          <p className="price">{Number(tour.price).toLocaleString("vi-VN")}₫</p>
+
+          <button className="view-detail-btn" onClick={handleViewDetail}>
+            Xem chi tiết
+          </button>
         </div>
-        <p className="price">${tour.price}</p>
       </div>
-    </div>
-  );
+    );
+  };
   const ArticleCard = ({ article }) => (
     <div className="article-card">
       <img src={article.image} alt={article.title} />
@@ -196,6 +257,37 @@ function Home(props) {
       </div>
     </div>
   );
+  const PromoPopup = ({ onClose }) => {
+    const navigate = useNavigate();
+    const popupRef = useRef(null);
+
+    const handleBookNow = () => {
+      navigate("/tours");
+      onClose();
+    };
+
+    const handleClickOutside = (event) => {
+      if (popupRef.current && !popupRef.current.contains(event.target)) {
+        onClose();
+        sessionStorage.setItem("promoPopupShown", "true");
+      }
+    };
+
+    return (
+      <div className="promo-popup" onClick={handleClickOutside}>
+        <div className="promo-popup-content" ref={popupRef}>
+          <img src={tour} alt="Promo Tour" className="promo-image" />
+          <h2>Get 10% Off Your Next Tour!</h2>
+          <p>
+            Book now and save on your dream Vietnam adventure. Limited offer!
+          </p>
+          <button onClick={handleBookNow} className="book-button">
+            Book Now
+          </button>
+        </div>
+      </div>
+    );
+  };
   return (
     <div>
       <Header
@@ -204,6 +296,9 @@ function Home(props) {
       />
 
       {showPopup && <LoginRegisterPopup onClose={() => setShowPopup(false)} />}
+      {showPromoPopup && (
+        <PromoPopup onClose={() => setShowPromoPopup(false)} />
+      )}
       <ImageBanner />
       <HeroSection />
       <div className="container">
