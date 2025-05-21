@@ -9,12 +9,14 @@ import Contact from "./pages/Client/Contact";
 import Dashboard from "./pages/Admin/Dashboard";
 import Authorization from "./components/authorization/Authorization";
 import BookedTour from "./pages/Client/BookedTour";
+import LoginAdmin from "./pages/Admin/LoginAdmin";
 
 function App() {
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/loginadmin" element={<LoginAdmin />} />
         <Route path="/about" element={<About />} />
         <Route path="/tours" element={<Tours />} />
         <Route path="/posts" element={<Posts />} />

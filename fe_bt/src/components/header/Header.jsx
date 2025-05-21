@@ -8,8 +8,7 @@ function Header({ onLoginClick, onRegisterClick }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userName");
+    localStorage.clear();
     navigate("/login");
   };
 

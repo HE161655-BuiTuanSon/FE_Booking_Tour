@@ -13,11 +13,11 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5); /* Mờ nền */
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* Đảm bảo hiển thị trên cùng */
+  z-index: 9999;
 }
 
 /* popup-content ở giữa */
@@ -49,7 +49,7 @@ p {
   margin: 20px 0 30px;
 }
 
-span {
+.span {
   font-size: 12px;
 }
 
@@ -113,7 +113,7 @@ input {
   font-weight: bold;
   font-size: 18px;
 }
-.container {
+.contain {
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
@@ -137,7 +137,7 @@ input {
   z-index: 2;
 }
 
-.container.right-panel-active .sign-in-container {
+.contain.right-panel-active .sign-in-container {
   transform: translateX(100%);
 }
 
@@ -148,7 +148,7 @@ input {
   z-index: 1;
 }
 
-.container.right-panel-active .sign-up-container {
+.contain.right-panel-active .sign-up-container {
   transform: translateX(100%);
   opacity: 1;
   z-index: 5;
@@ -180,7 +180,7 @@ input {
   z-index: 100;
 }
 
-.container.right-panel-active .overlay-container {
+.contain.right-panel-active .overlay-container {
   transform: translateX(-100%);
 }
 
@@ -200,7 +200,7 @@ input {
   transition: transform 0.6s ease-in-out;
 }
 
-.container.right-panel-active .overlay {
+.contain.right-panel-active .overlay {
   transform: translateX(50%);
 }
 
@@ -223,7 +223,7 @@ input {
   transform: translateX(-20%);
 }
 
-.container.right-panel-active .overlay-left {
+.contain.right-panel-active .overlay-left {
   transform: translateX(0);
 }
 
@@ -232,7 +232,7 @@ input {
   transform: translateX(0);
 }
 
-.container.right-panel-active .overlay-right {
+.contain.right-panel-active .overlay-right {
   transform: translateX(20%);
 }
 

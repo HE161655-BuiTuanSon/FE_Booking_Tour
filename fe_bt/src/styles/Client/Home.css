@@ -1,0 +1,247 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", Arial, sans-serif;
+}
+body {
+  background-color: #ffff;
+  color: #333;
+  line-height: 1.6;
+}
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  gap: 2rem;
+}
+.main-content {
+  flex: 4;
+  padding: 2rem 0;
+}
+.sidebar {
+  flex: 2;
+  padding: 2rem;
+  background-color: #fbf6f2;
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+  border-radius: 12px;
+  margin: 2rem 0;
+}
+
+.hero-section {
+  text-align: center;
+  padding: 8rem 0;
+  background-color: #fbf6f2;
+  border-radius: 12px;
+  margin-bottom: 3rem;
+}
+.hero-section h2 {
+  color: #dc5a26;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.hero-section p {
+  font-size: 1.1rem;
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto;
+}
+section {
+  margin-bottom: 4rem;
+}
+section h2 {
+  color: #dc5a26;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.sidebar h3 {
+  color: #dc5a26;
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+.tour-card,
+.article-card,
+.product-card {
+  background-color: #ffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
+}
+.tour-card:hover,
+.article-card:hover,
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+.tour-card img,
+.article-card img,
+.product-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-bottom: 4px solid #dc5a26;
+}
+.tour-card .content,
+.article-card .content,
+.product-card .content {
+  padding: 1.5rem;
+}
+.tour-card h3,
+.article-card h3,
+.product-card h3 {
+  color: #dc5a26;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+.tour-card p,
+.article-card p,
+.product-card p {
+  color: #666;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+}
+.tour-card .price,
+.product-card .price {
+  color: #dc5a26;
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+.tour-card .meta,
+.article-card .meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.75rem;
+}
+.tour-card .meta span::before {
+  content: "★";
+  color: #f1c40f;
+  margin-right: 0.3rem;
+}
+.sidebar .article-card {
+  margin-bottom: 2rem;
+}
+.sidebar .article-card img {
+  height: 100px;
+}
+.newsletter,
+.social-links,
+.featured-destination {
+  margin-bottom: 2rem;
+}
+.newsletter input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+.newsletter button {
+  width: 100%;
+  background: linear-gradient(135deg, #dc5a26, #e67e22);
+  color: #ffff;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+.newsletter button:hover {
+  opacity: 0.9;
+}
+.social-links a {
+  display: inline-flex;
+  align-items: center;
+  color: #dc5a26;
+  text-decoration: none;
+  font-size: 0.95rem;
+  margin-right: 1rem;
+  transition: color 0.3s;
+}
+.social-links a::before {
+  content: "➤";
+  margin-right: 0.5rem;
+  color: #dc5a26;
+}
+.social-links a:hover {
+  color: #e67e22;
+}
+.featured-destination img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+.featured-destination p {
+  font-size: 0.9rem;
+  color: #666;
+}
+footer {
+  background-color: #fbf6f2;
+  color: #666;
+  padding: 2rem 0;
+  text-align: center;
+  border-top: 1px solid #eee;
+}
+@media (max-width: 1024px) {
+  .container {
+    flex-direction: column;
+  }
+  .sidebar {
+    position: static;
+    border-radius: 0;
+    margin: 0;
+  }
+}
+@media (max-width: 768px) {
+  .banner {
+    height: 400px;
+  }
+  .banner h2 {
+    font-size: 2.2rem;
+  }
+  .hero-section h2 {
+    font-size: 2rem;
+  }
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+  .tour-card img,
+  .article-card img,
+  .product-card img {
+    height: 180px;
+  }
+}
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 1.5rem;
+  }
+  section h2,
+  .sidebar h3 {
+    font-size: 1.8rem;
+  }
+  .banner h2 {
+    font-size: 1.8rem;
+  }
+  .popup-content {
+    padding: 1.5rem;
+  }
+}

@@ -16,7 +16,7 @@ function LoginRegisterPopup({ onClose }) {
   useEffect(() => {
     const signUpButton = document.getElementById("signUp");
     const signInButton = document.getElementById("signIn");
-    const container = document.getElementById("container");
+    const container = document.getElementById("contain");
 
     if (signUpButton && signInButton && container) {
       signUpButton.addEventListener("click", () => {
@@ -76,6 +76,11 @@ function LoginRegisterPopup({ onClose }) {
         const signInButton = document.getElementById("signIn");
         if (signInButton) signInButton.click();
       });
+      setSignUpAddress("");
+      setSignUpEmail("");
+      setSignUpPassword("");
+      setSignUpPhone("");
+      setSignUpName("");
     } catch (err) {
       console.error("Register failed:", err);
 
@@ -94,12 +99,12 @@ function LoginRegisterPopup({ onClose }) {
           ×
         </button>
 
-        <div className="container" id="container">
+        <div className="contain" id="contain">
           {/* Form đăng ký */}
           <div className="form-container sign-up-container">
             <form className="form" onSubmit={handleSignUpSubmit}>
               <h1>Create Account</h1>
-              <span>or use your email for registration</span>
+              <span className="span">or use your email for registration</span>
               <input
                 type="text"
                 placeholder="Name"
@@ -144,7 +149,7 @@ function LoginRegisterPopup({ onClose }) {
           <div className="form-container sign-in-container">
             <form className="form" onSubmit={handleSignInSubmit}>
               <h1>Sign in</h1>
-              <span>or use your account</span>
+              <span className="span">or use your account</span>
               <input
                 type="email"
                 placeholder="Email"
