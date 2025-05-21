@@ -30,7 +30,7 @@ function ImageBanner() {
   };
 
   return (
-    <div style={{ position: "relative", overflow: "hidden" }}>
+    <div style={{ position: "relative" }}>
       <Slider {...settings}>
         {images.map((item, index) => (
           <div key={index} style={{ position: "relative" }}>
