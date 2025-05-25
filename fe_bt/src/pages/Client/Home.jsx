@@ -4,32 +4,81 @@ import Footer from "../../components/footer/Footer";
 import LoginRegisterPopup from "../../components/authorization/LoginRegisterPopup";
 import ImageBanner from "../../components/ImageBanner";
 import "../../styles/Client/Home.css";
-import hoian from "../../assets/hoian.png";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import tour from "../../assets/tour.png";
+import {
+  FaBus,
+  FaCalendarAlt,
+  FaClock,
+  FaMapMarkerAlt,
+  FaSearch,
+} from "react-icons/fa";
+import three1 from "../../assets/three1.png";
+import three2 from "../../assets/three2.png";
+import three3 from "../../assets/three3.png";
+import { getFourPosts } from "../../services/Client/PostService";
+import { getTenTour } from "../../services/Client/TourService";
 function Home(props) {
   const [showPopup, setShowPopup] = useState(false);
   const [showPromoPopup, setShowPromoPopup] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [destination, setDestination] = useState("");
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
+  const [fourPosts, setFourPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [tourData, setTourData] = useState([]);
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const data = await getFourPosts();
+        setFourPosts(data);
+      } catch (error) {
+        console.error("Lỗi khi gọi getFourPost:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+  useEffect(() => {
+    const fetchTours = async () => {
+      try {
+        const data = await getTenTour();
+        setTourData(data);
+      } catch (error) {
+        console.error("Lỗi khi gọi getFourPost:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTours();
+  }, []);
+
   useEffect(() => {
     if (sessionStorage.getItem("promoPopupShown")) {
       return;
     }
 
     let timeoutId;
+    let interactionHandled = false;
 
-    const resetTimer = () => {
-      clearTimeout(timeoutId);
+    const handleInteraction = () => {
+      if (interactionHandled) return;
+      interactionHandled = true;
+
       timeoutId = setTimeout(() => {
         setShowPromoPopup(true);
         sessionStorage.setItem("promoPopupShown", "true");
       }, 3000);
-    };
 
-    const handleInteraction = () => {
-      resetTimer();
+      // Sau khi xử lý tương tác đầu tiên, gỡ bỏ listener
+      window.removeEventListener("click", handleInteraction);
+      window.removeEventListener("scroll", handleInteraction);
+      window.removeEventListener("mousemove", handleInteraction);
     };
-
-    resetTimer();
 
     window.addEventListener("click", handleInteraction);
     window.addEventListener("scroll", handleInteraction);
@@ -42,234 +91,136 @@ function Home(props) {
       window.removeEventListener("mousemove", handleInteraction);
     };
   }, []);
-  const mockDB = {
-    tours: [
-      {
-        id: 1,
-        title: "Hanoi City Tour",
-        image:
-          "https://d3h1lg3ksw6i6b.cloudfront.net/media/image/2024/05/15/50acecd6ea5d4c899a2caf59e00ce64f_2-days-in-hanoi_%287%29.jpg",
-        price: 990000,
-        description:
-          "Khám phá thủ đô Hà Nội với Hồ Hoàn Kiếm, phố cổ và những ngôi chùa lịch sử.",
-        duration: "2 ngày",
-        departure: "Hà Nội",
-        startDate: "25/06/2025",
-        transportation: "Xe du lịch",
-      },
-      {
-        id: 2,
-        title: "Ha Long Bay Cruise",
-        image:
-          "https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1200,h_630/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/qmgtdjekctlyucr8itqw/%C4%90%E1%BA%B7t%20tour%20%C4%91i%20V%E1%BB%8Bnh%20H%E1%BA%A1%20Long%20t%E1%BB%AB%20H%C3%A0%20N%E1%BB%99i.jpg",
-        price: 1490000,
-        description:
-          "Du ngoạn vịnh Hạ Long với cảnh sắc hùng vĩ, chèo kayak và tham quan hang động.",
-        duration: "3 ngày",
-        departure: "Hà Nội",
-        startDate: "30/06/2025",
-        transportation: "Xe du lịch + Tàu",
-      },
-      {
-        id: 3,
-        title: "Sapa Trekking Adventure",
-        image: "https://images.unsplash.com/photo-1521336575822-6da63fb45455",
-        price: 1200000,
-        description:
-          "Trekking qua những thửa ruộng bậc thang và bản làng dân tộc tại Sapa.",
-        duration: "4 ngày",
-        departure: "Hà Nội",
-        startDate: "02/07/2025",
-        transportation: "Xe giường nằm",
-      },
-      {
-        id: 4,
-        title: "Hoi An Ancient Town",
-        image:
-          "https://cleverlearnvietnam.com/wp-content/uploads/2019/05/hoian-e1559273078151.jpg",
-        price: 890000,
-        description:
-          "Dạo bước phố cổ Hội An rực rỡ đèn lồng và những ngôi nhà cổ kính.",
-        duration: "2 ngày",
-        departure: "Đà Nẵng",
-        startDate: "28/06/2025",
-        transportation: "Xe du lịch",
-      },
-    ],
+  const popularDestinations = [
+    { name: "Da Lat", country: "Vietnam" },
+    { name: "Vung Tau", country: "Vietnam" },
+    { name: "Ho Chi Minh City", country: "Vietnam" },
+    { name: "Da Nang", country: "Vietnam" },
+    { name: "Hanoi", country: "Vietnam" },
+  ];
+  // const tourData = [
+  //   {
+  //     id: 1,
+  //     name: "Tour Đà Lạt 3N2Đ",
+  //     image:
+  //       "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
+  //     startDate: "2025-06-10",
+  //     duration: "3 ngày 2 đêm",
+  //     price: "2.500.000đ",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Tour Phú Quốc 4N3Đ",
+  //     image:
+  //       "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
+  //     startDate: "2025-06-15",
+  //     duration: "4 ngày 3 đêm",
+  //     price: "3.800.000đ",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Tour Nha Trang",
+  //     image:
+  //       "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
+  //     startDate: "2025-06-18",
+  //     duration: "3 ngày 2 đêm",
+  //     price: "2.900.000đ",
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Tour Hội An",
+  //     image:
+  //       "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
+  //     startDate: "2025-06-20",
+  //     duration: "2 ngày 1 đêm",
+  //     price: "1.800.000đ",
+  //   },
+  //   {
+  //     id: 5,
+  //     name: "Tour Sa Pa",
+  //     image:
+  //       "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
+  //     startDate: "2025-06-25",
+  //     duration: "3 ngày 2 đêm",
+  //     price: "3.200.000đ",
+  //   },
+  //   {
+  //     id: 6,
+  //     name: "Tour Côn Đảo",
+  //     image:
+  //       "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
+  //     startDate: "2025-07-01",
+  //     duration: "4 ngày 3 đêm",
+  //     price: "4.500.000đ",
+  //   },
+  //   {
+  //     id: 7,
+  //     name: "Tour Hạ Long",
+  //     image:
+  //       "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
+  //     startDate: "2025-07-05",
+  //     duration: "2 ngày 1 đêm",
+  //     price: "2.100.000đ",
+  //   },
+  //   {
+  //     id: 8,
+  //     name: "Tour Huế",
+  //     image:
+  //       "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
+  //     startDate: "2025-07-08",
+  //     duration: "3 ngày 2 đêm",
+  //     price: "2.700.000đ",
+  //   },
+  //   {
+  //     id: 9,
+  //     name: "Tour Buôn Mê Thuột",
+  //     image:
+  //       "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
+  //     startDate: "2025-07-10",
+  //     duration: "3 ngày 2 đêm",
+  //     price: "2.200.000đ",
+  //   },
+  //   {
+  //     id: 10,
+  //     name: "Tour Cần Thơ",
+  //     image:
+  //       "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
+  //     startDate: "2025-07-12",
+  //     duration: "2 ngày 1 đêm",
+  //     price: "1.700.000đ",
+  //   },
+  // ];
+  const fixDriveUrl = (url) => {
+    if (typeof url !== "string") return url;
+    if (!url.includes("drive.google.com/uc?id=")) return url;
 
-    articles: [
-      {
-        id: 1,
-        title: "Top 10 Must-Visit Places in Vietnam",
-        image: "https://images.unsplash.com/photo-1504457047772-27faf1c00561",
-        description:
-          "Discover the best destinations in Vietnam for an unforgettable trip.",
-        author: "Nguyen Van A",
-        date: "2025-05-10",
-      },
-      {
-        id: 2,
-        title: "Exploring Vietnamese Street Food",
-        image:
-          "https://media.istockphoto.com/id/1489611687/photo/hand-holding-banh-mi-sandwich-on-street-in-hanoi.jpg?s=612x612&w=0&k=20&c=wecEZZb-UQWd9liLTFJGxjHq0COelQn5UesRpglZCFc=",
-        description:
-          "A guide to the vibrant street food culture, from pho to banh mi.",
-        author: "Tran Thi B",
-        date: "2025-05-12",
-      },
-      {
-        id: 3,
-        title: "Cultural Festivals in Hanoi",
-        image:
-          "https://static.vinwonders.com/production/festivals-in-hanoi-banner.jpg",
-        description:
-          "Experience the rich traditions of Hanoi's festivals, from Tet to Mid-Autumn.",
-        author: "Le Van C",
-        date: "2025-05-15",
-      },
-      {
-        id: 4,
-        title: "Hidden Gems of Central Vietnam",
-        image:
-          "https://vietnamnomad.com/wp-content/uploads/2022/01/Hidden-gem-in-Vietnam-Lao-Cai-Vietnamnomad.jpg",
-        description:
-          "Uncover lesser-known spots in Central Vietnam, from caves to beaches.",
-        author: "Pham Minh D",
-        date: "2025-05-08",
-      },
-    ],
-    products: [
-      {
-        id: 1,
-        name: "Handcrafted Silk Scarf",
-        image:
-          "https://static.wixstatic.com/media/9fa1f1_37d6a2684093434c93b4e3bef1cbcb9c~mv2.jpg/v1/crop/x_57,y_0,w_5003,h_3349/fill/w_560,h_374,al_c,q_80,usm_1.20_1.00_0.01,enc_avif,quality_auto/IMG_7516.jpg",
-        price: 25,
-        tourId: 4,
-        description:
-          "Elegant silk scarf handmade by Hoi An artisans, perfect for any outfit.",
-      },
-      {
-        id: 2,
-        name: "Traditional Conical Hat",
-        image:
-          "https://handicraftsafimex.com/wp-content/uploads/2022/12/vietnamese-conical-hats-learn-3-fascinating-facts-3090.jpg",
-        price: 15,
-        tourId: 1,
-        description:
-          "Iconic Vietnamese non la, crafted for style and sun protection.",
-      },
-      {
-        id: 3,
-        name: "Lacquerware Bowl",
-        image:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQs6Vywldw5tnXJfRAN3ZDAnV2VeW9PwjI03A&s",
-        price: 30,
-        tourId: 4,
-        description:
-          "Beautifully crafted bowl with a glossy lacquer finish, ideal for decor.",
-      },
-      {
-        id: 4,
-        name: "Bamboo Water Bottle",
-        image:
-          "https://thegreenmartvietnam.com/wp-content/uploads/2023/03/c459c9fcafab73f52aba5-1024x1024.jpg",
-        price: 20,
-        tourId: 5,
-        description:
-          "Eco-friendly bamboo bottle, perfect for sustainable travel.",
-      },
-    ],
+    const parts = url.split("id=");
+    const fileId = parts[1]?.split("&")[0];
+    return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
   };
-  const HeroSection = () => (
-    <div className="hero-section">
-      <h2>Plan Your Perfect Trip</h2>
-      <p>
-        Explore Vietnam's breathtaking landscapes, vibrant culture, and unique
-        experiences with our curated tours and products.
-      </p>
-    </div>
-  );
-  const TourCard = ({ tour }) => {
-    const navigate = useNavigate();
 
-    const handleViewDetail = () => {
-      navigate(`/tours/${tour.id}`);
-    };
-
-    return (
-      <div className="tour-card">
-        <img src={tour.image} alt={tour.title} className="tour-image" />
-
-        <div className="content">
-          <h3>{tour.title}</h3>
-          <p className="short-description">{tour.description}</p>
-
-          <div className="meta">
-            <span>🕒 {tour.duration}</span>
-            <span>📍 Khởi hành: {tour.departure}</span>
-            <span>🗓️ Ngày khởi hành: {tour.startDate}</span>
-            <span>🚌 Phương tiện: {tour.transportation}</span>
-          </div>
-
-          <p className="price">{Number(tour.price).toLocaleString("vi-VN")}₫</p>
-
-          <button className="view-detail-btn" onClick={handleViewDetail}>
-            Xem chi tiết
-          </button>
-        </div>
-      </div>
-    );
+  const handleInputClick = () => {
+    setIsDropdownOpen(true);
   };
-  const ArticleCard = ({ article }) => (
-    <div className="article-card">
-      <img src={article.image} alt={article.title} />
-      <div className="content">
-        <h3>{article.title}</h3>
-        <div className="meta">
-          <span>{article.author}</span>
-          <span>{article.date}</span>
-        </div>
-      </div>
-    </div>
-  );
-  const ArticlePreview = ({ article }) => (
-    <div className="article-card">
-      <img src={article.image} alt={article.title} />
-      <div className="content">
-        <h3>{article.title}</h3>
-        <p>{article.description}</p>
-        <div className="meta">
-          <span>{article.author}</span>
-          <span>{article.date}</span>
-        </div>
-      </div>
-    </div>
-  );
-  const ProductCard = ({ product, tourTitle }) => (
-    <div className="product-card">
-      <img src={product.image} alt={product.name} />
-      <div className="content">
-        <h3>{product.name}</h3>
-        <p>{product.description}</p>
-        <p>Tour: {tourTitle}</p>
-        <p className="price">${product.price}</p>
-      </div>
-    </div>
-  );
+
+  const handleSelectDestination = (destinationName) => {
+    setDestination(destinationName);
+    setIsDropdownOpen(false);
+  };
   const PromoPopup = ({ onClose }) => {
     const navigate = useNavigate();
     const popupRef = useRef(null);
 
     const handleBookNow = () => {
+      sessionStorage.setItem("promoPopupShown", "true");
       navigate("/tours");
       onClose();
     };
 
     const handleClickOutside = (event) => {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
-        onClose();
         sessionStorage.setItem("promoPopupShown", "true");
+        onClose();
       }
     };
 
@@ -288,76 +239,262 @@ function Home(props) {
       </div>
     );
   };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  const SearchBar = () => {
+    return (
+      <div className="search-bar-overlay">
+        <div className="search-bar-container" ref={dropdownRef}>
+          <div className="search-field">
+            <label>Điểm đến</label>
+            <input
+              type="text"
+              placeholder="Nhập điểm đến"
+              value={destination}
+              onChange={(e) => setDestination(e.target.value)}
+              onClick={handleInputClick}
+            />
+            {isDropdownOpen && (
+              <div className="dropdown-container">
+                <h4 className="dropdown-header">Popular nearby destinations</h4>
+                <ul className="dropdown-list">
+                  {popularDestinations.map((dest, index) => (
+                    <li
+                      key={index}
+                      className="dropdown-item"
+                      onClick={() => handleSelectDestination(dest.name)}
+                    >
+                      <FaMapMarkerAlt className="dropdown-icon" />
+                      <div className="dropdown-text">
+                        <span className="dropdown-name">{dest.name}</span>
+                        <span className="dropdown-country">{dest.country}</span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+          <div className="search-field">
+            <label>Ngày đi</label>
+            <input type="date" />
+          </div>
+          <div className="search-field">
+            <label>Ngày đến</label>
+            <input type="date" />
+          </div>
+          <div className="search-field">
+            <label>Ngân sách (VND)</label>
+            <input type="number" placeholder="Nhập ngân sách" />
+          </div>
+          <button className="search-btn" aria-label="Tìm kiếm">
+            <FaSearch />
+          </button>
+        </div>
+      </div>
+    );
+  };
+  const ThreeImages = () => {
+    return (
+      <div className="three-container">
+        <img src={three1} alt="" />
+        <img src={three2} alt="" />
+        <img src={three3} alt="" />
+      </div>
+    );
+  };
+  const Posts = () => {
+    return (
+      <div className="posts-container">
+        <h1>KHÁM PHÁ BÀI VIẾT</h1>
+        <p>
+          Hãy tận hưởng trải nghiệm du lịch chuyên nghiệp, mang lại cho bạn
+          những khoảnh khắc tuyệt vời và nâng tầm cuộc sống. Chúng tôi cam kết
+          mang đến những chuyến đi đáng nhớ, giúp bạn khám phá thế giới theo
+          cách hoàn hảo nhất.
+        </p>
+        <div className="post-list">
+          {fourPosts.map((post) => (
+            <div key={post.id} className="post-card">
+              <img
+                src={fixDriveUrl(post.imgUrl)}
+                alt={post.title}
+                className="post-image"
+              />
+              <div className="post-overlay">
+                <h2 className="post-title">{post.title}</h2>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+  const formatVND = (value) => {
+    // Kiểm tra xem value có phải là số hợp lệ không
+    if (typeof value === "number" && !isNaN(value)) {
+      // Chuyển số sang chuỗi định dạng VNĐ
+      return value.toLocaleString("vi-VN", {
+        style: "currency",
+        currency: "VND",
+      });
+    }
+    if (typeof value === "string") {
+      // Loại bỏ dấu phẩy, khoảng trắng trước khi chuyển sang số
+      const num = Number(value.replace(/[, ]+/g, ""));
+      if (!isNaN(num)) {
+        return num.toLocaleString("vi-VN", {
+          style: "currency",
+          currency: "VND",
+        });
+      }
+    }
+    return "Giá trị không hợp lệ";
+  };
+  const Tours = () => {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const visibleCount = 3.5;
+    const maxIndex = tourData.length - Math.floor(visibleCount);
+
+    const handleNext = () => {
+      setCurrentIndex((prev) => (prev + 1 > maxIndex ? 0 : prev + 1));
+    };
+
+    const handlePrev = () => {
+      setCurrentIndex((prev) => (prev - 1 < 0 ? maxIndex : prev - 1));
+    };
+    return (
+      <div className="tours-container">
+        <h1>KHÁM PHÁ TOUR</h1>
+        <p>Chọn lựa tour yêu thích và trải nghiệm hành trình tuyệt vời!</p>
+
+        <div
+          className="tour-list-wrapper"
+          style={{ display: "flex", alignItems: "center" }}
+        >
+          <button
+            onClick={handlePrev}
+            className="prev-btn"
+            aria-label="Xem tour trước đó"
+          >
+            ←
+          </button>
+
+          <div
+            className="tour-list"
+            style={{
+              overflow: "hidden",
+              width: "1250px", // 3.5 cards × 340px + 3 gaps × 20px
+            }}
+          >
+            <div
+              className="tour-inner"
+              style={{
+                display: "flex",
+                gap: "20px",
+                transition: "transform 0.5s ease",
+                transform: `translateX(-${currentIndex * 360}px)`, // 340px card + 20px gap
+              }}
+            >
+              {tourData.map((tour, index) => {
+                const halfVisibleIndex =
+                  currentIndex + Math.floor(visibleCount);
+                const isHalfVisible = index === halfVisibleIndex;
+
+                return (
+                  <div
+                    key={tour.id}
+                    className={`tour-card ${isHalfVisible ? "half" : ""}`}
+                    onClick={() => navigate(`/tours/${tour.id}`)}
+                  >
+                    <img
+                      src={tour.image}
+                      alt={tour.name}
+                      className="tour-img"
+                      loading="lazy"
+                    />
+                    <div className="tour-info" style={{ paddingTop: "8px" }}>
+                      <h2>{tour.tourName}</h2>
+                      <p>
+                        <FaCalendarAlt
+                          style={{ marginRight: "6px", color: "#0b5da7" }}
+                        />
+                        Ngày khởi hành: {tour.startDate}
+                      </p>
+                      <p>
+                        <FaClock
+                          style={{ marginRight: "6px", color: "#0b5da7" }}
+                        />
+                        Thời gian: {tour.durationDays}
+                      </p>
+                      <p>
+                        <FaBus
+                          style={{ marginRight: "6px", color: "#0b5da7" }}
+                        />
+                        Phương tiện: {tour.transportation}
+                      </p>
+                      <p className="price-container">
+                        Giá từ:{" "}
+                        <span className="price">{formatVND(tour.price)}</span>
+                      </p>
+                      <button
+                        className="book-btn"
+                        onClick={() => navigate(`/tours/${tour.id}`)}
+                      >
+                        Đặt ngay
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <button
+            onClick={handleNext}
+            className="next-btn"
+            aria-label="Xem tour tiếp theo"
+          >
+            →
+          </button>
+        </div>
+        <button
+          className="see-all"
+          onClick={() => {
+            navigate("/tours");
+          }}
+        >
+          Xem tất cả
+        </button>
+      </div>
+    );
+  };
+  if (loading) return <div>Đang tải...</div>;
   return (
     <div>
       <Header
         onLoginClick={() => setShowPopup(true)}
         onRegisterClick={() => setShowPopup(true)}
       />
-
       {showPopup && <LoginRegisterPopup onClose={() => setShowPopup(false)} />}
       {showPromoPopup && (
         <PromoPopup onClose={() => setShowPromoPopup(false)} />
       )}
       <ImageBanner />
-      <HeroSection />
-      <div className="container">
-        <div className="main-content">
-          <section>
-            <h2>Popular Tours</h2>
-            <div className="card-grid">
-              {mockDB.tours.map((tour) => (
-                <TourCard key={tour.id} tour={tour} />
-              ))}
-            </div>
-          </section>
-          <section>
-            <h2>Travel Stories</h2>
-            <div className="card-grid">
-              {mockDB.articles.map((article) => (
-                <ArticlePreview key={article.id} article={article} />
-              ))}
-            </div>
-          </section>
-          <section>
-            <h2>Unique Souvenirs</h2>
-            <div className="card-grid">
-              {mockDB.products.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  tourTitle={
-                    mockDB.tours.find((tour) => tour.id === product.tourId)
-                      ?.title || "Unknown Tour"
-                  }
-                />
-              ))}
-            </div>
-          </section>
-        </div>
-        <div className="sidebar">
-          <h3>Top Stories</h3>
-          {mockDB.articles.slice(0, 3).map((article) => (
-            <ArticleCard key={article.id} article={article} />
-          ))}
-          <div className="newsletter">
-            <h3>Stay Updated</h3>
-            <input type="email" placeholder="Enter your email" />
-            <button>Subscribe</button>
-          </div>
-          <div className="social-links">
-            <h3>Follow Us</h3>
-            <a href="#">Facebook</a>
-            <a href="#">Instagram</a>
-            <a href="#">Twitter</a>
-          </div>
-          <div className="featured-destination">
-            <h3>Featured Destination</h3>
-            <img src={hoian} alt="Hoi An" />
-            <p>Discover Hoi An's lantern-lit streets and timeless charm.</p>
-          </div>
-        </div>
-      </div>
+      <SearchBar />
+      <ThreeImages></ThreeImages>
+      <Posts></Posts>
+      <Tours></Tours>
       <Footer></Footer>
     </div>
   );
