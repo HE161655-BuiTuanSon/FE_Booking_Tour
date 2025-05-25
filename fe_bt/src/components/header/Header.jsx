@@ -18,21 +18,21 @@ function Header({ onLoginClick, onRegisterClick }) {
 
       <nav className="nav-links">
         <NavLink to="/" end>
-          Home
+          Trang chủ
         </NavLink>
-        <NavLink to="/about">About Us</NavLink>
-        <NavLink to="/tours">Tours</NavLink>
-        <NavLink to="/posts">Posts</NavLink>
+        <NavLink to="/about">Về chúng tôi</NavLink>
+        <NavLink to="/tours">Điểm đến</NavLink>
+        <NavLink to="/posts">Bài viết</NavLink>
         {token && <NavLink to="/booked">Booked Tours</NavLink>}
-        <NavLink to="/shop">Shop</NavLink>
-        <NavLink to="/contact">Contacts</NavLink>
+        <NavLink to="/shop">Đồ lưu niệm</NavLink>
+        <NavLink to="/contact">Liên hệ</NavLink>
       </nav>
 
       <div className="user-section">
         {!token ? (
           <>
             <button onClick={onLoginClick} className="btn-login">
-              Sign in
+              Đăng nhập
             </button>
           </>
         ) : (
