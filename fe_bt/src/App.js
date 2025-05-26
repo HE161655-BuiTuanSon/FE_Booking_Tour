@@ -10,6 +10,7 @@ import Dashboard from "./pages/Admin/Dashboard";
 import Authorization from "./components/authorization/Authorization";
 import BookedTour from "./pages/Client/BookedTour";
 import LoginAdmin from "./pages/Admin/LoginAdmin";
+import TourDetail from "./pages/Client/TourDetail";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/authorization" element={<Authorization />} />
+        <Route path="/tour/tour-detail/:tourId" element={<TourDetail />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </div>
