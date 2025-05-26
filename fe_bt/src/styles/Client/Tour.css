@@ -1,0 +1,101 @@
+.tour-card-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.tour-card-all {
+  display: flex;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+  height: 300px;
+}
+
+.tour-image {
+  width: 500px;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tour-info {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 15px;
+}
+.tour-sub-info {
+  display: flex;
+  gap: 50px;
+}
+.btn-detail-tour {
+  background-color: #0056b3;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.btn-detail-tour:hover {
+  background-color: #ffffff;
+  color: #0056b3;
+  border: #0056b3 3px solid;
+}
+
+.filter-sidebar {
+  background-color: #f8f8f8;
+  border-right: 1px solid #ddd;
+}
+
+.filter-group {
+  margin-bottom: 15px;
+}
+.price-tour {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.filter-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.tour-filter {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.tour-content {
+  padding-left: 20px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+.filter-group input {
+  background-color: white;
+}
+
+.pagination button {
+  margin: 0 5px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  color: black;
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+.title-tour {
+  color: #0056b3;
+}

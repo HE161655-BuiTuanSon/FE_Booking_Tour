@@ -5,42 +5,44 @@ import "./Footer.css";
 function Footer() {
   return (
     <footer className="footer-container">
-      <div className="social">
-        <div className="item-social">
-          <a
-            href="https://www.facebook.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="social-link"
-          >
-            <FaFacebookF /> <span>Facebook</span>
-          </a>
-        </div>
-        <div className="divider" />
-        <div className="item-social">
-          <a
-            href="https://www.instagram.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="social-link"
-          >
-            <FaInstagram /> <span>Instagram</span>
-          </a>
-        </div>
-        <div className="divider" />
-        <div className="item-social">
-          <a
-            href="https://www.youtube.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="social-link"
-          >
-            <FaYoutube /> <span>Youtube</span>
-          </a>
+      <div className="footer-a">
+        <h3>Du lịch</h3>
+        <div className="diem-den">
+          <div className="diem-den-1">
+            <p style={{ margin: "0" }}>Hà Nội</p>
+            <p style={{ margin: "0" }}>Hạ Long</p>
+            <p style={{ margin: "0" }}>Đà Nẵng</p>
+            <p style={{ margin: "0" }}>Nha Trang</p>
+            <p style={{ margin: "0" }}>Phú Quốc</p>
+            <p style={{ margin: "0" }}>Phan Thiết</p>
+            <p style={{ margin: "0" }}>Quy Nhơn</p>
+          </div>
+          <div className="diem-den-2">
+            <p style={{ margin: "0" }}>Huế</p>
+            <p style={{ margin: "0" }}>Quảng Bình</p>
+            <p style={{ margin: "0" }}>Nghệ An</p>
+            <p style={{ margin: "0" }}>Hồ Chí Minh</p>
+            <p style={{ margin: "0" }}>Kiên Giang</p>
+            <p style={{ margin: "0" }}>Cát Bà</p>
+            <p style={{ margin: "0" }}>Côn Đảo</p>
+          </div>
         </div>
       </div>
-      <div className="info-legit">
-        <p>Về làng © 2025. All Rights Reserved.</p>
+      <div className="footer-b">
+        <h3>Chính sách</h3>
+      </div>
+      <div className="footer-c">
+        <h3>Thông tin</h3>
+        <div className="info-footer">
+          <p style={{ margin: "0" }}>Chính sách riêng tư</p>
+          <p style={{ margin: "0" }}>Tin tức</p>
+          <p style={{ margin: "0" }}>Trợ giúp</p>
+          <p style={{ margin: "0" }}>Thỏa thuận sử dụng</p>
+          <p style={{ margin: "0" }}>Chính sách bảo vệ dữ liệu cá nhân</p>
+        </div>
+      </div>
+      <div className="footer-d">
+        <h3>Liên hệ</h3>
       </div>
     </footer>
   );

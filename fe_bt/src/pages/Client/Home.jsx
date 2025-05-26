@@ -98,98 +98,7 @@ function Home(props) {
     { name: "Da Nang", country: "Vietnam" },
     { name: "Hanoi", country: "Vietnam" },
   ];
-  // const tourData = [
-  //   {
-  //     id: 1,
-  //     name: "Tour Đà Lạt 3N2Đ",
-  //     image:
-  //       "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
-  //     startDate: "2025-06-10",
-  //     duration: "3 ngày 2 đêm",
-  //     price: "2.500.000đ",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Tour Phú Quốc 4N3Đ",
-  //     image:
-  //       "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
-  //     startDate: "2025-06-15",
-  //     duration: "4 ngày 3 đêm",
-  //     price: "3.800.000đ",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Tour Nha Trang",
-  //     image:
-  //       "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
-  //     startDate: "2025-06-18",
-  //     duration: "3 ngày 2 đêm",
-  //     price: "2.900.000đ",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Tour Hội An",
-  //     image:
-  //       "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
-  //     startDate: "2025-06-20",
-  //     duration: "2 ngày 1 đêm",
-  //     price: "1.800.000đ",
-  //   },
-  //   {
-  //     id: 5,
-  //     name: "Tour Sa Pa",
-  //     image:
-  //       "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
-  //     startDate: "2025-06-25",
-  //     duration: "3 ngày 2 đêm",
-  //     price: "3.200.000đ",
-  //   },
-  //   {
-  //     id: 6,
-  //     name: "Tour Côn Đảo",
-  //     image:
-  //       "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
-  //     startDate: "2025-07-01",
-  //     duration: "4 ngày 3 đêm",
-  //     price: "4.500.000đ",
-  //   },
-  //   {
-  //     id: 7,
-  //     name: "Tour Hạ Long",
-  //     image:
-  //       "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
-  //     startDate: "2025-07-05",
-  //     duration: "2 ngày 1 đêm",
-  //     price: "2.100.000đ",
-  //   },
-  //   {
-  //     id: 8,
-  //     name: "Tour Huế",
-  //     image:
-  //       "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
-  //     startDate: "2025-07-08",
-  //     duration: "3 ngày 2 đêm",
-  //     price: "2.700.000đ",
-  //   },
-  //   {
-  //     id: 9,
-  //     name: "Tour Buôn Mê Thuột",
-  //     image:
-  //       "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
-  //     startDate: "2025-07-10",
-  //     duration: "3 ngày 2 đêm",
-  //     price: "2.200.000đ",
-  //   },
-  //   {
-  //     id: 10,
-  //     name: "Tour Cần Thơ",
-  //     image:
-  //       "https://i2.ex-cdn.com/crystalbay.com/files/content/2024/06/03/du-lich-hoi-an-1-1542.jpg",
-  //     startDate: "2025-07-12",
-  //     duration: "2 ngày 1 đêm",
-  //     price: "1.700.000đ",
-  //   },
-  // ];
+
   const fixDriveUrl = (url) => {
     if (typeof url !== "string") return url;
     if (!url.includes("drive.google.com/uc?id=")) return url;
@@ -340,17 +249,28 @@ function Home(props) {
       </div>
     );
   };
+  function formatDateTime(dateString) {
+    const date = new Date(dateString);
+
+    if (isNaN(date.getTime())) return "Invalid date";
+
+    const pad = (n) => n.toString().padStart(2, "0");
+
+    const day = pad(date.getDate());
+    const month = pad(date.getMonth() + 1);
+    const year = date.getFullYear();
+
+    return `${day}/${month}/${year} `;
+  }
+
   const formatVND = (value) => {
-    // Kiểm tra xem value có phải là số hợp lệ không
     if (typeof value === "number" && !isNaN(value)) {
-      // Chuyển số sang chuỗi định dạng VNĐ
       return value.toLocaleString("vi-VN", {
         style: "currency",
         currency: "VND",
       });
     }
     if (typeof value === "string") {
-      // Loại bỏ dấu phẩy, khoảng trắng trước khi chuyển sang số
       const num = Number(value.replace(/[, ]+/g, ""));
       if (!isNaN(num)) {
         return num.toLocaleString("vi-VN", {
@@ -415,7 +335,6 @@ function Home(props) {
                   <div
                     key={tour.id}
                     className={`tour-card ${isHalfVisible ? "half" : ""}`}
-                    onClick={() => navigate(`/tours/${tour.id}`)}
                   >
                     <img
                       src={tour.image}
@@ -429,7 +348,8 @@ function Home(props) {
                         <FaCalendarAlt
                           style={{ marginRight: "6px", color: "#0b5da7" }}
                         />
-                        Ngày khởi hành: {tour.startDate}
+                        Ngày khởi hành:{" "}
+                        {formatDateTime(tour.nextDeparture?.departureDate)}
                       </p>
                       <p>
                         <FaClock
@@ -441,7 +361,7 @@ function Home(props) {
                         <FaBus
                           style={{ marginRight: "6px", color: "#0b5da7" }}
                         />
-                        Phương tiện: {tour.transportation}
+                        Phương tiện: {tour.vehicle}
                       </p>
                       <p className="price-container">
                         Giá từ:{" "}
@@ -449,7 +369,7 @@ function Home(props) {
                       </p>
                       <button
                         className="book-btn"
-                        onClick={() => navigate(`/tours/${tour.id}`)}
+                        onClick={() => navigate(`/tour/tour-detail/${tour.id}`)}
                       >
                         Đặt ngay
                       </button>
