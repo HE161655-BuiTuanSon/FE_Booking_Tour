@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 
 function Tours() {
   const [allTour, setAllTour] = useState([]);
-  const [totalPages, setTotalPages] = useState(1); // Lưu totalPages từ API
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
   const [filters, setFilters] = useState({
@@ -49,23 +49,21 @@ function Tours() {
     return "Giá trị không hợp lệ";
   };
   useEffect(() => {
-    const fetchAllTour = async () => {
+    const fetchTours = async () => {
+      setLoading(true);
       try {
-        const data = await getAllTour({
-          page: currentPage,
-          pageSize: toursPerPage,
-        });
+        const data = await getAllTour(currentPage, toursPerPage, filters);
         setAllTour(data.tours);
-        setTotalPages(data.totalPages); // Lấy totalPages từ API
-        console.log("API Data:", data); // Debug dữ liệu API
+        console.log(allTour);
+        setTotalPages(data.totalPages);
       } catch (error) {
-        console.log("Error fetching tours:", error);
+        console.log(error);
       } finally {
         setLoading(false);
       }
     };
-    fetchAllTour();
-  }, [currentPage]); // Gọi lại API khi currentPage thay đổi
+    fetchTours();
+  }, [currentPage, filters]);
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "Chưa xác định";
@@ -76,32 +74,7 @@ function Tours() {
     )}/${date.getFullYear()}`;
   };
 
-  const filteredTours = allTour.filter((tour) => {
-    const matchesName = tour.tourName
-      ?.toLowerCase()
-      .includes(filters.name.toLowerCase());
-    const matchesPrice =
-      (!filters.priceMin || tour.price >= Number(filters.priceMin)) &&
-      (!filters.priceMax || tour.price <= Number(filters.priceMax));
-    const matchesDestination =
-      !filters.destination ||
-      tour.destination
-        ?.toLowerCase()
-        .includes(filters.destination.toLowerCase());
-    const matchesDeparturePoint =
-      !filters.departurePoint ||
-      tour.departurePoint
-        ?.toLowerCase()
-        .includes(filters.departurePoint.toLowerCase());
-
-    return (
-      matchesName && matchesPrice && matchesDestination && matchesDeparturePoint
-    );
-  });
-
-  const indexOfLast = currentPage * toursPerPage;
-  const indexOfFirst = indexOfLast - toursPerPage;
-  const currentTours = filteredTours.slice(indexOfFirst, indexOfLast);
+  const currentTours = allTour;
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -128,7 +101,7 @@ function Tours() {
         className="about-banner"
         style={{ backgroundImage: `url(${aboutBanner})` }}
       >
-        <h1 className="banner-title">Tất cả điểm đến</h1>
+        <h2 className="banner-title">Tất cả điểm đến</h2>
       </div>
 
       <div className="tour-container" style={{ display: "flex" }}>

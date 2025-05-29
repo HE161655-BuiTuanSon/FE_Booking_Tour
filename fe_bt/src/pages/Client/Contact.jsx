@@ -68,24 +68,84 @@ function Contact(props) {
         <div className="review-title">Send us a Review</div>
         <form className="review-form">
           <div className="form-group">
-            <input type="text" id="name" name="name" placeholder="Your name" />
+            <select name="type" id="type" required>
+              <option value="">-- Loại thông tin* --</option>
+              <option value="du-lich">Du lịch</option>
+              <option value="cskh">CSKH</option>
+              <option value="khac">Liên hệ thông tin khác</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Họ tên *"
+              required
+            />
             <input
               type="email"
               id="email"
               name="email"
-              placeholder="Your email"
+              placeholder="Email *"
+              required
             />
           </div>
+
+          <div className="form-group">
+            <input
+              type="text"
+              id="phone"
+              name="phone"
+              placeholder="Số điện thoại *"
+              required
+            />
+            <input
+              type="text"
+              id="company"
+              name="company"
+              placeholder="Tên công ty"
+            />
+          </div>
+
+          <div className="form-group">
+            <input
+              type="number"
+              id="guests"
+              name="guests"
+              placeholder="Số khách"
+            />
+            <input
+              type="text"
+              id="address"
+              name="address"
+              placeholder="Địa chỉ"
+            />
+          </div>
+
+          <div className="form-group">
+            <input
+              type="text"
+              id="subject"
+              name="subject"
+              placeholder="Tiêu đề *"
+              required
+            />
+          </div>
+
           <div className="form-group">
             <textarea
               id="review"
               name="review"
               rows="5"
-              placeholder="Write your review here..."
+              placeholder="Nội dung *"
+              required
             ></textarea>
           </div>
+
           <button type="submit" className="submit-review-btn">
-            Submit
+            Gửi liên hệ
           </button>
         </form>
       </div>

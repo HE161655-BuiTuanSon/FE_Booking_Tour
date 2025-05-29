@@ -17,7 +17,7 @@ function Posts(props) {
         className="about-banner"
         style={{ backgroundImage: `url(${aboutBanner})` }}
       >
-        All Posts
+        <h2>Bài viết</h2>
       </div>
       <Footer></Footer>
     </div>

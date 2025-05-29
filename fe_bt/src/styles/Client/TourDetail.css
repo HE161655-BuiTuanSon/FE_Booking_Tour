@@ -1,0 +1,364 @@
+/* TourDetail.css */
+
+.tour-detail-container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+}
+
+.tour-detail {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.tour-header {
+  background: linear-gradient(90deg, #2563eb, #1e40af);
+  padding: 30px;
+  color: #ffffff;
+}
+
+.tour-header h1 {
+  font-size: 2.5rem;
+  margin: 0 0 10px;
+  font-weight: 700;
+}
+
+.tour-header p {
+  font-size: 1.1rem;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.tour-content-detail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  padding: 30px;
+}
+
+.tour-image-container {
+  flex: 1;
+  min-width: 300px;
+  max-width: 900px;
+}
+
+.tour-image-detail {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+.info-price-detail {
+  display: flex;
+  justify-content: start;
+  flex-direction: column;
+}
+.tour-image:hover {
+  transform: scale(1.05);
+}
+
+.tour-info {
+  flex: 2;
+  min-width: 300px;
+}
+
+.tour-info-grid {
+  display: flex;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 100px;
+  margin-bottom: 20px;
+}
+.info-detail-tour {
+  font-weight: 800;
+  color: #0b5da7;
+}
+.info-extra {
+  border: #0b5da7 2px solid;
+  padding: 10px;
+  border-radius: 7px;
+  display: flex;
+  justify-content: center;
+  background-color: #ffffff;
+  color: #0b5da7;
+  font-size: 20px;
+  width: 400px;
+  font-weight: 600;
+}
+.tour-info-column p {
+  margin: 12px 0;
+  font-size: 1rem;
+  color: #4b5563;
+  display: flex;
+  /* align-items: center; */
+  margin-top: 20px;
+}
+
+.tour-info-column p strong {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.price-highlight {
+  font-size: 1.5rem !important;
+  color: #dc2626 !important;
+  font-weight: 700 !important;
+  background-color: #fef2f2;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.tour-info p {
+  display: flex;
+  /* align-items: center; */
+  gap: 8px;
+}
+
+.tour-info p i {
+  color: #2563eb;
+  font-size: 1.2rem;
+}
+
+.book-now-btn {
+  margin-top: 20px;
+  width: 400px;
+  background-color: #2563eb;
+  text-align: center;
+  align-content: center;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 40px;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.book-now-btn:hover {
+  background-color: #1e40af;
+  transform: translateY(-2px);
+}
+
+.departure-dates {
+  padding: 30px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.departure-dates h2 {
+  font-size: 1.8rem;
+  color: #1f2937;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.departure-dates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.departure-card {
+  background-color: #f8f9fa;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.departure-card p {
+  margin: 6px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.departure-card strong {
+  color: #222;
+}
+
+.departure-card.active {
+  border-color: #28a745; /* xanh lá */
+  background-color: #e9f7ef;
+}
+
+.departure-card.inactive {
+  opacity: 0.6;
+  border-color: #ccc;
+  background-color: #f2f2f2;
+  cursor: not-allowed;
+}
+
+.departure-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.loading-container,
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f5f7fa;
+}
+
+.loading-container p {
+  font-size: 1.2rem;
+  color: #6b7280;
+  animation: pulse 1.5s infinite;
+}
+
+.error-container p {
+  font-size: 1.2rem;
+  color: #dc2626;
+}
+.tour-extra {
+  display: flex;
+  /* flex-direction: column; */
+  gap: 40px;
+}
+.no-data {
+  text-align: center;
+  padding: 50px;
+  font-size: 1.2rem;
+  color: #6b7280;
+}
+.tour-image-slider {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  height: 400px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.tour-image-detail {
+  width: 100%;
+  border-radius: 8px;
+  user-select: none;
+}
+
+.slider-controls {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.slider-controls button {
+  pointer-events: all;
+  background: rgba(11, 93, 167, 0.7);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  padding: 0 12px;
+  cursor: pointer;
+  border-radius: 50%;
+  user-select: none;
+}
+.notes-section {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f5f8fa;
+  border-radius: 8px;
+}
+
+.notes-section h2 {
+  color: #0b5da7;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.notes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.note-item {
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 8px;
+}
+
+.note-title {
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 10px 5px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #0b5da7;
+}
+
+.note-title:hover {
+  color: #084a8f;
+}
+
+.arrow {
+  font-size: 0.9rem;
+}
+
+.note-content {
+  padding: 10px 10px 15px 15px;
+  color: #333;
+  font-size: 1rem;
+  background-color: #e7f0fd;
+  border-radius: 4px;
+  margin-top: 5px;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .tour-content {
+    flex-direction: column;
+  }
+
+  .tour-image-container {
+    max-width: 100%;
+  }
+
+  .tour-image {
+    height: 250px;
+  }
+
+  .tour-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tour-header h1 {
+    font-size: 2rem;
+  }
+
+  .price-highlight {
+    font-size: 1.3rem !important;
+  }
+
+  .book-now-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
