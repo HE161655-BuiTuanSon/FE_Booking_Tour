@@ -1,0 +1,101 @@
+.about-banner {
+  background-size: cover;
+  background-position: center;
+  padding: 60px 0;
+  text-align: center;
+  color: white;
+}
+
+.banner-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.souvenir-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  padding: 40px 60px;
+  background-color: #f8f9fa;
+}
+
+.souvenir-card {
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.souvenir-card:hover {
+  transform: translateY(-5px);
+}
+
+.souvenir-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.souvenir-card h3 {
+  margin-top: 16px;
+  font-size: 20px;
+  color: #333;
+  font-weight: bold;
+}
+
+.souvenir-card p {
+  margin: 8px 0;
+  font-size: 16px;
+  color: #555;
+}
+
+.souvenir-card p strong {
+  color: #333;
+}
+
+.souvenir-card p:last-child {
+  font-weight: bold;
+  color: #d6336c;
+  font-size: 18px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
+.pagination button {
+  background-color: #f1f1f1;
+  color: #333;
+  border: none;
+  padding: 8px 14px;
+  font-size: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #ddd;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination .active-page {
+  background-color: #dc5a26;
+  color: white;
+  font-weight: bold;
+}

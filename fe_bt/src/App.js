@@ -11,6 +11,7 @@ import Authorization from "./components/authorization/Authorization";
 import BookedTour from "./pages/Client/BookedTour";
 import LoginAdmin from "./pages/Admin/LoginAdmin";
 import TourDetail from "./pages/Client/TourDetail";
+import ProductDetail from "./pages/Client/ProductDetail";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/posts" element={<Posts />} />
         <Route path="/booked" element={<BookedTour />} />
         <Route path="/shop" element={<Shop />} />
+        <Route path="/shop/:productId" element={<ProductDetail />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/authorization" element={<Authorization />} />

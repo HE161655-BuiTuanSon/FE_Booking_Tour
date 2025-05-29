@@ -50,6 +50,7 @@ function ImageBanner() {
                 textShadow: "1px 1px 2px #ccc",
                 padding: "10px 20px",
                 borderRadius: "10px",
+                textAlign: "center",
               }}
             >
               <h3>{item.caption}</h3>
