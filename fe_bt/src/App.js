@@ -12,6 +12,8 @@ import BookedTour from "./pages/Client/BookedTour";
 import LoginAdmin from "./pages/Admin/LoginAdmin";
 import TourDetail from "./pages/Client/TourDetail";
 import ProductDetail from "./pages/Client/ProductDetail";
+import ManageTours from "./pages/Admin/ManageTours";
+import PostDetail from "./pages/Client/PostDetail";
 
 function App() {
   return (
@@ -22,9 +24,11 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/tours" element={<Tours />} />
         <Route path="/posts" element={<Posts />} />
+        <Route path="/posts/post-detail/:postId" element={<PostDetail />} />
         <Route path="/booked" element={<BookedTour />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/shop/:productId" element={<ProductDetail />} />
+        <Route path="/manageTour" element={<ManageTours />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/authorization" element={<Authorization />} />

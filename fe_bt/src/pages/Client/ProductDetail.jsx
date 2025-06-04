@@ -5,6 +5,7 @@ import aboutBanner from "../../assets/about_banner.jpg";
 import { getProductById } from "../../services/Client/ProductService";
 import { useParams } from "react-router-dom";
 import "../../styles/Client/ProductDetail.css";
+import Footer from "../../components/footer/Footer";
 
 function ProductDetail() {
   const [showPopup, setShowPopup] = useState(false);
@@ -73,6 +74,7 @@ function ProductDetail() {
           </div>
         </div>
       )}
+      <Footer></Footer>
     </div>
   );
 }

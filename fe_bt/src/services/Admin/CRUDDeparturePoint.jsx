@@ -1,9 +1,9 @@
 import axios from "axios";
-export const createTour = async (tourData) => {
+export const createDesparturePoint = async (desparturePointData) => {
   try {
     const response = await axios.post(
-      "https://localhost:44338/api/Tour",
-      tourData
+      "https://localhost:44338/api/DeparturePoints",
+      desparturePointData
     );
     return response.data;
   } catch (error) {
@@ -11,11 +11,14 @@ export const createTour = async (tourData) => {
     throw error;
   }
 };
-export const updateTour = async (tourId, tourData) => {
+export const updateDesparturePoint = async (
+  desparturePointId,
+  desparturePointData
+) => {
   try {
     const response = await axios.put(
-      `https://localhost:44338/api/Tour/${tourId}`,
-      tourData
+      `https://localhost:44338/api/DeparturePoints/${desparturePointId}`,
+      desparturePointData
     );
     return response.data;
   } catch (error) {
@@ -23,10 +26,10 @@ export const updateTour = async (tourId, tourData) => {
     throw error;
   }
 };
-export const deleteTour = async (tourId) => {
+export const deleteDesparturePoint = async (desparturePointId) => {
   try {
     const response = await axios.delete(
-      `https://localhost:44338/api/Tour/${tourId}`
+      `https://localhost:44338/api/DeparturePoints/${desparturePointId}`
     );
     return response.data;
   } catch (error) {

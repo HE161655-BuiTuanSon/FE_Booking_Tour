@@ -333,7 +333,7 @@ function Home(props) {
 
                 return (
                   <div
-                    key={tour.id}
+                    key={tour.tourId}
                     className={`tour-card ${isHalfVisible ? "half" : ""}`}
                   >
                     <img
@@ -369,7 +369,10 @@ function Home(props) {
                       </p>
                       <button
                         className="book-btn"
-                        onClick={() => navigate(`/tour/tour-detail/${tour.id}`)}
+                        onClick={() => {
+                          navigate(`/tour/tour-detail/${tour.tourId}`);
+                          console.log(tour.tourId);
+                        }}
                       >
                         Đặt ngay
                       </button>
