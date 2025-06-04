@@ -30,6 +30,15 @@ function Footer() {
       </div>
       <div className="footer-b">
         <h3>Chính sách</h3>
+        <div className="info-footer">
+          <p style={{ margin: "0" }}>Đặt tour & xác nhận </p>
+          <p style={{ margin: "0" }}>Hoàn huỷ tour </p>
+          <p style={{ margin: "0" }}>Bảo mật thông tin </p>
+          <p style={{ margin: "0" }}>Thay đổi lịch trình </p>
+          <p style={{ margin: "0" }}>Dành cho trẻ em & người cao tuổi </p>
+          <p style={{ margin: "0" }}>Bảo hiểm du lịch </p>
+          <p style={{ margin: "0" }}>Hỗ trợ & Khiếu nại </p>
+        </div>
       </div>
       <div className="footer-c">
         <h3>Thông tin</h3>

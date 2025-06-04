@@ -109,7 +109,7 @@ function Tours() {
           className="filter-sidebar"
           style={{ width: "250px", padding: "20px" }}
         >
-          <h3>Bộ lọc</h3>
+          <h2 style={{ color: "#dc5a26" }}>Bộ lọc</h2>
           <div className="filter-group">
             <label>Giá (VNĐ)</label>
             <input

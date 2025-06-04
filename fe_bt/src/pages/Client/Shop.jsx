@@ -44,7 +44,7 @@ function Shop(props) {
         className="about-banner"
         style={{ backgroundImage: `url(${aboutBanner})` }}
       >
-        <h2 className="banner-title">Đồ lưu niệm</h2>
+        <h2>Đồ lưu niệm</h2>
       </div>
       <div className="souvenir-container">
         {souvenirs.map((item) => (

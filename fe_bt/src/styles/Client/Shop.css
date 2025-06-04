@@ -16,7 +16,7 @@
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 24px;
   padding: 40px 60px;
-  background-color: #f8f9fa;
+  background-color: #fbf6f2;
 }
 
 .souvenir-card {
@@ -29,6 +29,7 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
+  cursor: pointer;
 }
 
 .souvenir-card:hover {

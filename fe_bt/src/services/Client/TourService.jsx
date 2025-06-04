@@ -10,16 +10,27 @@ export const getTenTour = async () => {
     throw error;
   }
 };
-export const getAllTour = async (page, pageSize, filters) => {
-  const params = {
+export const getAllTour = async (page, pageSize, filters = {}) => {
+  // Xây params cơ bản
+  const rawParams = {
     page,
     pageSize,
-    name: filters.name,
-    priceMin: filters.priceMin,
-    priceMax: filters.priceMax,
-    destination: filters.destination,
-    departurePoint: filters.departurePoint,
+    minPrice: filters.priceMin,
+    maxPrice: filters.priceMax,
+    destinationId: filters.destination,
+    departurePointId: filters.departurePoint,
+    categoryId: filters.category,
+    startDate: filters.startDate,
+    endDate: filters.endDate,
   };
+
+  // Loại bỏ các field không có giá trị (null, undefined, "")
+  const params = Object.fromEntries(
+    Object.entries(rawParams).filter(
+      ([_, v]) => v !== null && v !== undefined && v !== ""
+    )
+  );
+
   try {
     const response = await axios.get(`https://localhost:44338/api/Tour`, {
       params,
@@ -30,17 +41,7 @@ export const getAllTour = async (page, pageSize, filters) => {
     throw error;
   }
 };
-export const filterTour = async (minPrice, maxPrice, startDate, endDate) => {
-  try {
-    const response = await axios.get(
-      "https://localhost:44338/api/Tour?page=1&pageSize=10"
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
+
 export const getTourById = async (tourId) => {
   try {
     const response = await axios.get(
