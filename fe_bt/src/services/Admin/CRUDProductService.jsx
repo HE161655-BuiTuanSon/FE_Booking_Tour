@@ -1,16 +1,19 @@
 import axios from "axios";
-export const createProduct = async (productData) => {
+export const createProduct = async (formData) => {
   try {
     const response = await axios.post(
       "https://localhost:44338/api/Souvenirs",
-      productData
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
     );
     return response.data;
   } catch (error) {
-    console.error(error);
     throw error;
   }
 };
+
 export const updateProduct = async (productId, productData) => {
   try {
     const response = await axios.put(
@@ -31,6 +34,17 @@ export const deleteProduct = async (productId) => {
     return response.data;
   } catch (error) {
     console.error(error);
+    throw error;
+  }
+};
+export const getAllProduct = async (page = 1) => {
+  try {
+    const response = await axios.get(
+      `https://localhost:44338/api/Souvenirs?page=${page}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
     throw error;
   }
 };

@@ -14,6 +14,10 @@ import TourDetail from "./pages/Client/TourDetail";
 import ProductDetail from "./pages/Client/ProductDetail";
 import ManageTours from "./pages/Admin/ManageTours";
 import PostDetail from "./pages/Client/PostDetail";
+import ManageDestination from "./pages/Admin/ManageDestination";
+import ManageDeparturePoint from "./pages/Admin/ManageDeparturePoint";
+import ManageTourCategory from "./pages/Admin/ManageTourCategory";
+import ManageShop from "./pages/Admin/ManageShop";
 
 function App() {
   return (
@@ -31,6 +35,13 @@ function App() {
         <Route path="/manageTour" element={<ManageTours />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/manage-destination" element={<ManageDestination />} />
+        <Route
+          path="/manage-departure-point"
+          element={<ManageDeparturePoint />}
+        />
+        <Route path="/manage-shop" element={<ManageShop />} />
+        <Route path="/manage-tour-category" element={<ManageTourCategory />} />
         <Route path="/authorization" element={<Authorization />} />
         <Route path="/tour/tour-detail/:tourId" element={<TourDetail />} />
         <Route path="*" element={<Navigate to="/" />} />

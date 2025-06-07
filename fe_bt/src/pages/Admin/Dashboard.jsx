@@ -6,12 +6,18 @@ function Dashboard() {
   const navigate = useNavigate();
 
   const sections = [
-    { title: "Manage Tour", path: "/admin/tours" },
-    { title: "Manage Product", path: "/admin/products" },
-    { title: "Manage Post", path: "/admin/posts" },
-    { title: "Manage Destination", path: "/admin/destinations" },
-    { title: "Manage Departure Point", path: "/admin/departure-points" },
+    { title: "Manage Tour", path: "/manage-tour" },
+    { title: "Manage Product", path: "/manage-shop" },
+    { title: "Manage Post", path: "/manage-post" },
+    { title: "Manage Destination", path: "/manage-destination" },
+    { title: "Manage Departure Point", path: "/manage-departure-point" },
+    { title: "Manage Tour Categories", path: "/manage-tour-category" },
   ];
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/loginadmin");
+  };
 
   return (
     <div className="dashboard-container">
@@ -26,6 +32,9 @@ function Dashboard() {
             <h2>{section.title}</h2>
           </div>
         ))}
+        <div className="dashboard-card logout-card" onClick={handleLogout}>
+          <h2>Logout</h2>
+        </div>
       </div>
     </div>
   );
