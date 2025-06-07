@@ -1,0 +1,91 @@
+.destination-container {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.destination-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.destination-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.destination-form input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.destination-form button {
+  padding: 10px 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.destination-form button:hover {
+  background-color: #45a049;
+}
+
+.destination-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.destination-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8f8f8;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.btn-group button {
+  margin-left: 8px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.edit-btn {
+  background-color: #2196f3;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #1976d2;
+}
+
+.delete-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #d32f2f;
+}
+.back-admin {
+  background-color: #2196f3;
+  border: none;
+  cursor: pointer;
+}
+.back-admin:hover {
+  background-color: #1976d2;
+}

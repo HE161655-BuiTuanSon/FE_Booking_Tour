@@ -1,9 +1,9 @@
 import axios from "axios";
-export const createDestination = async (destinationData) => {
+export const createTourCategory = async (tourCategoryData) => {
   try {
     const response = await axios.post(
-      "https://localhost:44338/api/Destinations",
-      destinationData
+      "https://localhost:44338/api/TourCategories",
+      tourCategoryData
     );
     return response.data;
   } catch (error) {
@@ -11,11 +11,11 @@ export const createDestination = async (destinationData) => {
     throw error;
   }
 };
-export const updateDestination = async (destinationId, destinationData) => {
+export const updateTourCategory = async (tourCategoryId, tourCategoryData) => {
   try {
     const response = await axios.put(
-      `https://localhost:44338/api/Destinations/${destinationId}`,
-      destinationData
+      `https://localhost:44338/api/TourCategories/${tourCategoryId}`,
+      tourCategoryData
     );
     return response.data;
   } catch (error) {
@@ -23,10 +23,10 @@ export const updateDestination = async (destinationId, destinationData) => {
     throw error;
   }
 };
-export const deleteDestination = async (destinationId) => {
+export const deleteTourCategory = async (tourCategoryId) => {
   try {
     const response = await axios.delete(
-      `https://localhost:44338/api/Destinations/${destinationId}`
+      `https://localhost:44338/api/TourCategories/${tourCategoryId}`
     );
     return response.data;
   } catch (error) {
@@ -34,10 +34,10 @@ export const deleteDestination = async (destinationId) => {
     throw error;
   }
 };
-export const getAllDestination = async () => {
+export const getAllTourCategory = async () => {
   try {
     const response = await axios.get(
-      "https://localhost:44338/api/Destinations"
+      "https://localhost:44338/api/TourCategories"
     );
     return response.data;
   } catch (error) {

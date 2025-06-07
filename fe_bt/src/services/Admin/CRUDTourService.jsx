@@ -34,3 +34,14 @@ export const deleteTour = async (tourId) => {
     throw error;
   }
 };
+export const getAllTour = async (page, pageSize) => {
+  try {
+    const response = await axios.get(
+      `https://localhost:44338/api/Tour?page=${page}&pageSize=${pageSize}&sortBy=departure`
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

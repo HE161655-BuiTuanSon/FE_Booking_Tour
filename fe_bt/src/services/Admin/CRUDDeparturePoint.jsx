@@ -37,3 +37,14 @@ export const deleteDesparturePoint = async (desparturePointId) => {
     throw error;
   }
 };
+export const getAllDeparturePoint = async () => {
+  try {
+    const response = await axios.get(
+      "https://localhost:44338/api/DeparturePoints"
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
