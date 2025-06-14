@@ -50,6 +50,7 @@ function LoginRegisterPopup({ onClose }) {
         confirmButtonText: "OK",
       });
       localStorage.setItem("token", data.token);
+      localStorage.setItem("role", data.roleId);
     } catch (err) {
       console.error("Login failed:", err);
       setError("Login failed. Please check your credentials.");

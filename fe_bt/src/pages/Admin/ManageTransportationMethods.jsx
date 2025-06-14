@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  getAllDestination,
-  createDestination,
-  updateDestination,
-  deleteDestination,
-} from "../../services/Admin/CRUDDestination";
+
 import {
   Box,
   Button,
@@ -21,29 +16,37 @@ import {
 } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import {
+  createMethodTrans,
+  deleteMethodTrans,
+  getAllMethodTrans,
+  updateMethodTrans,
+} from "../../services/Admin/CRUDTransportationMethods";
 
-function ManageDestination() {
-  const [destinations, setDestinations] = useState([]);
-  const [formData, setFormData] = useState({ DestinationName: "" });
+function ManageTransportationMethods() {
+  const [transportations, setTransportations] = useState([]);
+  const [formData, setFormData] = useState({ methodName: "" });
   const [editingId, setEditingId] = useState(null);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
+
   if (role !== "1") {
     navigate("/");
   }
+
   useEffect(() => {
-    fetchDestinations();
+    fetchTransportations();
   }, []);
 
-  const fetchDestinations = async () => {
+  const fetchTransportations = async () => {
     try {
-      const res = await getAllDestination();
-      setDestinations(res.data || []);
+      const res = await getAllMethodTrans();
+      setTransportations(res.data || []);
     } catch (err) {
-      console.error("Lỗi khi lấy danh sách điểm đến:", err);
-      setError("Không thể tải danh sách điểm đến.");
+      console.error("Lỗi khi lấy danh sách phương thức vận chuyển:", err);
+      setError("Không thể tải danh sách phương thức vận chuyển.");
     }
   };
 
@@ -53,52 +56,55 @@ function ManageDestination() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const name = formData.DestinationName.trim();
+    const name = formData.methodName.trim();
     if (!name) {
-      setError("Tên điểm đến không được để trống.");
+      setError("Tên phương thức vận chuyển không được để trống.");
       return;
     }
 
     try {
       if (editingId) {
-        await updateDestination(editingId, {
-          destinationId: editingId,
-          DestinationName: name,
+        await updateMethodTrans(editingId, {
+          transportationId: editingId,
+          methodName: name,
         });
-        setMessage("Cập nhật điểm đến thành công.");
+        setMessage("Cập nhật phương thức vận chuyển thành công.");
       } else {
-        await createDestination({ DestinationName: name });
-        setMessage("Thêm điểm đến thành công.");
+        await createMethodTrans({ methodName: name });
+        setMessage("Thêm phương thức vận chuyển thành công.");
       }
       resetForm();
-      await fetchDestinations();
+      await fetchTransportations();
     } catch (err) {
-      console.error("Lỗi khi lưu điểm đến:", err);
-      setError("Đã xảy ra lỗi khi lưu điểm đến.");
+      console.error("Lỗi khi lưu phương thức vận chuyển:", err);
+      setError("Đã xảy ra lỗi khi lưu phương thức vận chuyển.");
     }
   };
 
   const handleEdit = (item) => {
-    setFormData({ DestinationName: item.destinationName });
-    setEditingId(item.destinationId);
+    setFormData({ methodName: item.methodName });
+    setEditingId(item.transportationMethodId);
     setError("");
     setMessage("");
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Bạn có chắc chắn muốn xoá điểm đến này?")) return;
+    if (
+      !window.confirm("Bạn có chắc chắn muốn xóa phương thức vận chuyển này?")
+    )
+      return;
     try {
-      await deleteDestination(id);
-      setMessage("Xoá điểm đến thành công.");
-      await fetchDestinations();
+      await deleteMethodTrans(id);
+      setMessage("Xóa phương thức vận chuyển thành công.");
+      await fetchTransportations();
     } catch (err) {
       console.error("Lỗi khi xóa:", err);
-      setError("Không thể xoá điểm đến.");
+      setError("Không thể xóa phương thức vận chuyển.");
     }
   };
 
   const resetForm = () => {
-    setFormData({ DestinationName: "" });
+    setFormData({ methodName: "" });
     setEditingId(null);
     setError("");
   };
@@ -109,8 +115,8 @@ function ManageDestination() {
         Quay lại
       </Button>
 
-      <Typography align="center" variant="h3" mt={2} mb={2}>
-        Quản lý điểm đến
+      <Typography align="center" variant="h4" mt={2} mb={2}>
+        Quản lý phương thức vận chuyển
       </Typography>
 
       <Stack spacing={2} mb={3}>
@@ -126,9 +132,8 @@ function ManageDestination() {
             alignItems="center"
           >
             <TextField
-              label="Tên điểm đến"
-              name="DestinationName"
-              value={formData.DestinationName}
+              name="methodName"
+              value={formData.methodName}
               onChange={handleChange}
               fullWidth
               required
@@ -138,34 +143,34 @@ function ManageDestination() {
             </Button>
             {editingId && (
               <Button variant="outlined" color="inherit" onClick={resetForm}>
-                Huỷ
+                Hủy
               </Button>
             )}
           </Stack>
         </form>
       </Paper>
 
-      {destinations.length === 0 ? (
+      {transportations.length === 0 ? (
         <Typography variant="body2" color="text.secondary">
-          Chưa có điểm đến nào.
+          Chưa có phương thức vận chuyển nào.
         </Typography>
       ) : (
         <List>
-          {destinations.map((d) => (
-            <Paper key={d.destinationId} sx={{ mb: 1 }} elevation={1}>
+          {transportations.map((t) => (
+            <Paper key={t.transportationMethodId} sx={{ mb: 1 }} elevation={1}>
               <ListItem
                 secondaryAction={
                   <Stack direction="row" spacing={1}>
                     <IconButton
                       edge="end"
-                      onClick={() => handleEdit(d)}
+                      onClick={() => handleEdit(t)}
                       color="primary"
                     >
                       <Edit />
                     </IconButton>
                     <IconButton
                       edge="end"
-                      onClick={() => handleDelete(d.destinationId)}
+                      onClick={() => handleDelete(t.transportationMethodId)}
                       color="error"
                     >
                       <Delete />
@@ -173,7 +178,7 @@ function ManageDestination() {
                   </Stack>
                 }
               >
-                <ListItemText primary={d.destinationName} />
+                <ListItemText primary={t.methodName} />
               </ListItem>
             </Paper>
           ))}
@@ -183,4 +188,4 @@ function ManageDestination() {
   );
 }
 
-export default ManageDestination;
+export default ManageTransportationMethods;

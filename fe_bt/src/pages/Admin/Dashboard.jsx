@@ -4,7 +4,10 @@ import "../../styles/Admin/Dashboard.css";
 
 function Dashboard() {
   const navigate = useNavigate();
-
+  const role = localStorage.getItem("role");
+  if (role !== "1") {
+    navigate("/");
+  }
   const sections = [
     { title: "Manage Tour", path: "/manage-tour" },
     { title: "Manage Product", path: "/manage-shop" },
@@ -12,6 +15,8 @@ function Dashboard() {
     { title: "Manage Destination", path: "/manage-destination" },
     { title: "Manage Departure Point", path: "/manage-departure-point" },
     { title: "Manage Tour Categories", path: "/manage-tour-category" },
+    { title: "Manage Transpost Method", path: "/manage-method" },
+    { title: "List Reviews", path: "/list-reviews" },
   ];
 
   const handleLogout = () => {

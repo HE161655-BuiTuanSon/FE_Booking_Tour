@@ -22,6 +22,8 @@ function LoginAdmin(props) {
         confirmButtonText: "OK",
       });
       localStorage.setItem("token", response.token);
+      localStorage.setItem("role", response.roleId);
+      localStorage.setItem("userId", response.userId);
       navigate("/dashboard");
     } catch (err) {
       console.error("Đăng nhập thất bại:", err);

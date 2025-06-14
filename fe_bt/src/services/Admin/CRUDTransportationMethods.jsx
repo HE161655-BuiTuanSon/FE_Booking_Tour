@@ -1,23 +1,21 @@
 import axios from "axios";
-export const createTour = async (tourData) => {
+export const createMethodTrans = async (methodTransData) => {
   try {
     const response = await axios.post(
-      "https://localhost:44338/api/Tour",
-      tourData,
-      { headers: { "Content-Type": "application/json" } }
+      "https://localhost:44338/api/TransportationMethods",
+      methodTransData
     );
-    console.log("data sau khi call", tourData);
     return response.data;
   } catch (error) {
     console.error(error);
     throw error;
   }
 };
-export const updateTour = async (tourId, tourData) => {
+export const updateMethodTrans = async (methodTransId, methodTransData) => {
   try {
     const response = await axios.put(
-      `https://localhost:44338/api/Tour/${tourId}`,
-      tourData
+      `https://localhost:44338/api/TransportationMethods/${methodTransId}`,
+      methodTransData
     );
     return response.data;
   } catch (error) {
@@ -25,10 +23,10 @@ export const updateTour = async (tourId, tourData) => {
     throw error;
   }
 };
-export const deleteTour = async (tourId) => {
+export const deleteMethodTrans = async (methodTransId) => {
   try {
     const response = await axios.delete(
-      `https://localhost:44338/api/Tour/${tourId}`
+      `https://localhost:44338/api/TransportationMethods/${methodTransId}`
     );
     return response.data;
   } catch (error) {
@@ -36,10 +34,10 @@ export const deleteTour = async (tourId) => {
     throw error;
   }
 };
-export const getAllTour = async (page, pageSize) => {
+export const getAllMethodTrans = async () => {
   try {
     const response = await axios.get(
-      `https://localhost:44338/api/Tour?page=${page}&pageSize=${pageSize}&sortBy=departure`
+      "https://localhost:44338/api/TransportationMethods"
     );
     return response.data;
   } catch (error) {

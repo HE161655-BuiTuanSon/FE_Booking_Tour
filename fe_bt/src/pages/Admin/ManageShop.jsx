@@ -25,17 +25,21 @@ function ManageShop() {
   const [products, setProducts] = useState([]);
   const [formData, setFormData] = useState({
     tourId: "",
-    souvenirName: "",
+    name: "",
     description: "",
     price: "",
     file: null,
+    currentImageUrl: "",
   });
   const [editingId, setEditingId] = useState(null);
   const [open, setOpen] = useState(false);
   const [pageSize, setPageSize] = useState(5);
 
   const navigate = useNavigate();
-
+  const role = localStorage.getItem("role");
+  if (role !== "1") {
+    navigate("/");
+  }
   useEffect(() => {
     fetchProducts();
     fetchTours();
@@ -80,17 +84,26 @@ function ManageShop() {
       [name]: files ? files[0] : value,
     }));
   };
+  const fixDriveUrl = (url) => {
+    if (typeof url !== "string") return url;
+    if (!url.includes("drive.google.com/uc?id=")) return url;
 
+    const parts = url.split("id=");
+    const fileId = parts[1]?.split("&")[0];
+    return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const formPayload = new FormData();
       formPayload.append("tourId", formData.tourId);
-      formPayload.append("souvenirName", formData.souvenirName);
+      formPayload.append("SouvenirName", formData.SouvenirName);
       formPayload.append("description", formData.description);
       formPayload.append("price", Number(formData.price)); // chuyển về number
-      formPayload.append("image", formData.file); // tên trường phải đúng với backend yêu cầu
+      if (formData.file) {
+        formPayload.append("image", formData.file); // Chỉ append nếu có file mới
+      } // tên trường phải đúng với backend yêu cầu
 
       if (editingId) {
         await updateProduct(editingId, formPayload);
@@ -100,10 +113,11 @@ function ManageShop() {
 
       setFormData({
         tourId: "",
-        souvenirName: "",
+        SouvenirName: "",
         description: "",
         price: "",
         file: null,
+        currentImageUrl: "",
       });
       setEditingId(null);
       await fetchProducts();
@@ -115,10 +129,11 @@ function ManageShop() {
   const handleEdit = (product) => {
     setFormData({
       tourId: product.tourId || "",
-      souvenirName: product.souvenirName,
+      SouvenirName: product.SouvenirName,
       price: product.price,
       description: product.description,
       file: null,
+      currentImageUrl: product.imageUrl || "",
     });
     setEditingId(product.souvenirId);
     setOpen(true); // bật dialog luôn
@@ -141,15 +156,15 @@ function ManageShop() {
       renderCell: (params) =>
         params.row.imageUrl ? (
           <img
-            src={params.row.imageUrl}
-            alt={params.row.souvenirName}
+            src={fixDriveUrl(params.row.imageUrl)}
+            alt={params.row.name}
             style={{ width: 60, height: 60, objectFit: "cover" }}
           />
         ) : (
           "Không có ảnh"
         ),
     },
-    { field: "souvenirName", headerName: "Tên sản phẩm", width: 200 },
+    { field: "name", headerName: "Tên sản phẩm", width: 200 },
     { field: "price", headerName: "Giá", width: 100 },
     { field: "description", headerName: "Mô tả", width: 250 },
     {
@@ -178,7 +193,7 @@ function ManageShop() {
       <Button variant="outlined" onClick={() => navigate("/dashboard")}>
         Quay lại
       </Button>
-      <Typography variant="h5" sx={{ my: 2 }}>
+      <Typography align="center" variant="h3" sx={{ my: 2 }}>
         Quản lý cửa hàng (Souvenirs)
       </Typography>
       <Button variant="contained" onClick={() => setOpen(true)}>
@@ -221,10 +236,10 @@ function ManageShop() {
           </select>
           <TextField
             margin="dense"
-            name="souvenirName"
+            name="name"
             label="Tên sản phẩm"
             fullWidth
-            value={formData.souvenirName}
+            value={formData.name}
             onChange={handleChange}
             required
           />
@@ -248,6 +263,16 @@ function ManageShop() {
             value={formData.description}
             onChange={handleChange}
           />
+          {formData.currentImageUrl && (
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="subtitle1">Ảnh hiện tại:</Typography>
+              <img
+                src={fixDriveUrl(formData.currentImageUrl)}
+                alt="Current"
+                style={{ width: 100, height: 100, objectFit: "cover" }}
+              />
+            </Box>
+          )}
           <input
             type="file"
             name="file"

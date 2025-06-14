@@ -1,10 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { getAllTour } from "../../services/Client/TourService";
 import {
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Grid,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Paper,
+  Typography,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  FormHelperText,
+} from "@mui/material";
+import {
   createTour,
   deleteTour,
   updateTour,
 } from "../../services/Admin/CRUDTourService";
+import { useNavigate } from "react-router-dom";
+import { getAllDestination } from "../../services/Admin/CRUDDestination";
+import { getAllDeparturePoint } from "../../services/Admin/CRUDDeparturePoint";
+import { getAllMethodTrans } from "../../services/Admin/CRUDTransportationMethods";
+import { getAllTourCategory } from "../../services/Admin/CRUDTourCategories";
 
 function ManageTours() {
   const [tours, setTours] = useState([]);
@@ -24,39 +50,143 @@ function ManageTours() {
     IdealTime: "",
     Vehicle: "",
     Promotion: "",
-    CreateTourDeparture: [],
+    CreateTourDeparture: [], // Assuming this is an array of strings for now
     images: [],
   });
+  console.log(formData);
+  const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editId, setEditId] = useState(null);
   const [currentPage] = useState(1);
   const pageSize = 10;
-
-  // Mới: popup show/hide
   const [showPopup, setShowPopup] = useState(false);
+  const navigate = useNavigate();
+  const role = localStorage.getItem("role");
+  if (role !== "1") {
+    navigate("/");
+  }
+  const [destinations, setDestinations] = useState([]);
+  const [departurePoints, setDeparturePoints] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [transportationMethods, setTransportationMethods] = useState([]);
 
   useEffect(() => {
     fetchTours();
+    fecthDestination();
+    fetchDeparturePoint();
+    fetchMethodTrans();
+    fetchCategoryTour();
   }, []);
+
+  const fetchCategoryTour = async () => {
+    try {
+      const data = await getAllTourCategory();
+      setCategories(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fecthDestination = async () => {
+    try {
+      const data = await getAllDestination();
+      setDestinations(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchDeparturePoint = async () => {
+    try {
+      const data = await getAllDeparturePoint();
+      setDeparturePoints(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchMethodTrans = async () => {
+    try {
+      const data = await getAllMethodTrans();
+      setTransportationMethods(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const fetchTours = async () => {
     try {
       const data = await getAllTour(currentPage, pageSize);
       setTours(data.tours);
-      console.log(data);
     } catch (err) {
       console.error("Lỗi khi lấy danh sách tour", err);
     }
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+    const requiredFields = [
+      "TourName",
+      "Description",
+      "DurationDays",
+      "Cuisine",
+      "Vehicle",
+      "IdealTime",
+      "Promotion",
+      "SightseeingSpot",
+      "SuitableSubject",
+    ];
+
+    requiredFields.forEach((field) => {
+      if (!formData[field] || formData[field].toString().trim() === "") {
+        newErrors[field] = `Trường ${field} là bắt buộc`;
+      }
+    });
+
+    if (formData.CreateTourDeparture.length === 0) {
+      newErrors.CreateTourDeparture = "Phải có ít nhất một ngày khởi hành";
+    }
+
+    if (formData.DestinationId === 0) {
+      newErrors.DestinationId = "Vui lòng chọn điểm đến";
+    }
+    if (formData.CategoryId === 0) {
+      newErrors.CategoryId = "Vui lòng chọn thể loại";
+    }
+    if (formData.DeparturePointId === 0) {
+      newErrors.DeparturePointId = "Vui lòng chọn điểm khởi hành";
+    }
+    if (formData.TransportationMethodId === 0) {
+      newErrors.TransportationMethodId = "Vui lòng chọn phương tiện";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+    const payload = {
+      ...formData,
+      Price: Number(formData.Price),
+      MaxParticipants: Number(formData.MaxParticipants),
+      DestinationId: Number(formData.DestinationId),
+      CategoryId: Number(formData.CategoryId),
+      DeparturePointId: Number(formData.DeparturePointId),
+      TransportationMethodId: Number(formData.TransportationMethodId),
+    };
+    console.log("CreateTourDeparture gửi đi:", formData.CreateTourDeparture);
+
     try {
+      console.log("Payload gửi đi:", JSON.stringify(payload, null, 2));
       if (isEditing) {
-        await updateTour(editId, formData);
+        await updateTour(editId, payload);
       } else {
-        await createTour(formData);
+        await createTour(payload);
       }
+
+      // Reset lại form sau khi gửi
       setFormData({
         TourName: "",
         Description: "",
@@ -76,12 +206,16 @@ function ManageTours() {
         CreateTourDeparture: [],
         images: [],
       });
+      setErrors({});
       setIsEditing(false);
       setEditId(null);
-      setShowPopup(false); // Đóng popup sau khi tạo hoặc sửa
+      setShowPopup(false);
       fetchTours();
     } catch (err) {
       console.error("Lỗi khi submit tour", err);
+      if (err.response && err.response.data.errors) {
+        setErrors(err.response.data.errors);
+      }
     }
   };
 
@@ -98,7 +232,7 @@ function ManageTours() {
 
   const handleEdit = (tour) => {
     setFormData({
-      TourName: tour.tourName,
+      TourName: tour.TourName,
       Description: tour.description,
       DurationDays: tour.durationDays,
       Price: tour.price,
@@ -118,18 +252,41 @@ function ManageTours() {
     });
     setIsEditing(true);
     setEditId(tour.tourId);
-    setShowPopup(true); // Mở popup khi sửa
+    setShowPopup(true);
+    setErrors({});
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: type === "number" ? Number(value) : value,
     }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  // Mở popup tạo mới
+  const handleCreateTourDepartureChange = (e) => {
+    const value = e.target.value;
+
+    const departures = value
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean)
+      .map((date) => ({
+        departureDate: new Date(date).toISOString(),
+        availableSlots: 0,
+      }));
+
+    console.log("✅ Đã convert CreateTourDeparture:", departures);
+
+    setFormData((prev) => ({
+      ...prev,
+      CreateTourDeparture: departures,
+    }));
+
+    setErrors((prev) => ({ ...prev, CreateTourDeparture: "" }));
+  };
+
   const handleCreateNew = () => {
     setFormData({
       TourName: "",
@@ -153,230 +310,317 @@ function ManageTours() {
     setIsEditing(false);
     setEditId(null);
     setShowPopup(true);
+    setErrors({});
   };
 
   return (
     <div style={{ padding: "30px" }}>
-      <h2>Quản lý Tour</h2>
+      <Button variant="outlined" onClick={() => navigate("/dashboard")}>
+        Quay lại
+      </Button>
+      <Typography align="center" variant="h4" gutterBottom>
+        Quản lý Tour
+      </Typography>
 
-      <button onClick={handleCreateNew} style={{ marginBottom: "20px" }}>
-        Tạo mới Tour
-      </button>
-
-      {/* POPUP FORM */}
-      {showPopup && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            backgroundColor: "rgba(0,0,0,0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 999,
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "20px",
-              borderRadius: "8px",
-              maxHeight: "90vh",
-              overflowY: "auto",
-              width: "400px",
-            }}
-          >
-            <h3>{isEditing ? "Cập nhật Tour" : "Tạo mới Tour"}</h3>
-            <form onSubmit={handleSubmit}>
-              <input
-                name="TourName"
-                value={formData.TourName}
-                onChange={handleChange}
-                placeholder="Tên tour"
-                required
-                style={{ width: "100%", marginBottom: "8px" }}
-              />
-              <input
-                name="Description"
-                value={formData.Description}
-                onChange={handleChange}
-                placeholder="Mô tả"
-                style={{ width: "100%", marginBottom: "8px" }}
-              />
-              <input
-                name="DurationDays"
-                value={formData.DurationDays}
-                onChange={handleChange}
-                placeholder="Số ngày"
-                style={{ width: "100%", marginBottom: "8px" }}
-              />
-              <input
-                type="number"
-                name="Price"
-                value={formData.Price}
-                onChange={handleChange}
-                placeholder="Giá"
-                style={{ width: "100%", marginBottom: "8px" }}
-              />
-              <input
-                type="number"
-                name="DestinationId"
-                value={formData.DestinationId}
-                onChange={handleChange}
-                placeholder="ID Điểm đến"
-                style={{ width: "100%", marginBottom: "8px" }}
-              />
-              <input
-                type="number"
-                name="CategoryId"
-                value={formData.CategoryId}
-                onChange={handleChange}
-                placeholder="ID Thể loại"
-                style={{ width: "100%", marginBottom: "8px" }}
-              />
-              <input
-                type="number"
-                name="DeparturePointId"
-                value={formData.DeparturePointId}
-                onChange={handleChange}
-                placeholder="ID Điểm khởi hành"
-                style={{ width: "100%", marginBottom: "8px" }}
-              />
-              <input
-                type="number"
-                name="TransportationMethodId"
-                value={formData.TransportationMethodId}
-                onChange={handleChange}
-                placeholder="ID Phương tiện"
-                style={{ width: "100%", marginBottom: "8px" }}
-              />
-              <input
-                type="number"
-                name="MaxParticipants"
-                value={formData.MaxParticipants}
-                onChange={handleChange}
-                placeholder="Số người tối đa"
-                style={{ width: "100%", marginBottom: "8px" }}
-              />
-              <input
-                name="SightseeingSpot"
-                value={formData.SightseeingSpot}
-                onChange={handleChange}
-                placeholder="Điểm tham quan"
-                style={{ width: "100%", marginBottom: "8px" }}
-              />
-              <input
-                name="Cuisine"
-                value={formData.Cuisine}
-                onChange={handleChange}
-                placeholder="Ẩm thực"
-                style={{ width: "100%", marginBottom: "8px" }}
-              />
-              <input
-                name="SuitableSubject"
-                value={formData.SuitableSubject}
-                onChange={handleChange}
-                placeholder="Đối tượng phù hợp"
-                style={{ width: "100%", marginBottom: "8px" }}
-              />
-              <input
-                name="IdealTime"
-                value={formData.IdealTime}
-                onChange={handleChange}
-                placeholder="Thời điểm lý tưởng"
-                style={{ width: "100%", marginBottom: "8px" }}
-              />
-              <input
-                name="Vehicle"
-                value={formData.Vehicle}
-                onChange={handleChange}
-                placeholder="Phương tiện di chuyển"
-                style={{ width: "100%", marginBottom: "8px" }}
-              />
-              <input
-                name="Promotion"
-                value={formData.Promotion}
-                onChange={handleChange}
-                placeholder="Khuyến mãi"
-                style={{ width: "100%", marginBottom: "8px" }}
-              />
-
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <button type="submit">
-                  {isEditing ? "Cập nhật" : "Tạo mới"}
-                </button>
-                <button type="button" onClick={() => setShowPopup(false)}>
-                  Hủy
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* DANH SÁCH TOUR */}
-      <table
-        border="1"
-        cellPadding="10"
-        style={{ width: "100%", borderCollapse: "collapse" }}
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleCreateNew}
+        sx={{ mb: 3 }}
       >
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Tên Tour</th>
-            <th>Mô tả</th>
-            <th>Thời lượng</th>
-            <th>Giá</th>
-            <th>Phương tiện</th>
-            <th>Điểm đến</th>
-            <th>Loại</th>
-            <th>Điểm xuất phát</th>
-            <th>Số lượng tối đa</th>
-            <th>Khởi hành tiếp theo</th>
-            <th>Ảnh</th>
-            <th>Hành động</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tours.map((tour) => (
-            <tr key={tour.tourId}>
-              <td>{tour.tourId}</td>
-              <td>{tour.tourName}</td>
-              <td>{tour.description}</td>
-              <td>{tour.durationDays}</td>
-              <td>{tour.price.toLocaleString()} đ</td>
-              <td>{tour.vehicle}</td>
-              <td>{tour.destination}</td>
-              <td>{tour.category}</td>
-              <td>{tour.departurePoint}</td>
-              <td>{tour.maxParticipants}</td>
-              <td>
-                {tour.nextDeparture
-                  ? new Date(tour.nextDeparture).toLocaleDateString()
-                  : "Chưa có"}
-              </td>
-              <td>
-                {tour.imageUrl ? (
-                  <img
-                    src={`https://your-image-host/${tour.imageUrl}`}
-                    alt={tour.tourName}
-                    style={{ width: "100px", height: "auto" }}
-                  />
-                ) : (
-                  "Không có ảnh"
+        Tạo mới Tour
+      </Button>
+
+      <Dialog
+        open={showPopup}
+        onClose={() => setShowPopup(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          {isEditing ? "Cập nhật Tour" : "Tạo mới Tour"}
+        </DialogTitle>
+        <DialogContent dividers>
+          <Grid container spacing={2}>
+            {[
+              {
+                label: "Tên tour",
+                name: "TourName",
+                type: "text",
+                required: true,
+              },
+              {
+                label: "Mô tả",
+                name: "Description",
+                type: "text",
+                required: true,
+              },
+              {
+                label: "Số ngày",
+                name: "DurationDays",
+                type: "text",
+                required: true,
+              },
+              { label: "Giá", name: "Price", type: "number" },
+              {
+                label: "Số người tối đa",
+                name: "MaxParticipants",
+                type: "number",
+              },
+              {
+                label: "Điểm tham quan",
+                name: "SightseeingSpot",
+                type: "text",
+                required: true,
+              },
+              {
+                label: "Ẩm thực",
+                name: "Cuisine",
+                type: "text",
+                required: true,
+              },
+              {
+                label: "Đối tượng phù hợp",
+                name: "SuitableSubject",
+                type: "text",
+                required: true,
+              },
+              {
+                label: "Thời điểm lý tưởng",
+                name: "IdealTime",
+                type: "text",
+                required: true,
+              },
+              {
+                label: "Phương tiện di chuyển",
+                name: "Vehicle",
+                type: "text",
+                required: true,
+              },
+              {
+                label: "Khuyến mãi",
+                name: "Promotion",
+                type: "text",
+                required: true,
+              },
+            ].map((field) => (
+              <Grid item xs={12} key={field.name}>
+                <TextField
+                  fullWidth
+                  label={field.label}
+                  name={field.name}
+                  value={formData[field.name]}
+                  onChange={handleChange}
+                  type={field.type}
+                  required={field.required}
+                  error={!!errors[field.name]}
+                  helperText={errors[field.name]}
+                />
+              </Grid>
+            ))}
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Ngày khởi hành (cách nhau bởi dấu phẩy)"
+                name="CreateTourDeparture"
+                value={formData.CreateTourDeparture.map((item) =>
+                  item?.departureDate
+                    ? new Date(item.departureDate).toISOString().split("T")[0]
+                    : ""
+                ).join(", ")}
+                onChange={handleCreateTourDepartureChange}
+                required
+                error={!!errors.CreateTourDeparture}
+                helperText={
+                  errors.CreateTourDeparture ||
+                  "Nhập các ngày, ví dụ: 2025-06-15, 2025-06-20"
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl fullWidth error={!!errors.DestinationId}>
+                <InputLabel>Điểm đến</InputLabel>
+                <Select
+                  name="DestinationId"
+                  value={formData.DestinationId}
+                  onChange={handleChange}
+                  label="Điểm đến"
+                  required
+                >
+                  <MenuItem value={0}>Chọn điểm đến</MenuItem>
+                  {destinations.map((dest) => (
+                    <MenuItem
+                      key={dest.destinationId}
+                      value={dest.destinationId}
+                    >
+                      {dest.destinationName}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {errors.DestinationId && (
+                  <FormHelperText>{errors.DestinationId}</FormHelperText>
                 )}
-              </td>
-              <td>
-                <button onClick={() => handleEdit(tour)}>Sửa</button>
-                <button onClick={() => handleDelete(tour.tourId)}>Xóa</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl fullWidth error={!!errors.CategoryId}>
+                <InputLabel>Thể loại</InputLabel>
+                <Select
+                  name="CategoryId"
+                  value={formData.CategoryId}
+                  onChange={handleChange}
+                  label="Thể loại"
+                  required
+                >
+                  <MenuItem value={0}>Chọn thể loại</MenuItem>
+                  {categories.map((cat) => (
+                    <MenuItem key={cat.categoryId} value={cat.categoryId}>
+                      {cat.categoryName}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {errors.CategoryId && (
+                  <FormHelperText>{errors.CategoryId}</FormHelperText>
+                )}
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl fullWidth error={!!errors.DeparturePointId}>
+                <InputLabel>Điểm khởi hành</InputLabel>
+                <Select
+                  name="DeparturePointId"
+                  value={formData.DeparturePointId}
+                  onChange={handleChange}
+                  label="Điểm khởi hành"
+                  required
+                >
+                  <MenuItem value={0}>Chọn điểm khởi hành</MenuItem>
+                  {departurePoints.map((dep) => (
+                    <MenuItem
+                      key={dep.departurePointId}
+                      value={dep.departurePointId}
+                    >
+                      {dep.departurePointName}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {errors.DeparturePointId && (
+                  <FormHelperText>{errors.DeparturePointId}</FormHelperText>
+                )}
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl fullWidth error={!!errors.TransportationMethodId}>
+                <InputLabel>Phương tiện</InputLabel>
+                <Select
+                  name="TransportationMethodId"
+                  value={formData.TransportationMethodId}
+                  onChange={handleChange}
+                  label="Phương tiện"
+                  required
+                >
+                  <MenuItem value={0}>Chọn phương tiện</MenuItem>
+                  {transportationMethods.map((trans) => (
+                    <MenuItem
+                      key={trans.transportationMethodId}
+                      value={trans.transportationMethodId}
+                    >
+                      {trans.methodName}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {errors.TransportationMethodId && (
+                  <FormHelperText>
+                    {errors.TransportationMethodId}
+                  </FormHelperText>
+                )}
+              </FormControl>
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowPopup(false)} color="secondary">
+            Hủy
+          </Button>
+          <Button onClick={handleSubmit} variant="contained" color="primary">
+            {isEditing ? "Cập nhật" : "Tạo mới"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Paper elevation={3} sx={{ overflowX: "auto" }}>
+        <Table>
+          <TableHead
+            sx={{ backgroundColor: (theme) => theme.palette.primary.main }}
+          >
+            <TableRow>
+              <TableCell sx={{ color: "white" }}>ID</TableCell>
+              <TableCell sx={{ color: "white" }}>Tên Tour</TableCell>
+              <TableCell sx={{ color: "white" }}>Mô tả</TableCell>
+              <TableCell sx={{ color: "white" }}>Thời lượng</TableCell>
+              <TableCell sx={{ color: "white" }}>Giá</TableCell>
+              <TableCell sx={{ color: "white" }}>Phương tiện</TableCell>
+              <TableCell sx={{ color: "white" }}>Điểm đến</TableCell>
+              <TableCell sx={{ color: "white" }}>Loại</TableCell>
+              <TableCell sx={{ color: "white" }}>Điểm xuất phát</TableCell>
+              <TableCell sx={{ color: "white" }}>Số lượng tối đa</TableCell>
+              <TableCell sx={{ color: "white" }}>Khởi hành tiếp theo</TableCell>
+              <TableCell sx={{ color: "white" }}>Ảnh</TableCell>
+              <TableCell sx={{ color: "white" }}>Hành động</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {tours.map((tour) => (
+              <TableRow key={tour.tourId}>
+                <TableCell>{tour.tourId}</TableCell>
+                <TableCell>{tour.TourName}</TableCell>
+                <TableCell>{tour.description}</TableCell>
+                <TableCell>{tour.durationDays}</TableCell>
+                <TableCell>{tour.price.toLocaleString()} đ</TableCell>
+                <TableCell>{tour.vehicle}</TableCell>
+                <TableCell>{tour.destination}</TableCell>
+                <TableCell>{tour.category}</TableCell>
+                <TableCell>{tour.departurePoint}</TableCell>
+                <TableCell>{tour.maxParticipants}</TableCell>
+                <TableCell>
+                  {tour.nextDeparture
+                    ? new Date(tour.nextDeparture).toLocaleDateString()
+                    : "Chưa có"}
+                </TableCell>
+                <TableCell>
+                  {tour.imageUrl ? (
+                    <img
+                      src={`https://your-image-host/${tour.imageUrl}`}
+                      alt={tour.TourName}
+                      style={{ width: "80px", height: "auto", borderRadius: 4 }}
+                    />
+                  ) : (
+                    "Không có ảnh"
+                  )}
+                </TableCell>
+                <TableCell>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    onClick={() => handleEdit(tour)}
+                    sx={{ mb: 1 }}
+                  >
+                    Sửa
+                  </Button>
+                  <Button
+                    size="small"
+                    color="error"
+                    variant="outlined"
+                    onClick={() => handleDelete(tour.tourId)}
+                  >
+                    Xóa
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Paper>
     </div>
   );
 }

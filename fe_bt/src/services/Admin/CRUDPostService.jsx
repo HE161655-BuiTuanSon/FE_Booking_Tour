@@ -34,3 +34,14 @@ export const deletePost = async (postId) => {
     throw error;
   }
 };
+export const getAllPost = async (page = 1, pageSize = 10) => {
+  try {
+    const response = await axios.get(
+      `https://localhost:44338/api/Articles?page=${page}&pageSize=${pageSize}`
+    );
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
