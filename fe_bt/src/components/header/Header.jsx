@@ -4,6 +4,7 @@ import "./Header.css";
 
 function Header({ onLoginClick, onRegisterClick }) {
   const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
   const fullName = localStorage.getItem("fullName");
   const navigate = useNavigate();
 
@@ -23,13 +24,13 @@ function Header({ onLoginClick, onRegisterClick }) {
         <NavLink to="/about">Về chúng tôi</NavLink>
         <NavLink to="/tours">Điểm đến</NavLink>
         <NavLink to="/posts">Bài viết</NavLink>
-        {token && <NavLink to="/booked">Booked Tours</NavLink>}
+        {token && role === "2" && <NavLink to="/booked">Booked Tours</NavLink>}
         <NavLink to="/shop">Đồ lưu niệm</NavLink>
         <NavLink to="/contact">Liên hệ</NavLink>
       </nav>
 
       <div className="user-section">
-        {!token ? (
+        {!token || role !== "2" ? (
           <>
             <button onClick={onLoginClick} className="btn-login">
               Đăng nhập

@@ -29,7 +29,10 @@ function ManageTourCategory() {
   const [editingId, setEditingId] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
-
+  const role = localStorage.getItem("role");
+  if (role !== "1") {
+    navigate("/");
+  }
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -86,15 +89,11 @@ function ManageTourCategory() {
 
   return (
     <Box sx={{ p: 4 }}>
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={() => navigate("/dashboard")}
-      >
-        ← Quay lại
+      <Button variant="outlined" onClick={() => navigate("/dashboard")}>
+        Quay lại
       </Button>
 
-      <Typography variant="h4" mt={2} mb={2}>
+      <Typography align="center" variant="h4" mt={2} mb={2}>
         Quản lý danh mục tour
       </Typography>
 

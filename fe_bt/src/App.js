@@ -18,6 +18,9 @@ import ManageDestination from "./pages/Admin/ManageDestination";
 import ManageDeparturePoint from "./pages/Admin/ManageDeparturePoint";
 import ManageTourCategory from "./pages/Admin/ManageTourCategory";
 import ManageShop from "./pages/Admin/ManageShop";
+import ManageTransportationMethods from "./pages/Admin/ManageTransportationMethods";
+import ManagePost from "./pages/Admin/ManagePost";
+import ListConsultation from "./pages/Admin/ListConsultation";
 
 function App() {
   return (
@@ -32,7 +35,7 @@ function App() {
         <Route path="/booked" element={<BookedTour />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/shop/:productId" element={<ProductDetail />} />
-        <Route path="/manageTour" element={<ManageTours />} />
+        <Route path="/manage-tour" element={<ManageTours />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/manage-destination" element={<ManageDestination />} />
@@ -40,6 +43,12 @@ function App() {
           path="/manage-departure-point"
           element={<ManageDeparturePoint />}
         />
+        <Route
+          path="/manage-method"
+          element={<ManageTransportationMethods />}
+        />
+        <Route path="/list-reviews" element={<ListConsultation />} />
+        <Route path="/manage-post" element={<ManagePost />} />
         <Route path="/manage-shop" element={<ManageShop />} />
         <Route path="/manage-tour-category" element={<ManageTourCategory />} />
         <Route path="/authorization" element={<Authorization />} />
