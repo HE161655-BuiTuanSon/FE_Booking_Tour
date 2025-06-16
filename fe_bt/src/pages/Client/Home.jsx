@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import LoginRegisterPopup from "../../components/authorization/LoginRegisterPopup";
@@ -17,17 +17,24 @@ import three1 from "../../assets/three1.png";
 import three2 from "../../assets/three2.png";
 import three3 from "../../assets/three3.png";
 import { getFourPosts } from "../../services/Client/PostService";
-import { getTenTour } from "../../services/Client/TourService";
+import { getAllTour, getTenTour } from "../../services/Client/TourService";
+import { getAllDestination } from "../../services/Admin/CRUDDestination";
 function Home(props) {
   const [showPopup, setShowPopup] = useState(false);
   const [showPromoPopup, setShowPromoPopup] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [destination, setDestination] = useState("");
+  const [destinations, setDestinations] = useState([]);
   const dropdownRef = useRef(null);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [priceMin, setPriceMin] = useState("");
   const navigate = useNavigate();
   const [fourPosts, setFourPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [tourData, setTourData] = useState([]);
+  const [destinationId, setDestinationId] = useState(null);
+  const inputRef = useRef(null);
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -41,6 +48,18 @@ function Home(props) {
     };
 
     fetchPosts();
+  }, []);
+  useEffect(() => {
+    const fetchDestinations = async () => {
+      try {
+        const data = await getAllDestination();
+        setDestinations(data.data);
+      } catch (error) {
+        console.error("Lỗi khi lấy danh sách điểm đến:", error);
+      }
+    };
+
+    fetchDestinations();
   }, []);
   useEffect(() => {
     const fetchTours = async () => {
@@ -91,14 +110,23 @@ function Home(props) {
       window.removeEventListener("mousemove", handleInteraction);
     };
   }, []);
-  const popularDestinations = [
-    { name: "Da Lat", country: "Vietnam" },
-    { name: "Vung Tau", country: "Vietnam" },
-    { name: "Ho Chi Minh City", country: "Vietnam" },
-    { name: "Da Nang", country: "Vietnam" },
-    { name: "Hanoi", country: "Vietnam" },
-  ];
-
+  const handleSelectDestination = (destinationName, destinationId) => {
+    setDestination(destinationName);
+    setDestinationId(destinationId);
+    setIsDropdownOpen(false);
+  };
+  const handleSearch = async () => {
+    try {
+      const queryParams = new URLSearchParams({
+        ...(destinationId && { destinationId: destinationId.toString() }),
+        ...(startDate && { startDate }),
+        ...(endDate && { endDate }),
+      }).toString();
+      navigate(`/tours?${queryParams}`);
+    } catch (err) {
+      console.error("Lỗi khi tìm kiếm tour:", err);
+    }
+  };
   const fixDriveUrl = (url) => {
     if (typeof url !== "string") return url;
     if (!url.includes("drive.google.com/uc?id=")) return url;
@@ -112,10 +140,6 @@ function Home(props) {
     setIsDropdownOpen(true);
   };
 
-  const handleSelectDestination = (destinationName) => {
-    setDestination(destinationName);
-    setIsDropdownOpen(false);
-  };
   const PromoPopup = ({ onClose }) => {
     const navigate = useNavigate();
     const popupRef = useRef(null);
@@ -160,7 +184,15 @@ function Home(props) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  const SearchBar = () => {
+  const getTodayDateString = () => {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
+  const SearchBar = ({ onSearch }) => {
     return (
       <div className="search-bar-overlay">
         <div className="search-bar-container" ref={dropdownRef}>
@@ -177,16 +209,22 @@ function Home(props) {
               <div className="dropdown-container">
                 <h4 className="dropdown-header">Popular nearby destinations</h4>
                 <ul className="dropdown-list">
-                  {popularDestinations.map((dest, index) => (
+                  {destinations.map((dest) => (
                     <li
-                      key={index}
+                      key={dest.destinationId}
                       className="dropdown-item"
-                      onClick={() => handleSelectDestination(dest.name)}
+                      onClick={() =>
+                        handleSelectDestination(
+                          dest.destinationName,
+                          dest.destinationId
+                        )
+                      }
                     >
                       <FaMapMarkerAlt className="dropdown-icon" />
                       <div className="dropdown-text">
-                        <span className="dropdown-name">{dest.name}</span>
-                        <span className="dropdown-country">{dest.country}</span>
+                        <span className="dropdown-name">
+                          {dest.destinationName}
+                        </span>
                       </div>
                     </li>
                   ))}
@@ -196,23 +234,34 @@ function Home(props) {
           </div>
           <div className="search-field">
             <label>Ngày đi</label>
-            <input type="date" />
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              min={getTodayDateString()}
+            />
           </div>
           <div className="search-field">
-            <label>Ngày đến</label>
-            <input type="date" />
+            <label>Ngày về</label>
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              min={startDate || getTodayDateString()}
+            />
           </div>
-          <div className="search-field">
-            <label>Ngân sách (VND)</label>
-            <input type="number" placeholder="Nhập ngân sách" />
-          </div>
-          <button className="search-btn" aria-label="Tìm kiếm">
+          <button
+            className="search-btn"
+            aria-label="Tìm kiếm"
+            onClick={handleSearch}
+          >
             <FaSearch />
           </button>
         </div>
       </div>
     );
   };
+
   const ThreeImages = () => {
     return (
       <div className="three-container">

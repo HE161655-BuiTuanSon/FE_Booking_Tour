@@ -11,20 +11,18 @@ export const getTenTour = async () => {
   }
 };
 export const getAllTour = async (page, pageSize, filters = {}) => {
-  // Xây params cơ bản
   const rawParams = {
     page,
     pageSize,
-    minPrice: filters.priceMin,
-    maxPrice: filters.priceMax,
-    destinationId: filters.destination,
-    departurePointId: filters.departurePoint,
-    categoryId: filters.category,
+    minPrice: filters.minPrice,
+    maxPrice: filters.maxPrice,
+    destinationId: filters.destinationId,
+    departurePointId: filters.departurePointId,
+    categoryId: filters.categoryId,
     startDate: filters.startDate,
     endDate: filters.endDate,
+    sortBy: filters.sortBy,
   };
-
-  // Loại bỏ các field không có giá trị (null, undefined, "")
   const params = Object.fromEntries(
     Object.entries(rawParams).filter(
       ([_, v]) => v !== null && v !== undefined && v !== ""
@@ -37,7 +35,7 @@ export const getAllTour = async (page, pageSize, filters = {}) => {
     });
     return response.data;
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching tours:", error);
     throw error;
   }
 };

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import LoginRegisterPopup from "../../components/authorization/LoginRegisterPopup";
@@ -13,23 +14,124 @@ import {
   FaMapMarkerAlt,
   FaPlaneDeparture,
 } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { getAllDestination } from "../../services/Admin/CRUDDestination";
+import { getAllTourCategory } from "../../services/Admin/CRUDTourCategories";
+import { getAllDeparturePoint } from "../../services/Admin/CRUDDeparturePoint";
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
+function useDebounce(value, delay) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
 
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+}
 function Tours() {
   const [allTour, setAllTour] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
   const [filters, setFilters] = useState({
-    name: "",
-    priceMin: "",
-    priceMax: "",
-    destination: "",
-    departurePoint: "",
+    destinationId: "",
+    categoryId: "",
+    departurePointId: "",
+    minPrice: "",
+    maxPrice: "",
+    startDate: "",
+    endDate: "",
+    sortBy: "all",
   });
+  const [destinations, setDestinations] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [departurePoints, setDeparturePoints] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
   const toursPerPage = 10;
+  const [errors, setErrors] = useState({
+    minPrice: "",
+    maxPrice: "",
+    startDate: "",
+    endDate: "",
+  });
+  const [localMinPrice, setLocalMinPrice] = useState(filters.minPrice);
+  const [localMaxPrice, setLocalMaxPrice] = useState(filters.maxPrice);
+  const debouncedMinPrice = useDebounce(localMinPrice, 500);
+  const debouncedMaxPrice = useDebounce(localMaxPrice, 500);
+  useEffect(() => {
+    setFilters((prev) => ({
+      ...prev,
+      minPrice: debouncedMinPrice,
+      maxPrice: debouncedMaxPrice,
+    }));
+  }, [debouncedMinPrice, debouncedMaxPrice]);
+  useEffect(() => {
+    const fetchDropdownData = async () => {
+      try {
+        const [destData, catData, depData] = await Promise.all([
+          getAllDestination(),
+          getAllTourCategory(),
+          getAllDeparturePoint(),
+        ]);
+        setDestinations(destData.data || []);
+        setCategories(catData.data || []);
+        setDeparturePoints(depData.data || []);
+      } catch (error) {
+        console.error("Error fetching dropdown data:", error);
+      }
+    };
+    fetchDropdownData();
+  }, []);
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const newFilters = {
+      destinationId: queryParams.get("destinationId") || "",
+      categoryId: queryParams.get("categoryId") || "",
+      departurePointId: queryParams.get("departurePointId") || "",
+      minPrice: queryParams.get("minPrice") || "",
+      maxPrice: queryParams.get("maxPrice") || "",
+      startDate: queryParams.get("startDate") || "",
+      endDate: queryParams.get("endDate") || "",
+      sortBy: queryParams.get("sortBy") || "all",
+    };
+    setFilters(newFilters);
+    setLocalMinPrice(newFilters.minPrice);
+    setLocalMaxPrice(newFilters.maxPrice);
+    setCurrentPage(1);
+  }, [location.search]);
+
+  useEffect(() => {
+    console.log("Filters sent to API:", filters);
+    const fetchTours = async () => {
+      setLoading(true);
+      try {
+        const data = await getAllTour(currentPage, toursPerPage, filters);
+        setAllTour(data.tours || []);
+        setTotalPages(data.totalPages || 1);
+      } catch (error) {
+        console.error("Error fetching tours:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTours();
+  }, [currentPage, filters]);
+
   const formatVND = (value) => {
     if (typeof value === "number" && !isNaN(value)) {
       return value.toLocaleString("vi-VN", {
@@ -48,22 +150,6 @@ function Tours() {
     }
     return "Giá trị không hợp lệ";
   };
-  useEffect(() => {
-    const fetchTours = async () => {
-      setLoading(true);
-      try {
-        const data = await getAllTour(currentPage, toursPerPage, filters);
-        setAllTour(data.tours);
-        console.log(allTour);
-        setTotalPages(data.totalPages);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchTours();
-  }, [currentPage, filters]);
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "Chưa xác định";
@@ -73,9 +159,57 @@ function Tours() {
       date.getMonth() + 1
     )}/${date.getFullYear()}`;
   };
+  const validateFilters = (name, value) => {
+    let newErrors = { ...errors };
 
-  const currentTours = allTour;
+    if (name === "minPrice" || name === "maxPrice") {
+      const numValue = Number(value);
+      if (value && (isNaN(numValue) || numValue < 0)) {
+        newErrors[name] = "Giá phải là số không âm";
+      } else if (
+        name === "minPrice" &&
+        filters.maxPrice &&
+        numValue > Number(filters.maxPrice)
+      ) {
+        newErrors.minPrice = "Giá tối thiểu phải nhỏ hơn hoặc bằng giá tối đa";
+      } else if (
+        name === "maxPrice" &&
+        filters.minPrice &&
+        numValue < Number(filters.minPrice)
+      ) {
+        newErrors.maxPrice = "Giá tối đa phải lớn hơn hoặc bằng giá tối thiểu";
+      } else {
+        newErrors.minPrice = "";
+        newErrors.maxPrice = "";
+      }
+    }
 
+    if (name === "startDate" || name === "endDate") {
+      if (value && isNaN(Date.parse(value))) {
+        newErrors[name] = "Ngày không hợp lệ";
+      } else if (
+        name === "startDate" &&
+        filters.endDate &&
+        new Date(value) > new Date(filters.endDate)
+      ) {
+        newErrors.startDate = "Ngày đi phải trước hoặc bằng ngày về";
+      } else if (
+        name === "endDate" &&
+        filters.startDate &&
+        new Date(value) < new Date(filters.startDate)
+      ) {
+        newErrors.endDate = "Ngày về phải sau hoặc bằng ngày đi";
+      } else {
+        newErrors.startDate = "";
+        newErrors.endDate = "";
+      }
+    }
+
+    setErrors(newErrors);
+
+    // Return true if no errors for this field
+    return !newErrors[name];
+  };
   const handlePageChange = (page) => {
     setCurrentPage(page);
     window.scrollTo(0, 0);
@@ -83,8 +217,27 @@ function Tours() {
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    setFilters((prev) => ({ ...prev, [name]: value }));
-    setCurrentPage(1); // Reset to first page on filter change
+
+    // Validate before updating
+    if (
+      name === "minPrice" ||
+      name === "maxPrice" ||
+      name === "startDate" ||
+      name === "endDate"
+    ) {
+      if (!validateFilters(name, value)) return;
+    }
+
+    // Update local state for price inputs
+    if (name === "minPrice") {
+      setLocalMinPrice(value);
+    } else if (name === "maxPrice") {
+      setLocalMaxPrice(value);
+    } else {
+      // Update filters directly for non-debounced fields
+      setFilters((prev) => ({ ...prev, [name]: value }));
+      setCurrentPage(1);
+    }
   };
 
   if (loading) return <div className="loading">Đang tải...</div>;
@@ -105,65 +258,163 @@ function Tours() {
       </div>
 
       <div className="tour-container" style={{ display: "flex" }}>
-        <div
+        <Box
           className="filter-sidebar"
-          style={{ width: "250px", padding: "20px" }}
+          sx={{
+            width: { xs: "100%", sm: "280px" },
+            padding: 2,
+
+            borderRight: { sm: "1px solid #ccc" },
+            height: "100vh",
+            boxSizing: "border-box",
+            overflowY: "auto",
+            left: 0,
+            zIndex: 10,
+          }}
         >
-          <h2 style={{ color: "#dc5a26" }}>Bộ lọc</h2>
-          <div className="filter-group">
-            <label>Giá (VNĐ)</label>
-            <input
+          <Typography
+            variant="h6"
+            color="primary"
+            gutterBottom
+            sx={{ fontWeight: 600 }}
+          >
+            Bộ lọc
+          </Typography>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <FormControl variant="outlined" size="small">
+              <InputLabel id="destinationId-label">Điểm đến</InputLabel>
+              <Select
+                labelId="destinationId-label"
+                name="destinationId"
+                value={filters.destinationId}
+                onChange={handleFilterChange}
+                label="Điểm đến"
+              >
+                <MenuItem value="">Tất cả điểm đến</MenuItem>
+                {destinations.map((dest) => (
+                  <MenuItem key={dest.destinationId} value={dest.destinationId}>
+                    {dest.destinationName}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl variant="outlined" size="small">
+              <InputLabel id="categoryId-label">Danh mục</InputLabel>
+              <Select
+                labelId="categoryId-label"
+                name="categoryId"
+                value={filters.categoryId}
+                onChange={handleFilterChange}
+                label="Danh mục"
+              >
+                <MenuItem value="">Tất cả danh mục</MenuItem>
+                {categories.map((cat) => (
+                  <MenuItem key={cat.categoryId} value={cat.categoryId}>
+                    {cat.categoryName}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl variant="outlined" size="small">
+              <InputLabel id="departurePointId-label">
+                Điểm khởi hành
+              </InputLabel>
+              <Select
+                labelId="departurePointId-label"
+                name="departurePointId"
+                value={filters.departurePointId}
+                onChange={handleFilterChange}
+                label="Điểm khởi hành"
+              >
+                <MenuItem value="">Tất cả điểm khởi hành</MenuItem>
+                {departurePoints.map((dep) => (
+                  <MenuItem
+                    key={dep.departurePointId}
+                    value={dep.departurePointId}
+                  >
+                    {dep.departurePointName}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField
               type="number"
-              name="priceMin"
+              name="minPrice"
+              label="Giá tối thiểu (VNĐ)"
+              value={localMinPrice}
+              onChange={handleFilterChange}
+              variant="outlined"
+              size="small"
               placeholder="Giá tối thiểu"
-              value={filters.priceMin}
-              onChange={handleFilterChange}
-              className="tour-filter"
+              InputProps={{ inputProps: { min: 0 } }}
+              error={!!errors.minPrice}
+              helperText={errors.minPrice}
             />
-            <input
+            <TextField
               type="number"
-              name="priceMax"
+              name="maxPrice"
+              label="Giá tối đa (VNĐ)"
+              value={localMaxPrice}
+              onChange={handleFilterChange}
+              variant="outlined"
+              size="small"
               placeholder="Giá tối đa"
-              value={filters.priceMax}
-              onChange={handleFilterChange}
-              className="tour-filter"
+              InputProps={{ inputProps: { min: 0 } }}
+              error={!!errors.maxPrice}
+              helperText={errors.maxPrice}
             />
-          </div>
-          <div className="filter-group">
-            <label>Điểm đến</label>
-            <input
-              type="text"
-              name="destination"
-              placeholder="Điểm đến..."
-              value={filters.destination}
+            <TextField
+              type="date"
+              name="startDate"
+              label="Ngày đi"
+              value={filters.startDate}
               onChange={handleFilterChange}
-              className="tour-filter"
+              variant="outlined"
+              size="small"
+              InputLabelProps={{ shrink: true }}
+              error={!!errors.startDate}
+              helperText={errors.startDate}
             />
-          </div>
-          <div className="filter-group">
-            <label>Điểm khởi hành</label>
-            <input
-              type="text"
-              name="departurePoint"
-              placeholder="Điểm khởi hành..."
-              value={filters.departurePoint}
+            <TextField
+              type="date"
+              name="endDate"
+              label="Ngày về"
+              value={filters.endDate}
               onChange={handleFilterChange}
-              className="tour-filter"
+              variant="outlined"
+              size="small"
+              InputLabelProps={{ shrink: true }}
+              error={!!errors.endDate}
+              helperText={errors.endDate}
             />
-          </div>
-        </div>
+            <FormControl variant="outlined" size="small">
+              <InputLabel id="sortBy-label">Sắp xếp theo</InputLabel>
+              <Select
+                labelId="sortBy-label"
+                name="sortBy"
+                value={filters.sortBy}
+                onChange={handleFilterChange}
+                label="Sắp xếp theo"
+              >
+                <MenuItem value="all">Mới nhất</MenuItem>
+                <MenuItem value="priceasc">Giá: Thấp đến cao</MenuItem>
+                <MenuItem value="pricedesc">Giá: Cao đến thấp</MenuItem>
+                <MenuItem value="departure">Ngày khởi hành gần nhất</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </Box>
 
         <div className="tour-content" style={{ flex: 1, padding: "20px" }}>
           <div className="tour-card-grid">
-            {currentTours.length > 0 ? (
-              currentTours.map((tour) => (
+            {allTour.length > 0 ? (
+              allTour.map((tour) => (
                 <div className="tour-card-all" key={tour.tourId}>
                   <img
                     src={tour.imageUrl || "https://via.placeholder.com/300x200"}
                     alt={tour.tourName}
                     className="tour-image"
                   />
-
                   <div className="tour-info">
                     <h1 className="title-tour">{tour.tourName}</h1>
                     <div className="tour-sub-info">
@@ -172,12 +423,10 @@ function Tours() {
                           <FaIdBadge /> <strong>Mã tour:</strong>{" "}
                           {tour.tourId || "N/A"}
                         </p>
-
                         <p className="info-tour">
                           <FaPlaneDeparture /> <strong>Khởi hành:</strong>{" "}
                           {formatDate(tour.nextDeparture?.departureDate)}
                         </p>
-
                         <p className="info-tour">
                           <FaMapMarkerAlt /> <strong>Điểm đến:</strong>{" "}
                           {tour.destination || "N/A"}
@@ -188,12 +437,10 @@ function Tours() {
                           <FaFlag /> <strong>Điểm khởi hành:</strong>{" "}
                           {tour.departurePoint || "N/A"}
                         </p>
-
                         <p className="info-tour">
                           <FaBus /> <strong>Phương tiện:</strong>{" "}
                           {tour.transportation || "N/A"}
                         </p>
-
                         <p className="info-tour">
                           <FaClock /> <strong>Thời gian đi:</strong>{" "}
                           {tour.durationDays || "N/A"}
