@@ -2,16 +2,12 @@ import React, { useState } from "react";
 import Header from "../../components/header/Header";
 import "../../styles/Client/About.css";
 import aboutBanner from "../../assets/about_banner.jpg";
-import background from "../../assets/background.png";
+import section1 from "../../assets/1.jpg";
+import section2 from "../../assets/2.jpg";
+import section3 from "../../assets/3.jpg";
 import team1 from "../../assets/team.png";
 import team2 from "../../assets/team2.png";
-import TeamSlider from "../../components/slider/TeamSlider";
 import Footer from "../../components/footer/Footer";
-import member1 from "../../assets/member1.png";
-import member2 from "../../assets/member2.png";
-import member3 from "../../assets/member3.png";
-import member4 from "../../assets/member4.png";
-import member5 from "../../assets/member5.png";
 import LoginRegisterPopup from "../../components/authorization/LoginRegisterPopup";
 function About(props) {
   const images = [team1, team2];
@@ -28,57 +24,75 @@ function About(props) {
         className="about-banner"
         style={{ backgroundImage: `url(${aboutBanner})` }}
       >
-        About Us
+        Về chúng tôi
       </div>
-      <div
-        className="info-banner"
-        style={{ backgroundImage: `url(${background})` }}
-      >
-        <div className="title-banner">BlackPink - Tinh hoa làng Kpop</div>
-        <div className="des-banner">
-          Xin chào các bạn!<span>BlackPink -</span> là kênh thông tin chia sẻ về
-          các làng quê, các nghề truyền thống và các sản phẩm thủ công của Việt
-          Nam đến với cộng đồng.
-        </div>
-      </div>
-      <div className="info-team">
-        <TeamSlider images={images} />
-
-        <div className="des-team">
-          <div className="title-info-team">Đội ngũ Black Pink</div>
-          <div className="des-info-team">
-            Với chúng tôi, mỗi chuyến đi là một sự trải nghiệm, là việc khám phá
-            ra những điều mới mẻ ở các làng quê trên mọi miền tổ quốc. Qua đây,
-            chúng tôi muốn chia sẻ lại những điều đó đến với cộng đồng. Hãy ủng
-            hộ <span>BlackPink</span> nhé.
+      <div className="about-us-container">
+        <div className="section">
+          <div className="text-section-about1">
+            <h1>Sứ mệnh</h1>
+            <p>
+              <span>ViVu Travel</span> thực hiện sứ mệnh kết nối mọi người với
+              vẻ đẹp của các làng nghề truyền thống thông qua những hành trình
+              được cá nhân hóa, nơi mọi người được tự do khám phá theo cách
+              riêng của mình. Bằng cách tích hợp công nghệ AI,{" "}
+              <span>ViVu Travel</span> biến mỗi chuyến đi thành một cuộc phiêu
+              lưu độc đáo không chỉ khám phá những điểm đến mới và thúc đẩy sự
+              tự khám phá mà còn góp phần bảo tồn các giá trị văn hóa đang dần
+              mai một.
+            </p>
           </div>
         </div>
-      </div>
-      <div className="team-members">
-        <div className="member-card">
-          <img src={member1} alt="Jisoo" />
-          <p>Jisoo</p>
-          <div className="position">Trưởng nhóm</div>
+        <div className="section">
+          <div className="banner-section-about">
+            <img src={section1} alt="" />
+          </div>
+          <div className="text-section-about">
+            <h1>Tầm nhìn</h1>
+            <p>
+              <span>ViVu Travel</span> hướng đến mục tiêu trở thành nền tảng
+              hàng đầu tại Việt Nam về trải nghiệm du lịch làng nghề văn hóa,
+              nơi mỗi hành trình được cá nhân hóa cho từng du khách, giúp họ kết
+              nối, trân trọng và yêu mến các giá trị truyền thống của Việt Nam.
+              Trong tương lai, <span>ViVu Travel</span> mong muốn mở rộng ra
+              toàn cầu, trở thành cầu nối văn hóa kết nối du khách quốc tế với
+              vẻ đẹp độc đáo và sâu sắc của các làng nghề truyền thống Việt Nam.
+            </p>
+          </div>
         </div>
-        <div className="member-card">
-          <img src={member2} alt="Jennie" />
-          <p>Jennie</p>
-          <div className="position">Rapper chính</div>
+        <div className="section">
+          <div className="text-section-about">
+            <h1>Giá trị cốt lõi</h1>
+            <p>
+              <span>ViVu Travel</span> là nền tảng tiên phong khai phá du lịch
+              văn hóa tại các làng nghề truyền thống Việt Nam, với sứ mệnh mang
+              đến những hành trình cá nhân hóa sâu sắc nhờ sự hỗ trợ của AI.
+              Chúng tôi không chỉ đồng hành cùng du khách từ lúc lên kế hoạch
+              đến khi kết thúc hành trình, mà còn kết nối chặt chẽ với các đối
+              tác địa phương để cùng nhau phát triển bền vững trong thời đại số.
+              Mỗi chuyến đi cùng <span>ViVu Travel</span> là sự kết hợp giữa cảm
+              xúc, khám phá và trách nhiệm – nơi du khách không chỉ trải nghiệm
+              mà còn góp phần bảo tồn văn hóa, gìn giữ môi trường và xây dựng
+              giá trị cộng đồng. Với tinh thần đổi mới, minh bạch và tận tâm,
+              <span>ViVu Travel</span> cam kết trở thành người bạn đồng hành
+              đáng tin cậy trên mọi nẻo đường khám phá Việt Nam.
+            </p>
+          </div>
+          <div className="banner-section-about">
+            <img src={section2} alt="" />
+          </div>
         </div>
-        <div className="member-card">
-          <img src={member4} alt="Rosé" />
-          <p>Rosé</p>
-          <div className="position">Giọng ca chính</div>
-        </div>
-        <div className="member-card">
-          <img src={member3} alt="Lisa" />
-          <p>Lisa</p>
-          <div className="position">Nhảy chính</div>
-        </div>
-        <div className="member-card">
-          <img src={member5} alt="You" />
-          <p>Bạn🌸</p>
-          <div className="position">Thành viên đặc biệt</div>
+        <div className="section">
+          <img className="img-special" src={section3} alt="" />
+          <div className="text-section">
+            <p>
+              Với <span>ViVu Travel</span>, mỗi chuyến đi không chỉ là hành
+              trình khám phá những điều mới mẻ tại các làng quê khắp mọi miền
+              đất nước, mà còn là cơ hội để lắng nghe, cảm nhận và kết nối với
+              giá trị văn hóa truyền thống. Chúng tôi mong muốn lan tỏa những
+              trải nghiệm ấy đến cộng đồng, để mỗi bước chân không chỉ in dấu kỷ
+              niệm mà còn góp phần gìn giữ và sẻ chia di sản quê hương.
+            </p>
+          </div>
         </div>
       </div>
       <Footer />

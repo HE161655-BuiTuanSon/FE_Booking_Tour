@@ -1,176 +1,65 @@
-.about-banner {
-  position: relative;
-  background-size: cover;
-  background-position: center;
-  height: 300px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-size: 50px;
-  font-weight: bold;
-  z-index: 1;
-  overflow: hidden;
-}
-
-.about-banner::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.3);
-  z-index: -1;
-}
-.info-banner {
-  position: relative;
-  background-size: cover;
-  background-position: center;
-  height: 400px;
+.about-us-container {
+  margin: 20px 20px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 20px;
-  color: rgb(0, 0, 0);
-  overflow: hidden;
-  z-index: 1;
+  gap: 30px;
 }
-
-.title-banner {
-  font-size: 50px;
-  font-weight: bold;
-  margin-bottom: 20px;
+.section {
+  width: 100%;
+  display: flex;
+  gap: 20px;
+  position: relative;
 }
-
-.des-banner {
+.banner-section-about {
+  flex: 0 0 40%;
+}
+.text-section-about {
+  flex: 0 0 57%;
+}
+.section p {
   font-size: 20px;
-  max-width: 700px;
+  font-family: Arial, Helvetica, sans-serif;
   line-height: 1.6;
 }
-
-.des-banner span {
-  font-weight: bold;
+.section p span {
   color: #dc5a26;
-}
-
-.info-team {
-  background-color: #555;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 40px;
-  height: 500px;
-  padding-left: 20px;
-  flex-wrap: wrap;
-}
-
-.info-team img {
-  width: 700px;
-  object-fit: cover;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.des-team {
-  flex: 1;
-  min-width: 300px;
-}
-
-.title-info-team {
-  text-align: left;
-  font-size: 40px;
   font-weight: bold;
-  color: #fff;
-  margin-bottom: 15px;
-  position: relative;
-  padding-bottom: 8px;
 }
-.team-slider {
-  width: 700px;
-  height: 280px;
-  overflow: hidden;
-  position: relative;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-.slide-track {
-  display: flex;
-  width: calc(280px * 2);
-  animation: scroll 1s linear infinite;
-}
-.slide-track img {
-  width: 700px;
-  object-fit: cover;
-  border-radius: 12px;
-}
-@keyframes scroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-.title-info-team:hover {
-  color: #dc5a26;
-}
-
-.des-info-team {
-  text-align: left;
-  font-size: 20px;
-  line-height: 1.7;
-  color: #fff;
-  max-width: 600px;
-}
-.des-info-team span {
-  font-weight: bold;
-  color: #dc5a26;
-}
-.team-members {
-  background-color: #555;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 40px;
-  padding: 50px;
-}
-
-.member-card {
-  width: 300px;
-  height: 330px;
-  text-align: center;
-  color: rgb(0, 0, 0);
-  background-color: #fff;
-  -webkit-border-top-left-radius: 30px;
-  -webkit-border-top-right-radius: 30px;
-  -moz-border-radius-topleft: 30px;
-  -moz-border-radius-topright: 30px;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-}
-
-.member-card img {
+.banner-section-about img {
   width: 100%;
-  height: 200px;
-  -webkit-border-top-left-radius: 30px;
-  -webkit-border-top-right-radius: 30px;
-  -moz-border-radius-topleft: 30px;
-  -moz-border-radius-topright: 30px;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
+  height: auto;
   object-fit: cover;
+  border-radius: 8px;
+}
+.img-special {
+  width: 65%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.text-section {
+  position: absolute;
+  background-color: rgba(223, 204, 177, 0.5);
+  width: 50%;
+  padding-left: 30px;
+  top: 10%;
+  left: 48%;
+}
+.text-section p {
+  font-size: 24px;
+  padding: 20px;
+}
+.text-section p span {
+  color: #dc5a26;
+  font-weight: bold;
 }
 
-.member-card p {
-  margin-top: 8px;
-  font-weight: 600;
-  font-size: 25px;
-}
-.member-card .position {
-  font-size: 15px;
-  color: #555;
+.text-section::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 100%;
+  background: linear-gradient(to bottom, #dc5a26, #ffcc00);
 }

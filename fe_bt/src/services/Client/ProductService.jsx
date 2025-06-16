@@ -1,9 +1,9 @@
 import axios from "axios";
 
-export const getAllProduct = async (page, pageSize) => {
+export const getAllProduct = async (page, pageSize, sortBy) => {
   try {
     const response = await axios.get(
-      `https://localhost:44338/api/Souvenirs?page=${page}&pageSize=${pageSize}`
+      `https://localhost:44338/api/Souvenirs?page=${page}&pageSize=${pageSize}&sortBy=${sortBy}`
     );
     return response.data;
   } catch (error) {

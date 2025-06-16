@@ -4,9 +4,20 @@ import aboutBanner from "../../assets/about_banner.jpg";
 import Footer from "../../components/footer/Footer";
 import LoginRegisterPopup from "../../components/authorization/LoginRegisterPopup";
 import { getAllPosts } from "../../services/Client/PostService";
-import "../../styles/Client/Post.css";
 import background from "../../assets/background.png";
 import { useNavigate } from "react-router-dom";
+
+import {
+  Grid,
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  CardActions,
+  Button,
+  Box,
+} from "@mui/material";
+
 function Posts() {
   const [showPopup, setShowPopup] = useState(false);
   const [articles, setArticles] = useState([]);
@@ -52,56 +63,128 @@ function Posts() {
 
       <div
         className="about-banner"
-        style={{ backgroundImage: `url(${aboutBanner})` }}
+        style={{
+          backgroundImage: `url(${aboutBanner})`,
+          backgroundSize: "cover",
+          padding: "60px 0",
+          textAlign: "center",
+          color: "#fff",
+        }}
       >
         <h2>Bài viết</h2>
       </div>
 
-      <div
+      <Box
         className="allposts-container"
-        style={{ backgroundImage: `url(${background})` }}
+        sx={{
+          backgroundImage: `url(${background})`,
+          backgroundSize: "cover",
+          backgroundAttachment: "fixed",
+          padding: 5,
+          minHeight: "100vh",
+          backdropFilter: "brightness(0.95)",
+        }}
       >
         {articles.length === 0 ? (
-          <p className="empty-text">Không có bài viết nào.</p>
+          <Typography variant="body1" align="center" sx={{ marginTop: 4 }}>
+            Không có bài viết nào.
+          </Typography>
         ) : (
-          articles.map((post) => (
-            <div
-              className="post-card"
-              key={post.articleId}
-              onClick={() => {
-                navigate(`/posts/post-detail/${post.articleId}`);
-              }}
-            >
-              <img
-                src={post.imageUrl}
-                alt={post.title}
-                className="post-image"
-              />
-              <div className="post-info">
-                <h3 className="post-title">{post.title}</h3>
-                <p className="post-meta">
-                  ✍️ {post.authorName} &nbsp; | &nbsp; 🕒{" "}
-                  {new Date(post.createdDate).toLocaleDateString()}
-                </p>
-              </div>
-            </div>
-          ))
+          <Grid container spacing={3} direction="column">
+            {articles.map((post) => (
+              <Grid item key={post.articleId}>
+                <Card
+                  sx={{
+                    display: "flex",
+                    alignItems: "stretch",
+                    borderRadius: 2,
+                    boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
+                    transition: "transform 0.2s, box-shadow 0.2s",
+                    cursor: "pointer",
+                    ":hover": {
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
+                    },
+                  }}
+                  onClick={() =>
+                    navigate(`/posts/post-detail/${post.articleId}`)
+                  }
+                >
+                  <CardMedia
+                    component="img"
+                    image={post.imageUrl}
+                    alt={post.title}
+                    sx={{ width: 400, height: "100%", objectFit: "cover" }}
+                  />
+
+                  <CardContent
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      padding: 2,
+                      flex: 1,
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      sx={{ fontWeight: 600, marginBottom: 1 }}
+                    >
+                      {post.title}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ marginBottom: 1 }}
+                    >
+                      ✍️ {post.authorName} | 🕒{" "}
+                      {new Date(post.createdDate).toLocaleDateString()}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: "#555",
+                      }}
+                    >
+                      {post.content?.slice(0, 150)}...
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
         )}
 
-        <div className="pagination">
+        <Box
+          className="pagination"
+          sx={{
+            marginTop: 4,
+            display: "flex",
+            justifyContent: "center",
+            gap: 1,
+            flexWrap: "wrap",
+          }}
+        >
           {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(
             (page) => (
-              <button
+              <Button
                 key={page}
-                className={pagination.currentPage === page ? "active" : ""}
+                variant={
+                  pagination.currentPage === page ? "contained" : "outlined"
+                }
+                size="medium"
+                sx={{
+                  minWidth: 36,
+                  borderRadius: "50%",
+                  padding: "6px 0",
+                }}
                 onClick={() => handlePageChange(page)}
               >
                 {page}
-              </button>
+              </Button>
             )
           )}
-        </div>
-      </div>
+        </Box>
+      </Box>
 
       <Footer />
     </div>
