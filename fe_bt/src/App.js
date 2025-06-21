@@ -21,6 +21,14 @@ import ManageShop from "./pages/Admin/ManageShop";
 import ManageTransportationMethods from "./pages/Admin/ManageTransportationMethods";
 import ManagePost from "./pages/Admin/ManagePost";
 import ListConsultation from "./pages/Admin/ListConsultation";
+import Chatbot from "./components/Chatbot";
+
+const ClientLayout = ({ children }) => (
+    <div className="relative">
+      {children}
+      <Chatbot />
+    </div>
+);
 import Booking from "./pages/Client/Booking";
 
 function App() {

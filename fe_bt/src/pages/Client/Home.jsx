@@ -285,7 +285,7 @@ function Home(props) {
           {fourPosts.map((post) => (
             <div key={post.id} className="post-card">
               <img
-                src={fixDriveUrl(post.imgUrl)}
+                src={fixDriveUrl(post.imageUrl)}
                 alt={post.title}
                 className="post-image"
               />
@@ -386,7 +386,7 @@ function Home(props) {
                     className={`tour-card ${isHalfVisible ? "half" : ""}`}
                   >
                     <img
-                      src={tour.image}
+                      src={fixDriveUrl(tour.imageUrl)}
                       alt={tour.name}
                       className="tour-img"
                       loading="lazy"

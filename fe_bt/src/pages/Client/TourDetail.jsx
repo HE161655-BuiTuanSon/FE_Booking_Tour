@@ -39,6 +39,16 @@ function TourDetail() {
       prevIndex === 0 ? dataTour.images.length - 1 : prevIndex - 1
     );
   };
+
+  const fixDriveUrl = (url) => {
+    if (typeof url !== "string") return url;
+    if (!url.includes("drive.google.com/uc?id=")) return url;
+
+    const parts = url.split("id=");
+    const fileId = parts[1]?.split("&")[0];
+    return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+  };
+
   useEffect(() => {
     const fetchDetailTour = async () => {
       try {
@@ -116,14 +126,14 @@ function TourDetail() {
               {dataTour.images?.length > 0 && (
                 <div className="tour-image-slider">
                   <motion.img
-                    key={dataTour.images[currentIndex]}
-                    src={dataTour.images[currentIndex]}
-                    alt={`${dataTour.tourName} - ${currentIndex + 1}`}
-                    className="tour-image-detail"
-                    initial={{ opacity: 0, x: 100 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -100 }}
-                    transition={{ duration: 0.5 }}
+                      key={dataTour.images[currentIndex]}
+                      src={fixDriveUrl(dataTour.images[currentIndex])}
+                      alt={`${dataTour.tourName} - ${currentIndex + 1}`}
+                      className="tour-image-detail"
+                      initial={{opacity: 0, x: 100}}
+                      animate={{opacity: 1, x: 0}}
+                      exit={{opacity: 0, x: -100}}
+                      transition={{duration: 0.5}}
                   />
 
                   <div className="slider-controls">
@@ -135,7 +145,7 @@ function TourDetail() {
 
               <div className="tour-info">
                 <div className="tour-info-grid">
-                  <div className="tour-info-column">
+                <div className="tour-info-column">
                     <p className="info-price-detail">
                       <strong>Giá:</strong>
                       <span
