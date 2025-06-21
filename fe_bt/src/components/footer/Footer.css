@@ -16,3 +16,20 @@
   flex-direction: column;
   gap: 10px;
 }
+.social-icons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.social-icons a {
+  color: #ffffff;
+  font-size: 24px;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.social-icons a:hover {
+  transform: scale(1.2);
+  color: #007bff; /* hoặc màu thương hiệu của bạn */
+}

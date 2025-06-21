@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "./Header.css";
+import logo from "../../assets/logo.jpg";
 
 function Header({ onLoginClick, onRegisterClick }) {
   const token = localStorage.getItem("token");
@@ -15,7 +16,9 @@ function Header({ onLoginClick, onRegisterClick }) {
 
   return (
     <header className="sticky-header">
-      <div className="logo">MyLogo</div>
+      <div className="logo" onClick={() => navigate("/")}>
+        <img style={{ width: "80px", cursor: "pointer" }} src={logo} alt="" />
+      </div>
 
       <nav className="nav-links">
         <NavLink to="/" end>
@@ -24,7 +27,7 @@ function Header({ onLoginClick, onRegisterClick }) {
         <NavLink to="/about">Về chúng tôi</NavLink>
         <NavLink to="/tours">Điểm đến</NavLink>
         <NavLink to="/posts">Bài viết</NavLink>
-        {token && role === "2" && <NavLink to="/booked">Booked Tours</NavLink>}
+        {token && role === "2" && <NavLink to="/booked">Tour đã đặt</NavLink>}
         <NavLink to="/shop">Đồ lưu niệm</NavLink>
         <NavLink to="/contact">Liên hệ</NavLink>
       </nav>

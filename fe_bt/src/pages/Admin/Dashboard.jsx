@@ -9,6 +9,7 @@ function Dashboard() {
     navigate("/");
   }
   const sections = [
+    { title: "List Bookings", path: "/list-booking" },
     { title: "Manage Tour", path: "/manage-tour" },
     { title: "Manage Product", path: "/manage-shop" },
     { title: "Manage Post", path: "/manage-post" },

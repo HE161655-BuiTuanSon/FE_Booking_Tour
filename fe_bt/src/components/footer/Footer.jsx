@@ -1,5 +1,6 @@
 import React from "react";
-import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa";
+
 import "./Footer.css";
 
 function Footer() {
@@ -52,6 +53,38 @@ function Footer() {
       </div>
       <div className="footer-d">
         <h3>Liên hệ</h3>
+        <div className="social-icons">
+          <a
+            href="https://www.facebook.com/share/1AXztxcXvt/?mibextid=wwXIfr"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaFacebookF />
+          </a>
+          <a
+            href="https://www.instagram.com/vivutraveltour?igsh=NnBjdHc1dnMxamdo"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaInstagram />
+          </a>
+          <a
+            href="https://www.tiktok.com/@vivutravel.tour?_t=ZS-8xMcy49OEAK&_r=1"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaTiktok />
+          </a>
+        </div>
+        <p style={{ marginTop: "10px" }}>
+          Hotline:{" "}
+          <a
+            href="tel:0394627402"
+            style={{ color: "inherit", textDecoration: "none" }}
+          >
+            0394627402
+          </a>
+        </p>
       </div>
     </footer>
   );

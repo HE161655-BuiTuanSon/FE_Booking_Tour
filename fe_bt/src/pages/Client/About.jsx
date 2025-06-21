@@ -29,8 +29,8 @@ function About(props) {
       <div className="about-us-container">
         <div className="section">
           <div className="text-section-about1">
-            <h1>Sứ mệnh</h1>
-            <p>
+            <h1 style={{ textAlign: "center" }}>Sứ mệnh</h1>
+            <p style={{ textAlign: "center" }}>
               <span>ViVu Travel</span> thực hiện sứ mệnh kết nối mọi người với
               vẻ đẹp của các làng nghề truyền thống thông qua những hành trình
               được cá nhân hóa, nơi mọi người được tự do khám phá theo cách
