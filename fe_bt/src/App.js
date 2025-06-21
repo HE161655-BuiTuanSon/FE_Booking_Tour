@@ -21,6 +21,7 @@ import ManageShop from "./pages/Admin/ManageShop";
 import ManageTransportationMethods from "./pages/Admin/ManageTransportationMethods";
 import ManagePost from "./pages/Admin/ManagePost";
 import ListConsultation from "./pages/Admin/ListConsultation";
+import Booking from "./pages/Client/Booking";
 
 function App() {
   return (
@@ -47,6 +48,8 @@ function App() {
           path="/manage-method"
           element={<ManageTransportationMethods />}
         />
+        <Route path="/tours/:tourId/booking" element={<Booking />} />
+
         <Route path="/list-reviews" element={<ListConsultation />} />
         <Route path="/manage-post" element={<ManagePost />} />
         <Route path="/manage-shop" element={<ManageShop />} />

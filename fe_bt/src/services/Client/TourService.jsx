@@ -84,3 +84,15 @@ export const getDeparturepointTour = async () => {
     throw error;
   }
 };
+
+export const getTourBooked = async (userId) => {
+  try {
+    const response = await axios.get(
+      `https://localhost:44338/api/Bookings/booking-history/${userId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
