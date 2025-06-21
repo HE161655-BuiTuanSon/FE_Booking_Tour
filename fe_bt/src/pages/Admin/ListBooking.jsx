@@ -49,10 +49,10 @@ function ListBooking() {
         <TableHead>
           <TableRow sx={{ backgroundColor: "primary.main" }}>
             <TableCell>
-              <strong>User ID</strong>
+              <strong>User</strong>
             </TableCell>
             <TableCell>
-              <strong>Tour ID</strong>
+              <strong>Tour</strong>
             </TableCell>
             <TableCell>
               <strong>Booking Date</strong>
@@ -71,8 +71,8 @@ function ListBooking() {
         <TableBody>
           {bookings.map((booking) => (
             <TableRow key={booking.bookingId}>
-              <TableCell>{booking.userId}</TableCell>
-              <TableCell>{booking.tourId}</TableCell>
+              <TableCell>{booking.user.username}</TableCell>
+              <TableCell>{booking.tour.tourName}</TableCell>
               <TableCell>
                 {new Date(booking.bookingDate).toLocaleDateString("vi-VN")}
               </TableCell>
