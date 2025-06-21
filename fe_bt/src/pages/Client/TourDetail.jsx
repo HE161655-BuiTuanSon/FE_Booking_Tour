@@ -24,6 +24,7 @@ function TourDetail() {
   const { tourId } = useParams();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeNoteId, setActiveNoteId] = useState(null);
+  const [selectedDeparture, setSelectedDeparture] = useState(null);
   const toggleNote = (id) => {
     setActiveNoteId((prevId) => (prevId === id ? null : id));
   };
@@ -255,12 +256,20 @@ function TourDetail() {
                     )}
                   </div>
 
-                  <Link
-                    to={`/tours/${tourId}/booking`}
+                  <button
                     className="book-now-btn"
+                    onClick={() => {
+                      if (!selectedDeparture) {
+                        alert(
+                          "Vui lòng chọn ngày khởi hành trước khi đặt tour."
+                        );
+                        return;
+                      }
+                      window.location.href = `/tours/${tourId}/booking?departureId=${selectedDeparture.departureId}`;
+                    }}
                   >
                     Đặt ngay
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>
@@ -281,9 +290,17 @@ function TourDetail() {
                     <motion.div
                       key={date.departureId}
                       className={`departure-card ${
-                        date.isActive ? "active" : "inactive"
-                      }`}
+                        selectedDeparture?.departureId === date.departureId
+                          ? "selected"
+                          : ""
+                      } ${date.isActive ? "active" : "inactive"}`}
                       whileHover={{ scale: 1.03 }}
+                      onClick={() => {
+                        if (date.isActive) setSelectedDeparture(date);
+                      }}
+                      style={{
+                        cursor: date.isActive ? "pointer" : "not-allowed",
+                      }}
                     >
                       <p>
                         <strong>Ngày:</strong>{" "}

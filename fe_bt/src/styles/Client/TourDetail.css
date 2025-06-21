@@ -14,7 +14,13 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
-
+.departure-card.selected {
+  border: 5px solid #e77e0e;
+  background-color: #12e02d;
+  box-shadow: 0 0 12px rgba(15, 197, 2, 0.5);
+  transform: scale(1.02);
+  transition: all 0.3s ease;
+}
 .tour-header {
   background: linear-gradient(90deg, #2563eb, #1e40af);
   padding: 30px;

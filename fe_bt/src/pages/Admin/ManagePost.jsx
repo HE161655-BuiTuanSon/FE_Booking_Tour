@@ -64,7 +64,14 @@ function ManagePost() {
   useEffect(() => {
     fetchPosts(pagination.currentPage);
   }, [pagination.currentPage]);
+  const fixDriveUrl = (url) => {
+    if (typeof url !== "string") return url;
+    if (!url.includes("drive.google.com/uc?id=")) return url;
 
+    const parts = url.split("id=");
+    const fileId = parts[1]?.split("&")[0];
+    return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+  };
   const fetchPosts = async (page) => {
     setLoading(true);
     try {
@@ -88,7 +95,8 @@ function ManagePost() {
 
   const handleSectionChange = (index, field, value) => {
     const updatedSections = [...formData.Sections];
-    updatedSections[index][field] = field === "Image" ? value.target.files[0] : value;
+    updatedSections[index][field] =
+      field === "Image" ? value.target.files[0] : value;
     setFormData((prev) => ({ ...prev, Sections: updatedSections }));
   };
 
@@ -208,34 +216,107 @@ function ManagePost() {
   };
 
   return (
-      <div style={{ padding: 20 }}>
-        <Button variant="outlined" onClick={() => navigate("/dashboard")}>
-          Quay lại
-        </Button>
-        <Typography align="center" variant="h4" gutterBottom fontWeight="bold">
-          📄 Quản lý bài viết
-        </Typography>
-        {error && (
-            <Alert severity="error" sx={{ marginBottom: 2 }}>
-              {error}
-            </Alert>
-        )}
-        {loading && <CircularProgress sx={{ display: "block", margin: "20px auto" }} />}
-        <Button variant="contained" onClick={() => setOpen(true)} disabled={loading}>
-          ➕ Thêm bài viết
-        </Button>
-        <Paper elevation={3} sx={{ marginTop: 3, padding: 2 }}>
-          <Table>
-            <TableHead>
-              <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-                <TableCell align="center" sx={{ fontWeight: "bold" }}>
-                  Ảnh
+    <div style={{ padding: 20 }}>
+      <Button variant="outlined" onClick={() => navigate("/dashboard")}>
+        Quay lại
+      </Button>
+      <Typography align="center" variant="h4" gutterBottom fontWeight="bold">
+        📄 Quản lý bài viết
+      </Typography>
+      {error && (
+        <Alert severity="error" sx={{ marginBottom: 2 }}>
+          {error}
+        </Alert>
+      )}
+      {loading && (
+        <CircularProgress sx={{ display: "block", margin: "20px auto" }} />
+      )}
+      <Button
+        variant="contained"
+        onClick={() => setOpen(true)}
+        disabled={loading}
+      >
+        ➕ Thêm bài viết
+      </Button>
+      <Paper elevation={3} sx={{ marginTop: 3, padding: 2 }}>
+        <Table>
+          <TableHead>
+            <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                Ảnh
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Tiêu đề</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Tác giả</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Ngày tạo</TableCell>
+              <TableCell align="center" sx={{ fontWeight: "bold" }}>
+                Hành động
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {posts.map((post) => (
+              <TableRow key={post.articleId} hover>
+                <TableCell align="center">
+                  {post.imageUrl ? (
+                    <a
+                      href={fixDriveUrl(post.imageUrl)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <img
+                        src={fixDriveUrl(post.imageUrl)}
+                        alt="ảnh"
+                        style={{
+                          width: 120,
+                          height: 80,
+                          objectFit: "cover",
+                          borderRadius: 6,
+                          border: "2px solid #eee",
+                          transition: "0.3s",
+                        }}
+                        onMouseOver={(e) =>
+                          (e.currentTarget.style.border = "2px solid #1976d2")
+                        }
+                        onMouseOut={(e) =>
+                          (e.currentTarget.style.border = "2px solid #eee")
+                        }
+                      />
+                    </a>
+                  ) : (
+                    <img
+                      src="https://via.placeholder.com/120x80?text=No+Image"
+                      alt="No image"
+                      style={{
+                        width: 120,
+                        height: 80,
+                        objectFit: "cover",
+                        borderRadius: 6,
+                        border: "2px solid #eee",
+                        transition: "0.3s",
+                      }}
+                    />
+                  )}
                 </TableCell>
-                <TableCell sx={{ fontWeight: "bold" }}>Tiêu đề</TableCell>
-                <TableCell sx={{ fontWeight: "bold" }}>Tác giả</TableCell>
-                <TableCell sx={{ fontWeight: "bold" }}>Ngày tạo</TableCell>
-                <TableCell align="center" sx={{ fontWeight: "bold" }}>
-                  Hành động
+                <TableCell>{post.title}</TableCell>
+                <TableCell>{post.authorName}</TableCell>
+                <TableCell>
+                  {new Date(post.createdDate).toLocaleDateString()}
+                </TableCell>
+                <TableCell align="center">
+                  <IconButton
+                    onClick={() => handleEdit(post)}
+                    color="primary"
+                    disabled={loading}
+                  >
+                    <Edit />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => handleDelete(post.articleId)}
+                    color="error"
+                    disabled={loading}
+                  >
+                    <Delete />
+                  </IconButton>
                 </TableCell>
               </TableRow>
             </TableHead>

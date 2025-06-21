@@ -49,6 +49,7 @@ function LoginRegisterPopup({ onClose }) {
         title: "Đăng nhập thành công!",
         confirmButtonText: "OK",
       });
+      localStorage.setItem("userId", data.userId);
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.roleId);
     } catch (err) {
