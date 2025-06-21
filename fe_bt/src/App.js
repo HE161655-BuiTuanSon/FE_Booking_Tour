@@ -22,30 +22,95 @@ import ManageTransportationMethods from "./pages/Admin/ManageTransportationMetho
 import ManagePost from "./pages/Admin/ManagePost";
 import ListConsultation from "./pages/Admin/ListConsultation";
 import Chatbot from "./components/Chatbot";
+import Booking from "./pages/Client/Booking";
+import ListBooking from "./pages/Admin/ListBooking";
 
 const ClientLayout = ({ children }) => (
-    <div className="relative">
-      {children}
-      <Chatbot />
-    </div>
+  <div className="relative">
+    {children}
+    <Chatbot />
+  </div>
 );
-import Booking from "./pages/Client/Booking";
-
 function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={
+            <ClientLayout>
+              <Home />
+            </ClientLayout>
+          }
+        />
+        <Route path="/list-booking" element={<ListBooking />} />
         <Route path="/loginadmin" element={<LoginAdmin />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/tours" element={<Tours />} />
-        <Route path="/posts" element={<Posts />} />
-        <Route path="/posts/post-detail/:postId" element={<PostDetail />} />
-        <Route path="/booked" element={<BookedTour />} />
-        <Route path="/shop" element={<Shop />} />
-        <Route path="/shop/:productId" element={<ProductDetail />} />
+        <Route
+          path="/about"
+          element={
+            <ClientLayout>
+              <About />
+            </ClientLayout>
+          }
+        />
+        <Route
+          path="/tours"
+          element={
+            <ClientLayout>
+              <Tours />
+            </ClientLayout>
+          }
+        />
+        <Route
+          path="/posts"
+          element={
+            <ClientLayout>
+              <Posts />
+            </ClientLayout>
+          }
+        />
+        <Route
+          path="/posts/post-detail/:postId"
+          element={
+            <ClientLayout>
+              <PostDetail />
+            </ClientLayout>
+          }
+        />
+        <Route
+          path="/booked"
+          element={
+            <ClientLayout>
+              <BookedTour />
+            </ClientLayout>
+          }
+        />
+        <Route
+          path="/shop"
+          element={
+            <ClientLayout>
+              <Shop />
+            </ClientLayout>
+          }
+        />
+        Add commentMore actions
+        <Route
+          path="/shop/:productId"
+          element={
+            <ClientLayout>
+              <ProductDetail />
+            </ClientLayout>
+          }
+        />
         <Route path="/manage-tour" element={<ManageTours />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route
+          path="/contact"
+          element={
+            <ClientLayout>
+              <Contact />
+            </ClientLayout>
+          }
+        />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/manage-destination" element={<ManageDestination />} />
         <Route
@@ -57,13 +122,19 @@ function App() {
           element={<ManageTransportationMethods />}
         />
         <Route path="/tours/:tourId/booking" element={<Booking />} />
-
         <Route path="/list-reviews" element={<ListConsultation />} />
         <Route path="/manage-post" element={<ManagePost />} />
         <Route path="/manage-shop" element={<ManageShop />} />
         <Route path="/manage-tour-category" element={<ManageTourCategory />} />
         <Route path="/authorization" element={<Authorization />} />
-        <Route path="/tour/tour-detail/:tourId" element={<TourDetail />} />
+        <Route
+          path="/tour/tour-detail/:tourId"
+          element={
+            <ClientLayout>
+              <TourDetail />
+            </ClientLayout>
+          }
+        />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </div>

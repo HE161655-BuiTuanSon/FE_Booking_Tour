@@ -74,15 +74,52 @@ function Booking(props) {
   const handleSubmitBooking = async () => {
     try {
       setIsSubmitting(true);
-      await axios.post("https://localhost:44338/api/Bookings", {
-        tourId,
-        userId,
-        numberOfParticipants: participants,
-        bankAccountId: 0,
-        departureId: parseInt(departureId),
-      });
+      const postResponse = await axios.post(
+        "https://localhost:44338/api/Bookings",
+        {
+          tourId,
+          userId,
+          numberOfParticipants: participants,
+          bankAccountId: 999920032510,
+          departureId: parseInt(departureId),
+        }
+      );
+      const bookingId = postResponse.data?.bookingId;
 
-      Swal.fire("Thành công", "Bạn đã đặt tour thành công!", "success");
+      if (!bookingId) {
+        throw new Error("Không lấy được mã booking.");
+      }
+      const checkResponse = await axios.get(
+        `https://localhost:44338/api/Bookings/${bookingId}`
+      );
+      const { status, totalAmount } = checkResponse.data;
+      const expectedAmount = tourData?.price * participants;
+
+      if (status === "completed") {
+        if (totalAmount === expectedAmount) {
+          Swal.fire("Thành công", "Bạn đã đặt tour thành công!", "success");
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: "Có sự chênh lệch về số tiền",
+            html: `
+              <p>Số tiền hệ thống ghi nhận: <strong>${totalAmount.toLocaleString(
+                "vi-VN"
+              )} VND</strong></p>
+              <p>Số tiền bạn cần thanh toán: <strong>${expectedAmount.toLocaleString(
+                "vi-VN"
+              )} VND</strong></p>
+              <p>Vui lòng liên hệ <strong>hotline 1900 9999</strong> để được hỗ trợ!</p>
+            `,
+          });
+        }
+      } else {
+        Swal.fire(
+          "Đang xử lý",
+          `Trạng thái hiện tại: ${status}. Vui lòng kiểm tra lại sau hoặc liên hệ hỗ trợ qua số 1900 9999.`,
+          "info"
+        );
+      }
     } catch (error) {
       console.error("Lỗi khi đặt tour:", error);
 

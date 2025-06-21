@@ -4,10 +4,46 @@ import aboutBanner from "../../assets/about_banner.jpg";
 import Footer from "../../components/footer/Footer";
 import LoginRegisterPopup from "../../components/authorization/LoginRegisterPopup";
 import { getTourBooked } from "../../services/Client/TourService";
-function BookedTour(props) {
+import { useNavigate } from "react-router-dom";
+import {
+  FaIdBadge,
+  FaPlaneDeparture,
+  FaMapMarkerAlt,
+  FaFlag,
+  FaBus,
+  FaClock,
+} from "react-icons/fa";
+import "../../styles/Client/TourBooked.css";
+
+function BookedTour() {
   const [showPopup, setShowPopup] = useState(false);
   const [tourBooked, setTourBooked] = useState([]);
   const userId = localStorage.getItem("userId");
+  const navigate = useNavigate();
+
+  const fixDriveUrl = (url) => {
+    if (!url || typeof url !== "string")
+      return "https://via.placeholder.com/300x200";
+    if (!url.includes("drive.google.com/uc?id=")) return url;
+    const parts = url.split("id=");
+    const fileId = parts[1]?.split("&")[0];
+    return `https://drive.google.com/thumbnail?id=${fileId}&sz=w600`;
+  };
+
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "N/A";
+    return new Date(dateStr).toLocaleDateString("vi-VN", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  };
+
+  const formatVND = (number) => {
+    if (!number) return "0 VND";
+    return Number(number).toLocaleString("vi-VN") + " VND";
+  };
+
   useEffect(() => {
     const fetchTourBooked = async () => {
       try {
@@ -26,44 +62,86 @@ function BookedTour(props) {
     };
     fetchTourBooked();
   }, []);
+
   return (
     <div>
       <Header
         onLoginClick={() => setShowPopup(true)}
         onRegisterClick={() => setShowPopup(true)}
       />
-
       {showPopup && <LoginRegisterPopup onClose={() => setShowPopup(false)} />}
+
       <div
         className="about-banner"
         style={{ backgroundImage: `url(${aboutBanner})` }}
       >
-        Booked Tour
+        <h2 className="banner-title">Tour đã đặt</h2>
       </div>
-      <div className="tour-booked-container" style={{ padding: "20px" }}>
+
+      <div className="tour-booked-container">
         {tourBooked.length === 0 ? (
-          <p style={{ fontWeight: "bold" }}>Không có tour nào đã được đặt.</p>
+          <p className="no-tour">Bạn chưa đặt tour nào.</p>
         ) : (
-          tourBooked.map((tour, index) => (
-            <div
-              key={index}
-              className="booked-tour-item"
-              style={{
-                border: "1px solid #ccc",
-                borderRadius: "8px",
-                padding: "16px",
-                marginBottom: "12px",
-              }}
-            >
-              <h3>{tour.name}</h3>
-              <p>Ngày đi: {tour.date}</p>
-              <p>Số lượng: {tour.quantity}</p>
-              <p>Giá: {tour.price} VND</p>
+          tourBooked.map((tour) => (
+            <div className="tour-card-all" key={tour.tourId}>
+              <img
+                src={fixDriveUrl(tour.imageUrl)}
+                alt={tour.tourName}
+                className="tour-image"
+              />
+              <div className="tour-info">
+                <h1 className="title-tour">{tour.tourName}</h1>
+                <div className="tour-sub-info">
+                  <div className="info-1">
+                    <p className="info-tour">
+                      <FaIdBadge /> <strong>Mã tour:</strong>{" "}
+                      {tour.tourId || "N/A"}
+                    </p>
+                    <p className="info-tour">
+                      <FaPlaneDeparture /> <strong>Khởi hành:</strong>{" "}
+                      {formatDate(tour.nextDeparture?.departureDate)}
+                    </p>
+                    <p className="info-tour">
+                      <FaMapMarkerAlt /> <strong>Điểm đến:</strong>{" "}
+                      {tour.destination || "N/A"}
+                    </p>
+                  </div>
+                  <div className="info-2">
+                    <p className="info-tour">
+                      <FaFlag /> <strong>Điểm khởi hành:</strong>{" "}
+                      {tour.departurePoint || "N/A"}
+                    </p>
+                    <p className="info-tour">
+                      <FaBus /> <strong>Phương tiện:</strong>{" "}
+                      {tour.transportation || "N/A"}
+                    </p>
+                    <p className="info-tour">
+                      <FaClock /> <strong>Thời gian đi:</strong>{" "}
+                      {tour.durationDays || "N/A"} ngày
+                    </p>
+                  </div>
+                </div>
+                <div className="price-tour">
+                  <div className="info-price">
+                    <strong>Giá từ:</strong>
+                    <div className="price">{formatVND(tour.price)}</div>
+                  </div>
+                  <button
+                    className="btn-detail-tour"
+                    onClick={() => {
+                      navigate(`/tour/tour-detail/${tour.tourId}`);
+                    }}
+                  >
+                    Xem chi tiết
+                  </button>
+                </div>
+              </div>
             </div>
           ))
         )}
       </div>
-      <Footer></Footer>
+
+      <Footer />
     </div>
   );
 }

@@ -17,6 +17,10 @@ import { useNavigate } from "react-router-dom";
 function ListConsultation(props) {
   const [consultation, setConsultation] = useState([]);
   const navigate = useNavigate();
+  const role = localStorage.getItem("role");
+  if (role !== "1") {
+    navigate("/");
+  }
   useEffect(() => {
     fetchConsultation();
   }, []);

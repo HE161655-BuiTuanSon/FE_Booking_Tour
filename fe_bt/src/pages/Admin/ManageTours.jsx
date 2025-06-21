@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAllTour } from "../../services/Client/TourService";
+import { getAllTour, getTourById } from "../../services/Client/TourService";
 import {
   Button,
   Dialog,
@@ -73,6 +73,7 @@ function ManageTours() {
   const [transportationMethods, setTransportationMethods] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [existingImages, setExistingImages] = useState([]);
   useEffect(() => {
     fetchDestination();
     fetchDeparturePoint();
@@ -251,7 +252,6 @@ function ManageTours() {
       formPayload.append("Vehicle", formData.Vehicle);
       formPayload.append("Promotion", formData.Promotion);
 
-      // Chuẩn hóa CreateTourDeparture
       const departures = formData.CreateTourDeparture.map((dep) => ({
         departureDate: dep.departureDate,
         availableSlots: Number(dep.availableSlots),
@@ -292,6 +292,7 @@ function ManageTours() {
         CreateTourDeparture: [{ departureDate: "", availableSlots: "" }],
         images: [],
       });
+      setExistingImages([]); // Reset existing images
       setErrors({});
       setIsEditing(false);
       setEditId(null);
@@ -319,33 +320,70 @@ function ManageTours() {
     }
   };
 
-  const handleEdit = (tour) => {
-    setFormData({
-      TourName: tour.tourName || "",
-      Description: tour.description || "",
-      DurationDays: tour.durationDays || "",
-      Price: tour.price || "",
-      DestinationId: tour.destinationId || 0,
-      CategoryId: tour.categoryId || 0,
-      DeparturePointId: tour.departurePointId || 0,
-      TransportationMethodId: tour.transportationMethodId || 0,
-      MaxParticipants: tour.maxParticipants || "",
-      SightseeingSpot: tour.sightseeingSpot || "",
-      Cuisine: tour.cuisine || "",
-      SuitableSubject: tour.suitableSubject || "",
-      IdealTime: tour.idealTime || "",
-      Vehicle: tour.vehicle || "",
-      Promotion: tour.promotion || "",
-      CreateTourDeparture: tour.departureDates?.map((d) => ({
-        departureDate: new Date(d.departureDate).toISOString(),
-        availableSlots: d.availableSlots.toString(),
-      })) || [{ departureDate: "", availableSlots: "" }],
-      images: [],
-    });
-    setIsEditing(true);
-    setEditId(tour.tourId);
-    setShowPopup(true);
-    setErrors({});
+  const handleEdit = async (tour) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const tourDetails = await getTourById(tour.tourId);
+
+      const destination = destinations.find(
+        (dest) => dest.destinationName === tourDetails.destinationName
+      );
+      const destinationId = destination ? destination.destinationId : 0;
+
+      const departurePoint = departurePoints.find(
+        (dep) => dep.departurePointName === tourDetails.departurePointName
+      );
+      const departurePointId = departurePoint
+        ? departurePoint.departurePointId
+        : 0;
+
+      const transportationMethod = tourDetails.transportationMethod[0];
+      const transportationMethodId = transportationMethod
+        ? transportationMethod.transportationMethodId
+        : 0;
+
+      const categoryId = tourDetails.category[0]?.categoryId || 0;
+
+      setFormData({
+        TourName: tourDetails.tourName || "",
+        Description: tourDetails.description || "",
+        DurationDays: tourDetails.durationDays || "",
+        Price: tourDetails.price || "",
+        DestinationId: destinationId,
+        CategoryId: categoryId,
+        DeparturePointId: departurePointId,
+        TransportationMethodId: transportationMethodId,
+        MaxParticipants: tourDetails.maxParticipants || "",
+        SightseeingSpot: tourDetails.sightseeingSpot || "",
+        Cuisine: tourDetails.cuisine || "",
+        SuitableSubject: tourDetails.suitableSubject || "",
+        IdealTime: tourDetails.idealTime || "",
+        Vehicle: tourDetails.vehicle || "",
+        Promotion: tourDetails.promotion || "",
+        CreateTourDeparture:
+          tourDetails.departureDates?.length > 0
+            ? tourDetails.departureDates.map((d) => ({
+                departureDate: new Date(d.departureDate).toISOString(),
+                availableSlots: d.availableSlots.toString(),
+              }))
+            : [{ departureDate: "", availableSlots: "" }],
+        images: [],
+      });
+
+      // Set existing images for display
+      setExistingImages(tourDetails.images || []);
+
+      setIsEditing(true);
+      setEditId(tour.tourId);
+      setShowPopup(true);
+      setErrors({});
+    } catch (err) {
+      console.error("Lỗi khi lấy chi tiết tour:", err);
+      setError(err.response?.data?.message || "Không thể lấy chi tiết tour.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e) => {
