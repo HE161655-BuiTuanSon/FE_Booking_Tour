@@ -73,6 +73,16 @@ function ManageTours() {
   const [categories, setCategories] = useState([]);
   const [transportationMethods, setTransportationMethods] = useState([]);
 
+  // Hàm fixDriveUrl để xử lý URL ảnh từ Google Drive
+  const fixDriveUrl = (url) => {
+    if (typeof url !== "string") return url;
+    if (!url.includes("drive.google.com/uc?id=")) return url;
+
+    const parts = url.split("id=");
+    const fileId = parts[1]?.split("&")[0];
+    return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+  };
+
   useEffect(() => {
     fetchTours();
     fetchDestination();
@@ -669,9 +679,10 @@ function ManageTours() {
                     <TableCell>
                       {tour.imageUrl ? (
                           <img
-                              src={tour.imageUrl}
+                              src={fixDriveUrl(tour.imageUrl)} // Áp dụng fixDriveUrl
                               alt={tour.tourName}
                               style={{ width: "80px", height: "auto", borderRadius: 4 }}
+                              loading="lazy" // Tối ưu hóa tải ảnh
                           />
                       ) : (
                           "Không có ảnh"

@@ -45,9 +45,21 @@ function ManagePost() {
     Title: "",
     AuthorId: userId,
     Image: null,
+    ExistingImageUrl: "", // Lưu URL ảnh hiện tại
     Sections: [],
   });
   const navigate = useNavigate();
+
+  // Hàm fixDriveUrl để xử lý URL ảnh từ Google Drive
+  const fixDriveUrl = (url) => {
+    if (typeof url !== "string" || !url.trim()) return "/assets/placeholder.jpg"; // Cập nhật đường dẫn ảnh mặc định
+    if (!url.includes("drive.google.com/uc?id=")) return url;
+
+    const parts = url.split("id=");
+    const fileId = parts[1]?.split("&")[0];
+    if (!fileId) return "/assets/placeholder.jpg";
+    return `https://drive.google.com/thumbnail?id=${fileId}&sz=w200`;
+  };
 
   useEffect(() => {
     fetchPosts(pagination.currentPage);
@@ -60,7 +72,7 @@ function ManagePost() {
       setPosts(data.articles);
       setPagination(data.pagination);
     } catch (error) {
-      setError(error);
+      setError(error.message || "Lỗi khi tải bài viết");
     } finally {
       setLoading(false);
     }
@@ -83,7 +95,7 @@ function ManagePost() {
   const handleAddSection = () => {
     setFormData((prev) => ({
       ...prev,
-      Sections: [...prev.Sections, { Text: "", Image: null }],
+      Sections: [...prev.Sections, { Text: "", Image: null, ExistingImageUrl: "" }],
     }));
   };
 
@@ -104,11 +116,16 @@ function ManagePost() {
       const form = new FormData();
       form.append("Title", formData.Title);
       form.append("AuthorId", formData.AuthorId);
-      if (formData.Image) form.append("Image", formData.Image);
+      if (formData.Image) {
+        form.append("Image", formData.Image);
+      } else if (formData.ExistingImageUrl && editId) {
+        form.append("ExistingImageUrl", formData.ExistingImageUrl); // Gửi URL ảnh hiện tại nếu không thay đổi
+      }
 
       const sectionsData = formData.Sections.map((section, idx) => ({
         Text: section.Text,
         Image: section.Image ? `section_image_${idx}` : null,
+        ExistingImageUrl: section.ExistingImageUrl || null, // Gửi URL ảnh section hiện tại
       }));
       form.append("Sections", JSON.stringify(sectionsData));
 
@@ -117,6 +134,11 @@ function ManagePost() {
           form.append(`section_image_${idx}`, section.Image);
         }
       });
+
+      console.log("📦 FormData sent:");
+      for (let [key, value] of form.entries()) {
+        console.log(`${key}:`, value instanceof File ? value.name : value);
+      }
 
       if (editId) {
         await updatePost(editId, form);
@@ -127,7 +149,8 @@ function ManagePost() {
       fetchPosts(pagination.currentPage);
       handleClose();
     } catch (error) {
-      setError(error);
+      console.error("Lỗi khi submit:", error);
+      setError(error.message || "Không thể lưu bài viết");
     } finally {
       setLoading(false);
     }
@@ -141,15 +164,18 @@ function ManagePost() {
         Title: postData.title,
         AuthorId: userId,
         Image: null,
+        ExistingImageUrl: postData.imageUrl || "", // Lưu URL ảnh chính hiện tại
         Sections: postData.sections.map((section) => ({
           Text: section.text,
           Image: null,
+          ExistingImageUrl: section.imageUrl || "", // Lưu URL ảnh section hiện tại
         })),
       });
       setEditId(post.articleId);
       setOpen(true);
     } catch (error) {
-      setError(error);
+      console.error("Lỗi khi tải dữ liệu chỉnh sửa:", error);
+      setError(error.message || "Lỗi khi tải dữ liệu bài viết");
     } finally {
       setLoading(false);
     }
@@ -161,7 +187,8 @@ function ManagePost() {
       await deletePost(id);
       fetchPosts(pagination.currentPage);
     } catch (error) {
-      setError(error);
+      console.error("Lỗi khi xóa:", error);
+      setError(error.message || "Lỗi khi xóa bài viết");
     } finally {
       setLoading(false);
     }
@@ -170,7 +197,7 @@ function ManagePost() {
   const handleClose = () => {
     setOpen(false);
     setEditId(null);
-    setFormData({ Title: "", AuthorId: userId, Image: null, Sections: [] });
+    setFormData({ Title: "", AuthorId: userId, Image: null, ExistingImageUrl: "", Sections: [] });
   };
 
   const handlePageChange = (event, value) => {
@@ -220,8 +247,8 @@ function ManagePost() {
                           <a
                               href={
                                 post.imageUrl.startsWith("http")
-                                    ? post.imageUrl
-                                    : `https://localhost:44338${post.imageUrl}`
+                                    ? fixDriveUrl(post.imageUrl)
+                                    : `${process.env.REACT_APP_API_URL}${post.imageUrl}`
                               }
                               target="_blank"
                               rel="noopener noreferrer"
@@ -229,8 +256,8 @@ function ManagePost() {
                             <img
                                 src={
                                   post.imageUrl.startsWith("http")
-                                      ? post.imageUrl
-                                      : `https://localhost:44338${post.imageUrl}`
+                                      ? fixDriveUrl(post.imageUrl)
+                                      : `${process.env.REACT_APP_API_URL}${post.imageUrl}`
                                 }
                                 alt="ảnh"
                                 style={{
@@ -239,19 +266,21 @@ function ManagePost() {
                                   objectFit: "cover",
                                   borderRadius: 6,
                                   border: "2px solid #eee",
-                                  transition: "0.3s",
+                                  transition: "border 0.3s",
                                 }}
                                 onMouseOver={(e) =>
-                                    (e.currentTarget.style.border = "2px solid #1976d2")
+                                    (e.currentTarget.style.borderColor = "#1976d2")
                                 }
                                 onMouseOut={(e) =>
-                                    (e.currentTarget.style.border = "2px solid #eee")
+                                    (e.currentTarget.style.borderColor = "#eee")
                                 }
+                                loading="lazy"
+                                onError={(e) => { e.target.src = "/assets/placeholder.jpg"; }}
                             />
                           </a>
                       ) : (
                           <img
-                              src="https://via.placeholder.com/120x80?text=No+Image"
+                              src="/assets/placeholder.jpg"
                               alt="No image"
                               style={{
                                 width: 120,
@@ -259,15 +288,16 @@ function ManagePost() {
                                 objectFit: "cover",
                                 borderRadius: 6,
                                 border: "2px solid #eee",
-                                transition: "0.3s",
+                                transition: "border 0.3s",
                               }}
+                              loading="lazy"
                           />
                       )}
                     </TableCell>
                     <TableCell>{post.title}</TableCell>
                     <TableCell>{post.authorName}</TableCell>
                     <TableCell>
-                      {new Date(post.createdDate).toLocaleDateString()}
+                      {new Date(post.createdDate).toLocaleString("vi-VN")}
                     </TableCell>
                     <TableCell align="center">
                       <IconButton onClick={() => handleEdit(post)} color="primary" disabled={loading}>
@@ -301,90 +331,114 @@ function ManagePost() {
           <DialogContent dividers>
             <TextField
                 fullWidth
-                margin="dense"
-                label="Tiêu đề"
+                margin="normal"
+                label="Tiêu đề bài đăng"
                 name="Title"
-                value={formData.Title}
+                value={formData.Title || ""}
                 onChange={handleChange}
                 disabled={loading}
+                required
+                error={!!error && !formData.Title}
+                helperText={error && !formData.Title ? "Tiêu đề là bắt buộc" : ""}
             />
+            <Typography variant="body2" sx={{ marginTop: 2 }}>
+              Ảnh chính thức
+            </Typography>
             <input
                 type="file"
                 name="Image"
                 accept="image/*"
                 onChange={handleChange}
-                style={{ marginTop: "16px" }}
+                style={{ margin: "16px 0" }}
                 disabled={loading}
             />
-            {formData.Image && (
+            {(formData.Image || formData.ExistingImageUrl) && (
                 <img
-                    src={URL.createObjectURL(formData.Image)}
+                    src={
+                      formData.Image
+                          ? URL.createObjectURL(formData.Image)
+                          : fixDriveUrl(formData.ExistingImageUrl)
+                    }
                     alt="Preview"
-                    style={{ maxWidth: 200, marginTop: 8 }}
+                    style={{ maxWidth: 200, height: 80, objectFit: "cover", marginTop: 8 }}
+                    loading="lazy"
+                    onError={(e) => { e.target.src = "/assets/placeholder.jpg"; }}
                 />
             )}
             <Stack spacing={2} sx={{ marginTop: 2 }}>
-              {formData.Sections.map((section, index) => (
+              <Typography sx variant={{ fontWeight: "bold" }}>Các mục tiêu bài đăng</Typography>
+              {formData.Sections?.map((section, index) => (
                   <Paper
-                      key={index}
-                      variant="outlined"
-                      sx={{ padding: 2, borderStyle: "dashed" }}
+                    key={index}
+                    variant="outlined"
+                    sx={{ padding: 2, borderStyle: "dashed" }}
                   >
                     <TextField
                         fullWidth
-                        label={`Section ${index + 1} - Text`}
-                        value={section.Text}
+                        label={`Mục ${index + 1} - Nội dung văn bản`}
+                        value={section.Text || section.Text || ""}
                         onChange={(e) =>
-                            handleSectionChange(index, "Text", e.target.value)
+                          handleSectionChange(index, "Text", e.target.value)
                         }
                         multiline
+                        rows={5}
                         disabled={loading}
+                        error={!!error && !section.Text}
+                        helperText={error && !section.Text ? "Nội dung mục là bắt buộc" : ""}
                     />
+                    <Typography variant="caption">Ảnh của mục</Typography>
                     <input
                         type="file"
-                        accept="image/*"
+                        accept="image"
                         onChange={(e) => handleSectionChange(index, "Image", e)}
                         style={{ marginTop: 8 }}
                         disabled={loading}
                     />
-                    {section.Image && (
+                      {(section.Image || section.ExistingImageUrl) && (
                         <img
-                            src={URL.createObjectURL(section.Image)}
+                            src={
+                                section.Image
+                                  ? URL.createObjectURL(section.Image)
+                                  : fixDriveUrl(section.ExistingImageUrl)
+                                }
                             alt={`Section ${index + 1} Preview`}
-                            style={{ maxWidth: 200, marginTop: 8 }}
-                        />
-                    )}
-                    <Button
-                        color="error"
-                        variant="text"
-                        onClick={() => handleRemoveSection(index)}
-                        disabled={loading}
-                    >
-                      Xóa Section
-                    </Button>
-                  </Paper>
-              ))}
+                            style={{ maxWidth: 200, height: 80, objectFit: "cover", marginTop: 8 }}
+                            loading="lazy"
+                            onError={(e) => { e.target.src = "/assets/placeholder.jpg"; }}
+                          />
+                      )}
+                        <Button
+                            color="error"
+                          variant="text"
+                          onClick={() => handleRemoveSection(index)}
+                          disabled={loading}
+                          sx={{ marginTop: 1 }}
+                        >
+                          Xóa mục tiêu
+                        </Button>
+                    </Paper>
+                  ))}
             </Stack>
             <Button
                 variant="outlined"
                 onClick={handleAddSection}
                 sx={{ marginTop: 2 }}
                 disabled={loading}
-            >
-              ➕ Thêm Section
-            </Button>
+              >
+                ➕ Thêm mục mới
+              </Button>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} disabled={loading}>
               Hủy
             </Button>
-            <Button variant="contained" onClick={handleSubmit} disabled={loading}>
+            <Button variant="contained" onClick={handleSubmit} color="primary" disabled={loading}>
               {editId ? "Cập nhật" : "Thêm"}
             </Button>
           </DialogActions>
         </Dialog>
       </div>
-  );
+    );
 }
 
 export default ManagePost;
