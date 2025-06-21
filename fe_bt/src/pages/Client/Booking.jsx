@@ -113,10 +113,20 @@ function Booking(props) {
             `,
           });
         }
+      } else if (status === "failed") {
+        Swal.fire({
+          icon: "error",
+          title: "Thanh toán thất bại",
+          html: `
+            <p>Hệ thống ghi nhận giao dịch không hợp lệ.</p>
+            <p>Vui lòng kiểm tra lại thông tin chuyển khoản, đặc biệt là số tiền và nội dung.</p>
+            <p>Hoặc liên hệ <strong>0394627402</strong> để được hỗ trợ.</p>
+          `,
+        });
       } else {
         Swal.fire(
           "Đang xử lý",
-          `Trạng thái hiện tại: ${status}. Vui lòng kiểm tra lại sau hoặc liên hệ hỗ trợ qua số 1900 9999.`,
+          `Trạng thái hiện tại: ${status}. Vui lòng kiểm tra lại sau hoặc liên hệ hỗ trợ qua số 0394627402.`,
           "info"
         );
       }
