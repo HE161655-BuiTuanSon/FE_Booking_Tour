@@ -3,9 +3,9 @@ import axios from "axios";
 export const createTour = async (formData) => {
   try {
     const response = await axios.post(
-        "http://vivutravel.net/api/Tour",
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
+      "https://localhost:44338/api/Tour",
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } }
     );
     console.log("Data sent:", formData);
     return response.data;
@@ -18,9 +18,9 @@ export const createTour = async (formData) => {
 export const updateTour = async (tourId, formData) => {
   try {
     const response = await axios.put(
-        `http://vivutravel.net/api/Tour/${tourId}`,
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
+      `https://localhost:44338/api/Tour/${tourId}`,
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } }
     );
     return response.data;
   } catch (error) {
@@ -32,7 +32,7 @@ export const updateTour = async (tourId, formData) => {
 export const deleteTour = async (tourId) => {
   try {
     const response = await axios.delete(
-        `http://vivutravel.net/api/Tour/${tourId}`
+      `https://localhost:44338/api/Tour/${tourId}`
     );
     return response.data;
   } catch (error) {
@@ -44,7 +44,7 @@ export const deleteTour = async (tourId) => {
 export const getAllTour = async (page, pageSize) => {
   try {
     const response = await axios.get(
-        `http://vivutravel.net/api/Tour?page=${page}&pageSize=${pageSize}&sortBy=departure`
+      `https://localhost:44338/api/Tour?page=${page}&pageSize=${pageSize}&sortBy=departure`
     );
     return response.data;
   } catch (error) {

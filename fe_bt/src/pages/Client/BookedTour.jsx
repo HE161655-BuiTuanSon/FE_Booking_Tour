@@ -12,6 +12,7 @@ import {
   FaFlag,
   FaBus,
   FaClock,
+  FaUserFriends,
 } from "react-icons/fa";
 import "../../styles/Client/TourBooked.css";
 
@@ -48,12 +49,11 @@ function BookedTour() {
     const fetchTourBooked = async () => {
       try {
         const response = await getTourBooked(userId);
-        const result = await response.json();
-        if (result.status === "success" && Array.isArray(result.data)) {
-          setTourBooked(result.data);
+        console.log(response);
+        if (response.status === "success" && Array.isArray(response.data)) {
+          setTourBooked(response.data);
         } else {
           setTourBooked([]);
-          console.warn("Unexpected response format:", result);
         }
       } catch (error) {
         console.error("Lỗi khi lấy danh sách tour đã đặt:", error);
@@ -98,33 +98,15 @@ function BookedTour() {
                       {tour.tourId || "N/A"}
                     </p>
                     <p className="info-tour">
-                      <FaPlaneDeparture /> <strong>Khởi hành:</strong>{" "}
-                      {formatDate(tour.nextDeparture?.departureDate)}
-                    </p>
-                    <p className="info-tour">
-                      <FaMapMarkerAlt /> <strong>Điểm đến:</strong>{" "}
-                      {tour.destination || "N/A"}
-                    </p>
-                  </div>
-                  <div className="info-2">
-                    <p className="info-tour">
-                      <FaFlag /> <strong>Điểm khởi hành:</strong>{" "}
-                      {tour.departurePoint || "N/A"}
-                    </p>
-                    <p className="info-tour">
-                      <FaBus /> <strong>Phương tiện:</strong>{" "}
-                      {tour.transportation || "N/A"}
-                    </p>
-                    <p className="info-tour">
-                      <FaClock /> <strong>Thời gian đi:</strong>{" "}
-                      {tour.durationDays || "N/A"} ngày
+                      <FaUserFriends /> <strong>Số người:</strong>{" "}
+                      {tour.numberOfParticipants || "N/A"}
                     </p>
                   </div>
                 </div>
                 <div className="price-tour">
                   <div className="info-price">
                     <strong>Giá từ:</strong>
-                    <div className="price">{formatVND(tour.price)}</div>
+                    <div className="price">{formatVND(tour.totalAmount)}</div>
                   </div>
                   <button
                     className="btn-detail-tour"

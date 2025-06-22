@@ -2,7 +2,7 @@ import axios from "axios";
 export const createDesparturePoint = async (desparturePointData) => {
   try {
     const response = await axios.post(
-      "http://vivutravel.net/api/DeparturePoints",
+      "https://localhost:44338/api/DeparturePoints",
       desparturePointData
     );
     return response.data;
@@ -17,7 +17,7 @@ export const updateDesparturePoint = async (
 ) => {
   try {
     const response = await axios.put(
-      `http://vivutravel.net/api/DeparturePoints/${desparturePointId}`,
+      `https://localhost:44338/api/DeparturePoints/${desparturePointId}`,
       desparturePointData
     );
     return response.data;
@@ -29,7 +29,7 @@ export const updateDesparturePoint = async (
 export const deleteDesparturePoint = async (desparturePointId) => {
   try {
     const response = await axios.delete(
-      `http://vivutravel.net/api/DeparturePoints/${desparturePointId}`
+      `https://localhost:44338/api/DeparturePoints/${desparturePointId}`
     );
     return response.data;
   } catch (error) {
@@ -40,7 +40,7 @@ export const deleteDesparturePoint = async (desparturePointId) => {
 export const getAllDeparturePoint = async () => {
   try {
     const response = await axios.get(
-      "http://vivutravel.net/api/DeparturePoints"
+      "https://localhost:44338/api/DeparturePoints"
     );
     return response.data;
   } catch (error) {
