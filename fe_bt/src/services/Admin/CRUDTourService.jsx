@@ -3,7 +3,7 @@ import axios from "axios";
 export const createTour = async (formData) => {
   try {
     const response = await axios.post(
-        "https://localhost:44338/api/Tour",
+        "http://vivutravel.net/api/Tour",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
     );
@@ -18,7 +18,7 @@ export const createTour = async (formData) => {
 export const updateTour = async (tourId, formData) => {
   try {
     const response = await axios.put(
-        `https://localhost:44338/api/Tour/${tourId}`,
+        `http://vivutravel.net/api/Tour/${tourId}`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
     );
@@ -32,7 +32,7 @@ export const updateTour = async (tourId, formData) => {
 export const deleteTour = async (tourId) => {
   try {
     const response = await axios.delete(
-        `https://localhost:44338/api/Tour/${tourId}`
+        `http://vivutravel.net/api/Tour/${tourId}`
     );
     return response.data;
   } catch (error) {
@@ -44,7 +44,7 @@ export const deleteTour = async (tourId) => {
 export const getAllTour = async (page, pageSize) => {
   try {
     const response = await axios.get(
-        `https://localhost:44338/api/Tour?page=${page}&pageSize=${pageSize}&sortBy=departure`
+        `http://vivutravel.net/api/Tour?page=${page}&pageSize=${pageSize}&sortBy=departure`
     );
     return response.data;
   } catch (error) {

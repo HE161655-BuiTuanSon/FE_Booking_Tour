@@ -75,12 +75,12 @@ function Booking(props) {
     try {
       setIsSubmitting(true);
       const postResponse = await axios.post(
-        "https://localhost:44338/api/Bookings",
+        "http://vivutravel.net/api/Bookings",
         {
           tourId,
           userId,
           numberOfParticipants: participants,
-          bankAccountId: 999920032510,
+          bankAccountId: 1,
           departureId: parseInt(departureId),
         }
       );
@@ -90,7 +90,7 @@ function Booking(props) {
         throw new Error("Không lấy được mã booking.");
       }
       const checkResponse = await axios.get(
-        `https://localhost:44338/api/Bookings/${bookingId}`
+        `http://vivutravel.net/api/Bookings/${bookingId}`
       );
       const { status, totalAmount } = checkResponse.data;
       const expectedAmount = tourData?.price * participants;

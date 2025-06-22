@@ -2,7 +2,7 @@ import axios from "axios";
 export const createMethodTrans = async (methodTransData) => {
   try {
     const response = await axios.post(
-      "https://localhost:44338/api/TransportationMethods",
+      "http://vivutravel.net/api/TransportationMethods",
       methodTransData
     );
     return response.data;
@@ -14,7 +14,7 @@ export const createMethodTrans = async (methodTransData) => {
 export const updateMethodTrans = async (methodTransId, methodTransData) => {
   try {
     const response = await axios.put(
-      `https://localhost:44338/api/TransportationMethods/${methodTransId}`,
+      `http://vivutravel.net/api/TransportationMethods/${methodTransId}`,
       methodTransData
     );
     return response.data;
@@ -26,7 +26,7 @@ export const updateMethodTrans = async (methodTransId, methodTransData) => {
 export const deleteMethodTrans = async (methodTransId) => {
   try {
     const response = await axios.delete(
-      `https://localhost:44338/api/TransportationMethods/${methodTransId}`
+      `http://vivutravel.net/api/TransportationMethods/${methodTransId}`
     );
     return response.data;
   } catch (error) {
@@ -37,7 +37,7 @@ export const deleteMethodTrans = async (methodTransId) => {
 export const getAllMethodTrans = async () => {
   try {
     const response = await axios.get(
-      "https://localhost:44338/api/TransportationMethods"
+      "http://vivutravel.net/api/TransportationMethods"
     );
     return response.data;
   } catch (error) {

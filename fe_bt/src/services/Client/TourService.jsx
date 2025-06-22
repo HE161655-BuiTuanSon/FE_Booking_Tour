@@ -2,7 +2,7 @@ import axios from "axios";
 export const getTenTour = async () => {
   try {
     const response = await axios.get(
-      "https://localhost:44338/api/Home/latest-tour"
+      "http://vivutravel.net/api/Home/latest-tour"
     );
     return response.data;
   } catch (error) {
@@ -30,7 +30,7 @@ export const getAllTour = async (page, pageSize, filters = {}) => {
   );
 
   try {
-    const response = await axios.get(`https://localhost:44338/api/Tour`, {
+    const response = await axios.get(`http://vivutravel.net/api/Tour`, {
       params,
     });
     return response.data;
@@ -43,7 +43,7 @@ export const getAllTour = async (page, pageSize, filters = {}) => {
 export const getTourById = async (tourId) => {
   try {
     const response = await axios.get(
-      `https://localhost:44338/api/Tour/${tourId}`
+      `http://vivutravel.net/api/Tour/${tourId}`
     );
     return response.data;
   } catch (error) {
@@ -54,7 +54,7 @@ export const getTourById = async (tourId) => {
 export const getCategoryTour = async () => {
   try {
     const response = await axios.get(
-      `https://localhost:44338/api/TourFilter/categories`
+      `http://vivutravel.net/api/TourFilter/categories`
     );
     return response.data;
   } catch (error) {
@@ -65,7 +65,7 @@ export const getCategoryTour = async () => {
 export const getDestinationTour = async () => {
   try {
     const response = await axios.get(
-      `https://localhost:44338/api/TourFilter/destinations`
+      `http://vivutravel.net/api/TourFilter/destinations`
     );
     return response.data;
   } catch (error) {
@@ -76,7 +76,7 @@ export const getDestinationTour = async () => {
 export const getDeparturepointTour = async () => {
   try {
     const response = await axios.get(
-      `https://localhost:44338/api/TourFilter/departurepoints`
+      `http://vivutravel.net/api/TourFilter/departurepoints`
     );
     return response.data;
   } catch (error) {
@@ -88,7 +88,7 @@ export const getDeparturepointTour = async () => {
 export const getTourBooked = async (userId) => {
   try {
     const response = await axios.get(
-      `https://localhost:44338/api/Bookings/booking-history/${userId}`
+      `http://vivutravel.net/api/Bookings/booking-history/${userId}`
     );
     return response.data;
   } catch (error) {

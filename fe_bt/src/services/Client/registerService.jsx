@@ -3,7 +3,7 @@ import axios from "axios";
 export const register = async (fullName, email, password, phone, address) => {
   try {
     const response = await axios.post(
-      "https://localhost:44338/api/Auth/register",
+      "http://vivutravel.net/api/Auth/register",
       {
         fullName: fullName,
         email: email,
