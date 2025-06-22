@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "https://localhost:44338/api/Articles";
+const API_BASE_URL = "http://vivutravel.net/api/Articles";
 
 // Helper function to add authorization headers if needed
 const getAuthHeaders = () => {

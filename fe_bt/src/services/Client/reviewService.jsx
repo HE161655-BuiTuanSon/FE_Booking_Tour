@@ -1,9 +1,7 @@
 import axios from "axios";
 export const getAllConsultation = async () => {
   try {
-    const response = await axios.get(
-      "https://localhost:44338/api/Consultations"
-    );
+    const response = await axios.get("http://vivutravel.net/api/Consultations");
     return response.data;
   } catch (error) {
     console.error(error);
@@ -13,7 +11,7 @@ export const getAllConsultation = async () => {
 export const createConsultation = async (dataForm) => {
   try {
     const response = await axios.post(
-      "https://localhost:44338/api/Consultations",
+      "http://vivutravel.net/api/Consultations",
       dataForm
     );
     return response.data;
