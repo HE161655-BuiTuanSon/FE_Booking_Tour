@@ -35,7 +35,7 @@ const Chatbot = () => {
 
     try {
       const response = await axios.post(
-        "http://vivutravel.net/api/Tour/recommend",
+        "https://localhost:44338/api/Tour/recommend",
         { userInput: userInput },
         { headers: { "Content-Type": "application/json" } }
       );

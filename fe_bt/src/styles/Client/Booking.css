@@ -88,3 +88,30 @@
 .confirm-button:hover {
   background-color: #15803d;
 }
+.payment-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.payment-popup {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 90%;
+  text-align: center;
+  position: relative;
+}
+
+.payment-popup img.qr-img {
+  width: 200px;
+  margin: 20px 0;
+}

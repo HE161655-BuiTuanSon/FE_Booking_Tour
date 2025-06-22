@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://vivutravel.net/api/Articles";
+const API_BASE_URL = "https://localhost:44338/api/Articles";
 
 // Helper function to add authorization headers if needed
 const getAuthHeaders = () => {
@@ -12,8 +12,8 @@ const getAuthHeaders = () => {
 export const getAllPost = async (page = 1, pageSize = 10) => {
   try {
     const response = await axios.get(
-        `${API_BASE_URL}?page=${page}&pageSize=${pageSize}`,
-        { headers: getAuthHeaders() }
+      `${API_BASE_URL}?page=${page}&pageSize=${pageSize}`,
+      { headers: getAuthHeaders() }
     );
     return response.data.data; // Backend wraps data in a "data" field
   } catch (error) {

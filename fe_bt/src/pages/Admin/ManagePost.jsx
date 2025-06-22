@@ -54,10 +54,9 @@ function ManagePost() {
     navigate("/");
   }
 
-  // Hàm fixDriveUrl để xử lý URL ảnh từ Google Drive
   const fixDriveUrl = (url) => {
     if (typeof url !== "string" || !url.trim())
-      return "/assets/placeholder.jpg"; // Cập nhật đường dẫn ảnh mặc định
+      return "/assets/placeholder.jpg";
     if (!url.includes("drive.google.com/uc?id=")) return url;
 
     const parts = url.split("id=");

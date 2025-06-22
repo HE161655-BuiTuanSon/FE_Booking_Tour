@@ -2,7 +2,7 @@ import axios from "axios";
 export const getAllConsultation = async () => {
   try {
     const response = await axios.get(
-      "http://vivutravel.net/api/Consultations"
+      "https://localhost:44338/api/Consultations"
     );
     return response.data;
   } catch (error) {
@@ -13,7 +13,7 @@ export const getAllConsultation = async () => {
 export const createConsultation = async (dataForm) => {
   try {
     const response = await axios.post(
-      "http://vivutravel.net/api/Consultations",
+      "https://localhost:44338/api/Consultations",
       dataForm
     );
     return response.data;

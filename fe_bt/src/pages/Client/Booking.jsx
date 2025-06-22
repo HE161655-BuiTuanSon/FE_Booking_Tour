@@ -21,6 +21,10 @@ function Booking(props) {
   const [departureDateText, setDepartureDateText] = useState("");
   const userId = localStorage.getItem("userId");
   const [availableSlots, setAvailableSlots] = useState(0);
+  const [paymentInfo, setPaymentInfo] = useState(null);
+  const [showPaymentPopup, setShowPaymentPopup] = useState(false);
+  const [isCheckingPayment, setIsCheckingPayment] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState(null);
   useEffect(() => {
     const role = localStorage.getItem("role");
     if (userId && role === "2") {
@@ -75,7 +79,7 @@ function Booking(props) {
     try {
       setIsSubmitting(true);
       const postResponse = await axios.post(
-        "http://vivutravel.net/api/Bookings",
+        "https://localhost:44338/api/Bookings",
         {
           tourId,
           userId,
@@ -84,52 +88,24 @@ function Booking(props) {
           departureId: parseInt(departureId),
         }
       );
-      const bookingId = postResponse.data?.bookingId;
+
+      const bookingData = postResponse.data;
+      const bookingId = bookingData.data.bookingId;
+      console.log("postResponse.data", bookingData);
 
       if (!bookingId) {
         throw new Error("Không lấy được mã booking.");
       }
-      const checkResponse = await axios.get(
-        `http://vivutravel.net/api/Bookings/${bookingId}`
-      );
-      const { status, totalAmount } = checkResponse.data;
-      const expectedAmount = tourData?.price * participants;
+      console.log(bookingData);
+      setPaymentInfo({
+        bookingId,
+        orderContent:
+          bookingData.data.transferContent || `Thanh toan tour ${bookingId}`,
+        amount: bookingData.totalAmount || tourData?.price * participants,
+        qrCodeUrl: bookingData.qrCodeUrl || qr,
+      });
 
-      if (status === "completed") {
-        if (totalAmount === expectedAmount) {
-          Swal.fire("Thành công", "Bạn đã đặt tour thành công!", "success");
-        } else {
-          Swal.fire({
-            icon: "warning",
-            title: "Có sự chênh lệch về số tiền",
-            html: `
-              <p>Số tiền hệ thống ghi nhận: <strong>${totalAmount.toLocaleString(
-                "vi-VN"
-              )} VND</strong></p>
-              <p>Số tiền bạn cần thanh toán: <strong>${expectedAmount.toLocaleString(
-                "vi-VN"
-              )} VND</strong></p>
-              <p>Vui lòng liên hệ <strong>hotline 1900 9999</strong> để được hỗ trợ!</p>
-            `,
-          });
-        }
-      } else if (status === "failed") {
-        Swal.fire({
-          icon: "error",
-          title: "Thanh toán thất bại",
-          html: `
-            <p>Hệ thống ghi nhận giao dịch không hợp lệ.</p>
-            <p>Vui lòng kiểm tra lại thông tin chuyển khoản, đặc biệt là số tiền và nội dung.</p>
-            <p>Hoặc liên hệ <strong>0394627402</strong> để được hỗ trợ.</p>
-          `,
-        });
-      } else {
-        Swal.fire(
-          "Đang xử lý",
-          `Trạng thái hiện tại: ${status}. Vui lòng kiểm tra lại sau hoặc liên hệ hỗ trợ qua số 0394627402.`,
-          "info"
-        );
-      }
+      setShowPaymentPopup(true);
     } catch (error) {
       console.error("Lỗi khi đặt tour:", error);
 
@@ -142,6 +118,63 @@ function Booking(props) {
       setIsSubmitting(false);
     }
   };
+  const handleCheckPaymentStatus = async () => {
+    try {
+      setIsCheckingPayment(true);
+      console.log("BookingId:", paymentInfo.bookingId);
+
+      const res = await axios.get(
+        `https://localhost:44338/api/Bookings/bookings-status?bookingId=${paymentInfo.bookingId}`
+      );
+
+      const status = res.data?.status || "Unknown";
+      setPaymentStatus(status); // để hiển thị dưới popup nếu cần
+
+      switch (status) {
+        case "Confirmed":
+          Swal.fire("✅ Thành công", "Thanh toán đã được xác nhận!", "success");
+          setShowPaymentPopup(false);
+          break;
+
+        case "Pending":
+          Swal.fire(
+            "⏳ Đang xử lý",
+            "Thanh toán của bạn đang được kiểm tra. Vui lòng đợi vài phút.",
+            "info"
+          );
+          break;
+
+        case "Failed":
+          Swal.fire(
+            "❌ Chuyển khoản sai số tiền",
+            "Vui lòng kiểm tra lại số tiền và nội dung chuyển khoản.",
+            "error"
+          );
+          break;
+
+        case "Cancelled":
+          Swal.fire(
+            "❌ Thanh toán quá hạn",
+            "Thời gian chuyển khoản đã hết. Vui lòng đặt lại tour mới.",
+            "warning"
+          );
+          break;
+
+        default:
+          Swal.fire(
+            "⚠️ Không rõ trạng thái",
+            "Vui lòng thử lại sau.",
+            "question"
+          );
+      }
+    } catch (error) {
+      console.error("Lỗi khi kiểm tra trạng thái thanh toán:", error);
+      Swal.fire("Lỗi", "Không thể kiểm tra trạng thái thanh toán.", "error");
+    } finally {
+      setIsCheckingPayment(false);
+    }
+  };
+
   if (!isAuthorized) {
     return (
       <div style={{ padding: "40px", textAlign: "center" }}>
@@ -205,24 +238,61 @@ function Booking(props) {
               </tr>
             </tbody>
           </table>
+          <div style={{ marginTop: "20px", textAlign: "right" }}>
+            <button
+              className="confirm-button"
+              onClick={handleSubmitBooking}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Đang xử lý..." : "Xác nhận đặt tour"}
+            </button>
+          </div>
         </div>
 
-        <div className="booking-sidebar">
-          <h3>Thanh toán</h3>
-          <img src={qr} alt="QR thanh toán" className="qr-img" />
-          <p>
-            <strong>Nội dung chuyển khoản:</strong>
-            <br />
-            <code>{orderCode}</code>
-          </p>
-          <button
-            className="confirm-button"
-            onClick={handleSubmitBooking}
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Đang xử lý..." : "Xác nhận đặt tour"}
-          </button>
-        </div>
+        {showPaymentPopup && paymentInfo && (
+          <div className="payment-popup-overlay">
+            <div className="payment-popup">
+              <h3>Thông tin thanh toán</h3>
+              <img
+                src={paymentInfo.qrCodeUrl}
+                alt="QR thanh toán"
+                className="qr-img"
+              />
+              <p>
+                <strong>Số tiền cần chuyển:</strong>{" "}
+                {paymentInfo.amount.toLocaleString("vi-VN")} VND
+              </p>
+              <p>
+                <strong>Nội dung chuyển khoản:</strong>
+                <br />
+                <code>{paymentInfo.orderContent}</code>
+              </p>
+              <p style={{ fontStyle: "italic", fontSize: "0.9rem" }}>
+                Sau khi chuyển khoản, hệ thống sẽ xác nhận thanh toán trong vòng
+                vài phút.
+              </p>
+              <button
+                style={{ backgroundColor: "red" }}
+                onClick={() => setShowPaymentPopup(false)}
+                className="confirm-button"
+              >
+                Đóng
+              </button>
+              <button
+                onClick={handleCheckPaymentStatus}
+                className="confirm-button"
+                disabled={isCheckingPayment}
+                style={{
+                  marginTop: "10px",
+                  marginLeft: "10px",
+                  backgroundColor: "#0d6efd",
+                }}
+              >
+                {isCheckingPayment ? "Đang kiểm tra..." : "Tôi đã chuyển khoản"}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
