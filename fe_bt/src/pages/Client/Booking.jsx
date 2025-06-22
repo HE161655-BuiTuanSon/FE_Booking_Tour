@@ -79,7 +79,7 @@ function Booking(props) {
     try {
       setIsSubmitting(true);
       const postResponse = await axios.post(
-        "https://localhost:44338/api/Bookings",
+        "http://vivutravel.net/api/Bookings",
         {
           tourId,
           userId,
@@ -124,7 +124,7 @@ function Booking(props) {
       console.log("BookingId:", paymentInfo.bookingId);
 
       const res = await axios.get(
-        `https://localhost:44338/api/Bookings/bookings-status?bookingId=${paymentInfo.bookingId}`
+        `http://vivutravel.net/api/Bookings/bookings-status?bookingId=${paymentInfo.bookingId}`
       );
 
       const status = res.data?.status || "Unknown";

@@ -23,9 +23,7 @@ function ListBooking() {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await axios.get(
-          "https://localhost:44338/api/Bookings"
-        );
+        const response = await axios.get("http://vivutravel.net/api/Bookings");
         setBookings(response.data);
       } catch (error) {
         console.error(error);

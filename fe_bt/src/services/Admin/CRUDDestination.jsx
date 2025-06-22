@@ -2,7 +2,7 @@ import axios from "axios";
 export const createDestination = async (destinationData) => {
   try {
     const response = await axios.post(
-      "https://localhost:44338/api/Destinations",
+      "http://vivutravel.net/api/Destinations",
       destinationData
     );
     return response.data;
@@ -14,7 +14,7 @@ export const createDestination = async (destinationData) => {
 export const updateDestination = async (destinationId, destinationData) => {
   try {
     const response = await axios.put(
-      `https://localhost:44338/api/Destinations/${destinationId}`,
+      `http://vivutravel.net/api/Destinations/${destinationId}`,
       destinationData
     );
     return response.data;
@@ -26,7 +26,7 @@ export const updateDestination = async (destinationId, destinationData) => {
 export const deleteDestination = async (destinationId) => {
   try {
     const response = await axios.delete(
-      `https://localhost:44338/api/Destinations/${destinationId}`
+      `http://vivutravel.net/api/Destinations/${destinationId}`
     );
     return response.data;
   } catch (error) {
@@ -36,9 +36,7 @@ export const deleteDestination = async (destinationId) => {
 };
 export const getAllDestination = async () => {
   try {
-    const response = await axios.get(
-      "https://localhost:44338/api/Destinations"
-    );
+    const response = await axios.get("http://vivutravel.net/api/Destinations");
     return response.data;
   } catch (error) {
     console.error(error);
