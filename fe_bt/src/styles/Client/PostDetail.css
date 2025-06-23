@@ -8,7 +8,7 @@
   font-family: "Segoe UI", sans-serif;
 }
 
-.post-title {
+.post-title-detail {
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 12px;
@@ -48,16 +48,50 @@
   line-height: 1.6;
 }
 
-.post-image {
-  width: 100%;
-  border-radius: 8px;
-  object-fit: cover;
-  max-height: 400px;
-}
-
 .post-loading {
   text-align: center;
   margin-top: 100px;
   font-size: 1.2rem;
   color: #666;
+}
+.post-cover-wrapper {
+  margin-bottom: 24px;
+}
+
+.post-title-detail {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.post-meta {
+  text-align: center;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.post-divider {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin-bottom: 30px;
+}
+
+.post-section {
+  margin-bottom: 40px;
+}
+
+.post-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-top: 12px;
+}
+
+.post-main-image,
+.post-image {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  display: block;
+  margin: 16px 0;
 }

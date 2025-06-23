@@ -37,45 +37,62 @@ function PostDetail() {
   }
 
   return (
-      <div className="">
-        <Header />
-        <div
-            className="about-banner"
-            style={{ backgroundImage: `url(${aboutBanner})` }}
-        >
-          <h2 className="banner-title">{post.title}</h2>
-        </div>
-        <div className="post-container">
-          <h1 className="post-title">{post.title}</h1>
-          <div className="post-meta">
-            <span className="post-author">✍ {post.authorName}</span>
-            <span className="post-date">
+    <div className="">
+      <Header />
+      <div
+        className="about-banner"
+        style={{ backgroundImage: `url(${aboutBanner})` }}
+      >
+        <h2 className="banner-title">{post.title}</h2>
+      </div>
+      <div className="post-container">
+        {/* Ảnh đại diện bài viết */}
+        {post.imageUrl && (
+          <div className="post-cover-wrapper">
+            <img
+              src={fixDriveUrl(post.imageUrl)}
+              alt="Ảnh bài viết"
+              className="post-main-image"
+              loading="lazy"
+            />
+          </div>
+        )}
+
+        {/* Tiêu đề bài viết */}
+        <h1 className="post-title-detail">{post.title}</h1>
+
+        {/* Thông tin meta */}
+        <div className="post-meta">
+          <span className="post-author">✍ {post.authorName}</span>
+          <span className="post-date">
             📅 {new Date(post.createdDate).toLocaleDateString("vi-VN")}
           </span>
-          </div>
-
-          <div className="post-divider" />
-
-          <div className="post-sections">
-            {post.sections
-                .sort((a, b) => a.sectionOrder - b.sectionOrder)
-                .map((section) => (
-                    <div className="post-section" key={section.sectionId}>
-                      <p className="post-text">{section.text}</p>
-                      {section.imageUrl && (
-                          <img
-                              src={fixDriveUrl(section.imageUrl)} // Áp dụng fixDriveUrl
-                              alt={`Hình ảnh ${section.sectionId}`}
-                              className="post-image"
-                              loading="lazy" // Tối ưu hóa tải ảnh
-                          />
-                      )}
-                    </div>
-                ))}
-          </div>
         </div>
-        <Footer />
+
+        <hr className="post-divider" />
+
+        {/* Các đoạn nội dung */}
+        <div className="post-sections">
+          {post.sections
+            .sort((a, b) => a.sectionOrder - b.sectionOrder)
+            .map((section) => (
+              <div className="post-section" key={section.sectionId}>
+                {section.imageUrl && (
+                  <img
+                    src={fixDriveUrl(section.imageUrl)}
+                    alt={`Hình ảnh ${section.sectionId}`}
+                    className="post-image"
+                    loading="lazy"
+                  />
+                )}
+                <p className="post-text">{section.text}</p>
+              </div>
+            ))}
+        </div>
       </div>
+
+      <Footer />
+    </div>
   );
 }
 

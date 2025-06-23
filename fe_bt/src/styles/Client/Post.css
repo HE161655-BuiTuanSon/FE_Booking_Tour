@@ -78,3 +78,8 @@
   color: white;
   font-weight: bold;
 }
+.allposts-container img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
