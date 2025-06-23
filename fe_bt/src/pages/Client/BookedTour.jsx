@@ -5,126 +5,128 @@ import Footer from "../../components/footer/Footer";
 import LoginRegisterPopup from "../../components/authorization/LoginRegisterPopup";
 import { getTourBooked } from "../../services/Client/TourService";
 import { useNavigate } from "react-router-dom";
-import {
-  FaIdBadge,
-  FaPlaneDeparture,
-  FaMapMarkerAlt,
-  FaFlag,
-  FaBus,
-  FaClock,
-  FaUserFriends,
-} from "react-icons/fa";
+import { FaIdBadge, FaUserFriends, FaCalendarAlt, FaMoneyBillWave, FaCheckCircle, FaClock, FaBan } from 'react-icons/fa';
 import "../../styles/Client/TourBooked.css";
 
 function BookedTour() {
   const [showPopup, setShowPopup] = useState(false);
   const [tourBooked, setTourBooked] = useState([]);
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem('userId');
   const navigate = useNavigate();
 
-  const fixDriveUrl = (url) => {
-    if (!url || typeof url !== "string")
-      return "https://via.placeholder.com/300x200";
-    if (!url.includes("drive.google.com/uc?id=")) return url;
-    const parts = url.split("id=");
-    const fileId = parts[1]?.split("&")[0];
-    return `https://drive.google.com/thumbnail?id=${fileId}&sz=w600`;
-  };
-
   const formatDate = (dateStr) => {
-    if (!dateStr) return "N/A";
-    return new Date(dateStr).toLocaleDateString("vi-VN", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
+    if (!dateStr) return 'N/A';
+    return new Date(dateStr).toLocaleDateString('vi-VN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     });
   };
 
   const formatVND = (number) => {
-    if (!number) return "0 VND";
-    return Number(number).toLocaleString("vi-VN") + " VND";
+    if (!number) return '0 VND';
+    return Number(number).toLocaleString('vi-VN') + ' VND';
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Confirmed':
+        return 'green-bg';
+      case 'Pending':
+        return 'yellow-bg';
+      case 'Cancelled':
+        return 'red-bg';
+      default:
+        return 'gray-bg';
+    }
   };
 
   useEffect(() => {
     const fetchTourBooked = async () => {
       try {
         const response = await getTourBooked(userId);
-        console.log(response);
-        if (response.status === "success" && Array.isArray(response.data)) {
+        if (response.status === 'success' && Array.isArray(response.data)) {
           setTourBooked(response.data);
         } else {
           setTourBooked([]);
         }
       } catch (error) {
-        console.error("Lỗi khi lấy danh sách tour đã đặt:", error);
+        console.error('Lỗi khi lấy danh sách tour đã đặt:', error);
         setTourBooked([]);
       }
     };
-    fetchTourBooked();
-  }, []);
+    if (userId) {
+      fetchTourBooked();
+    }
+  }, [userId]);
 
   return (
-    <div>
-      <Header
-        onLoginClick={() => setShowPopup(true)}
-        onRegisterClick={() => setShowPopup(true)}
-      />
-      {showPopup && <LoginRegisterPopup onClose={() => setShowPopup(false)} />}
+      <div className="booked-tour-page">
+        <Header
+            onLoginClick={() => setShowPopup(true)}
+            onRegisterClick={() => setShowPopup(true)}
+        />
+        {showPopup && <LoginRegisterPopup onClose={() => setShowPopup(false)} />}
 
-      <div
-        className="about-banner"
-        style={{ backgroundImage: `url(${aboutBanner})` }}
-      >
-        <h2 className="banner-title">Tour đã đặt</h2>
-      </div>
-
-      <div className="tour-booked-container">
-        {tourBooked.length === 0 ? (
-          <p className="no-tour">Bạn chưa đặt tour nào.</p>
-        ) : (
-          tourBooked.map((tour) => (
-            <div className="tour-card-all" key={tour.tourId}>
-              <img
-                src={fixDriveUrl(tour.imageUrl)}
-                alt={tour.tourName}
-                className="tour-image"
-              />
-              <div className="tour-info">
-                <h1 className="title-tour">{tour.tourName}</h1>
-                <div className="tour-sub-info">
-                  <div className="info-1">
-                    <p className="info-tour">
-                      <FaIdBadge /> <strong>Mã tour:</strong>{" "}
-                      {tour.tourId || "N/A"}
-                    </p>
-                    <p className="info-tour">
-                      <FaUserFriends /> <strong>Số người:</strong>{" "}
-                      {tour.numberOfParticipants || "N/A"}
-                    </p>
-                  </div>
-                </div>
-                <div className="price-tour">
-                  <div className="info-price">
-                    <strong>Giá từ:</strong>
-                    <div className="price">{formatVND(tour.totalAmount)}</div>
-                  </div>
-                  <button
-                    className="btn-detail-tour"
-                    onClick={() => {
-                      navigate(`/tour/tour-detail/${tour.tourId}`);
-                    }}
-                  >
-                    Xem chi tiết
-                  </button>
-                </div>
-              </div>
+        <div className="banner">
+          <div className="banner-overlay" style={{ backgroundImage: `url(${aboutBanner})` }}>
+            <div className="banner-content">
+              <h1>Lịch Sử Đặt Tour</h1>
             </div>
-          ))
-        )}
-      </div>
+          </div>
+        </div>
 
-      <Footer />
-    </div>
+        <div className="container">
+          {tourBooked.length === 0 ? (
+              <div className="no-tours">
+                <p>Bạn chưa đặt tour nào.</p>
+                <p>Hãy khám phá và đặt tour ngay hôm nay!</p>
+              </div>
+          ) : (
+              <div className="tour-grid">
+                {tourBooked.map((booking) => (
+                    <div key={booking.bookingId} className="tour-card">
+                      <div className="card-content">
+                        <div className="card-header">
+                          <h2>{booking.tourName}</h2>
+                          <span className={`status ${getStatusColor(booking.status)}`}>
+                      {booking.status === 'Confirmed' && <FaCheckCircle />}
+                            {booking.status === 'Pending' && <FaClock />}
+                            {booking.status === 'Cancelled' && <FaBan />}
+                            {booking.status}
+                    </span>
+                        </div>
+
+                        <div className="tour-info">
+                          <p><FaIdBadge /> <span>Mã đặt tour:</span> {booking.bookingId}</p>
+                          <p><FaCalendarAlt /> <span>Ngày đặt:</span> {formatDate(booking.bookingDate)}</p>
+                          <p><FaUserFriends /> <span>Số người:</span> {booking.numberOfParticipants}</p>
+                          <p><FaMoneyBillWave /> <span>Tổng tiền:</span> {formatVND(booking.totalAmount)}</p>
+                        </div>
+
+                        <div className="payment-info">
+                          <h3>Thông tin thanh toán:</h3>
+                          <p><FaCheckCircle /> <span>Trạng thái:</span> <span className={getStatusColor(booking.payment.paymentStatus)}>{booking.payment.paymentStatus}</span></p>
+                          <p><FaClock /> <span>Ngày thanh toán:</span> {formatDate(booking.payment.paymentDate)}</p>
+                          {booking.payment.transactionId && (
+                              <p><FaIdBadge /> <span>Mã giao dịch:</span> {booking.payment.transactionId}</p>
+                          )}
+                        </div>
+
+                        <div className="card-actions">
+                          <button onClick={() => navigate(`/tour/tour-detail/${booking.tourId}`)}>Xem chi tiết tour</button>
+                        </div>
+                      </div>
+                    </div>
+                ))}
+              </div>
+          )}
+        </div>
+
+        <Footer />
+      </div>
   );
 }
 

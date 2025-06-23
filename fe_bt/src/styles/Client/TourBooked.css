@@ -1,86 +1,184 @@
-.tour-booked-container {
-  padding: 30px;
+.booked-tour-page {
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #f9fafb, #edf2f7);
+}
+
+.banner {
+  position: relative;
+  height: 288px;
+  width: 100%;
+}
+
+.banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('../../assets/about_banner.jpg') no-repeat center center/cover;
+}
+
+.banner-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+}
+
+.banner-content h1 {
+  font-size: 48px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.container {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 48px 16px;
 }
 
-.no-tour {
-  font-weight: bold;
+.no-tours {
   text-align: center;
-  font-size: 18px;
-  margin-top: 40px;
-}
-
-.tour-card-all {
-  display: flex;
-  gap: 20px;
-  background: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  padding: 64px 0;
+  background: white;
   border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 24px;
-  transition: 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.tour-card-all:hover {
-  transform: scale(1.01);
+.no-tours p {
+  margin: 8px 0;
+  font-size: 20px;
+  color: #4a5568;
 }
 
-.tour-image {
-  width: 500px;
-  height: 100%;
-  object-fit: cover;
+.no-tours p:first-child {
+  font-weight: 600;
 }
 
-.tour-info {
-  flex: 1;
+.tour-grid {
+  display: grid;
+  gap: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.tour-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.tour-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card-content {
+  padding: 24px;
+}
+
+.card-header {
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
 }
 
-.title-tour {
+.card-header h2 {
   font-size: 24px;
+  font-weight: 700;
+  color: #1a202c;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid;
+}
+
+.green-bg {
+  background-color: #e6fffa;
+  color: #2b6cb0;
+  border-color: #c6f6d5;
+}
+
+.yellow-bg {
+  background-color: #fefcbf;
+  color: #b7791f;
+  border-color: #faf089;
+}
+
+.red-bg {
+  background-color: #fed7d7;
+  color: #c53030;
+  border-color: #feb2b2;
+}
+
+.gray-bg {
+  background-color: #e2e8f0;
+  color: #4a5568;
+  border-color: #cbd5e0;
+}
+
+.tour-info, .payment-info {
+  margin-bottom: 24px;
+}
+
+.tour-info p, .payment-info p {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 16px;
+  color: #4a5568;
+}
+
+.tour-info p span, .payment-info p span {
+  font-weight: 600;
+  margin-right: 8px;
+  color: #2d3748;
+}
+
+.payment-info h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2d3748;
   margin-bottom: 12px;
 }
 
-.tour-sub-info {
-  display: flex;
-  gap: 40px;
-  margin-bottom: 16px;
+.payment-info .green-bg, .payment-info .yellow-bg, .payment-info .red-bg, .payment-info .gray-bg {
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-left: 8px;
 }
 
-.info-tour {
-  margin: 6px 0;
-  font-size: 15px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.card-actions {
+  text-align: right;
 }
 
-.price-tour {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.info-price {
-  font-size: 18px;
-}
-
-.price {
-  color: #d32f2f;
-  font-size: 25px;
-  margin-top: 4px;
-}
-
-.btn-detail-tour {
-  padding: 10px 16px;
-  background-color: #1976d2;
+.card-actions button {
+  padding: 10px 20px;
+  background: linear-gradient(to right, #3182ce, #4299e1);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
+  font-weight: 600;
   cursor: pointer;
-  font-weight: 500;
-  transition: background 0.3s;
+  transition: all 0.3s ease;
+}
+
+.card-actions button:hover {
+  background: linear-gradient(to right, #2b6cb0, #3182ce);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
