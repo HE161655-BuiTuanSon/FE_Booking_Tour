@@ -266,7 +266,7 @@
 }
 
 .post-title {
-  color: white;
+  color: white !important;
   font-size: 18px;
   margin: 0;
 }
@@ -398,7 +398,7 @@
 }
 .price {
   font-size: 30px;
-  color: #e01600;
+  color: #e01600 !important;
 }
 .price-container {
   display: flex;
