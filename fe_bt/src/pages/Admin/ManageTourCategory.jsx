@@ -4,7 +4,7 @@ import {
   createTourCategory,
   updateTourCategory,
   deleteTourCategory,
-} from "../../services/Admin/CRUDServicesTourCategories";
+} from "../../services/Admin/CRUDTourCategories";
 
 import {
   Box,
