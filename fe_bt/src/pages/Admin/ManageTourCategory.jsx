@@ -4,7 +4,7 @@ import {
   createTourCategory,
   updateTourCategory,
   deleteTourCategory,
-} from "../../services/Admin/CRUDTourCategories";
+} from "../../services/Admin/CRUDServicesTourCategories";
 
 import {
   Box,
@@ -25,14 +25,16 @@ import { useNavigate } from "react-router-dom";
 
 function ManageTourCategory() {
   const [categories, setCategories] = useState([]);
-  const [formData, setFormData] = useState({ tourCategory: "" });
+  const [formData, setFormData] = useState({ CategoryName: "" });
   const [editingId, setEditingId] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
+
   if (role !== "1") {
     navigate("/");
   }
+
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -43,13 +45,12 @@ function ManageTourCategory() {
       setCategories(data.data || data);
       setErrorMsg("");
     } catch (error) {
-      console.error("Lỗi khi lấy danh mục tour:", error);
-      setErrorMsg("Lỗi khi lấy danh mục tour");
+      setErrorMsg(error.response?.data?.message || "Lỗi khi lấy danh mục tour");
     }
   };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, tourCategory: e.target.value });
+    setFormData({ ...formData, CategoryName: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -60,20 +61,17 @@ function ManageTourCategory() {
       } else {
         await createTourCategory(formData);
       }
-      setFormData({ tourCategory: "" });
+      setFormData({ CategoryName: "" });
       setEditingId(null);
       await fetchCategories();
     } catch (error) {
-      console.error("Lỗi khi lưu danh mục tour:", error);
-      setErrorMsg("Lỗi khi lưu danh mục tour");
+      setErrorMsg(error.response?.data?.message || "Lỗi khi lưu danh mục tour");
     }
   };
 
   const handleEdit = (category) => {
-    setFormData({
-      tourCategory: category.categoryName || category.tourCategory,
-    });
-    setEditingId(category.categoryId || category.id);
+    setFormData({ CategoryName: category.categoryName });
+    setEditingId(category.categoryId);
   };
 
   const handleDelete = async (id) => {
@@ -82,98 +80,97 @@ function ManageTourCategory() {
       await deleteTourCategory(id);
       await fetchCategories();
     } catch (error) {
-      console.error("Lỗi khi xóa danh mục tour:", error);
-      setErrorMsg("Lỗi khi xóa danh mục tour");
+      setErrorMsg(error.response?.data?.message || "Lỗi khi xóa danh mục tour");
     }
   };
 
   return (
-    <Box sx={{ p: 4 }}>
-      <Button variant="outlined" onClick={() => navigate("/dashboard")}>
-        Quay lại
-      </Button>
+      <Box sx={{ p: 4 }}>
+        <Button variant="outlined" onClick={() => navigate("/dashboard")}>
+          Quay lại
+        </Button>
 
-      <Typography align="center" variant="h4" mt={2} mb={2}>
-        Quản lý danh mục tour
-      </Typography>
-
-      {errorMsg && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {errorMsg}
-        </Alert>
-      )}
-
-      <Paper sx={{ p: 3, mb: 4 }} elevation={3}>
-        <form onSubmit={handleSubmit}>
-          <Stack
-            spacing={2}
-            direction={{ xs: "column", sm: "row" }}
-            alignItems="center"
-          >
-            <TextField
-              label="Tên danh mục"
-              name="tourCategory"
-              value={formData.tourCategory}
-              onChange={handleChange}
-              fullWidth
-              required
-            />
-            <Button type="submit" variant="contained" color="primary">
-              {editingId ? "Cập nhật" : "Thêm mới"}
-            </Button>
-            {editingId && (
-              <Button
-                variant="outlined"
-                onClick={() => {
-                  setEditingId(null);
-                  setFormData({ tourCategory: "" });
-                  setErrorMsg("");
-                }}
-              >
-                Huỷ
-              </Button>
-            )}
-          </Stack>
-        </form>
-      </Paper>
-
-      {categories.length === 0 ? (
-        <Typography variant="body2" color="text.secondary">
-          Chưa có danh mục tour nào.
+        <Typography align="center" variant="h4" mt={2} mb={2}>
+          Quản lý danh mục tour
         </Typography>
-      ) : (
-        <List>
-          {categories.map((cat) => (
-            <Paper key={cat.categoryId || cat.id} sx={{ mb: 1 }} elevation={1}>
-              <ListItem
-                secondaryAction={
-                  <Stack direction="row" spacing={1}>
-                    <IconButton
-                      edge="end"
-                      onClick={() => handleEdit(cat)}
-                      color="primary"
-                      aria-label="edit"
+
+        {errorMsg && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {errorMsg}
+            </Alert>
+        )}
+
+        <Paper sx={{ p: 3, mb: 4 }} elevation={3}>
+          <form onSubmit={handleSubmit}>
+            <Stack
+                spacing={2}
+                direction={{ xs: "column", sm: "row" }}
+                alignItems="center"
+            >
+              <TextField
+                  label="Tên danh mục"
+                  name="CategoryName"
+                  value={formData.CategoryName}
+                  onChange={handleChange}
+                  fullWidth
+                  required
+              />
+              <Button type="submit" variant="contained" color="primary">
+                {editingId ? "Cập nhật" : "Thêm mới"}
+              </Button>
+              {editingId && (
+                  <Button
+                      variant="outlined"
+                      onClick={() => {
+                        setEditingId(null);
+                        setFormData({ CategoryName: "" });
+                        setErrorMsg("");
+                      }}
+                  >
+                    Huỷ
+                  </Button>
+              )}
+            </Stack>
+          </form>
+        </Paper>
+
+        {categories.length === 0 ? (
+            <Typography variant="body2" color="text.secondary">
+              Chưa có danh mục tour nào.
+            </Typography>
+        ) : (
+            <List>
+              {categories.map((cat) => (
+                  <Paper key={cat.categoryId} sx={{ mb: 1 }} elevation={1}>
+                    <ListItem
+                        secondaryAction={
+                          <Stack direction="row" spacing={1}>
+                            <IconButton
+                                edge="end"
+                                onClick={() => handleEdit(cat)}
+                                color="primary"
+                                aria-label="edit"
+                            >
+                              <Edit />
+                            </IconButton>
+                            <IconButton
+                                edge="end"
+                                onClick={() => handleDelete(cat.categoryId)}
+                                color="error"
+                                aria-label="delete"
+                            >
+                              <Delete />
+                            </IconButton>
+                          </Stack>
+                        }
                     >
-                      <Edit />
-                    </IconButton>
-                    <IconButton
-                      edge="end"
-                      onClick={() => handleDelete(cat.categoryId || cat.id)}
-                      color="error"
-                      aria-label="delete"
-                    >
-                      <Delete />
-                    </IconButton>
-                  </Stack>
-                }
-              >
-                <ListItemText primary={cat.categoryName || cat.tourCategory} />
-              </ListItem>
-            </Paper>
-          ))}
-        </List>
-      )}
-    </Box>
+                      <ListItemText primary={cat.categoryName} />
+                    </ListItem>
+                  </Paper>
+              ))}
+            </List>
+        )}
+      </Box>
   );
 }
 
