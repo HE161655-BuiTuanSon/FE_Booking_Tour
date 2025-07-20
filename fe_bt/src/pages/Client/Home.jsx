@@ -19,6 +19,9 @@ import three3 from "../../assets/three3.png";
 import { getFourPosts } from "../../services/Client/PostService";
 import { getAllTour, getTenTour } from "../../services/Client/TourService";
 import { getAllDestination } from "../../services/Admin/CRUDDestination";
+import RegionTabs from "../../components/Regiontab";
+import axios from "axios";
+import { FaMapSigns, FaMoneyBillAlt } from 'react-icons/fa';
 function Home(props) {
   const [showPopup, setShowPopup] = useState(false);
   const [showPromoPopup, setShowPromoPopup] = useState(false);
@@ -271,6 +274,159 @@ function Home(props) {
       </div>
     );
   };
+  const ThreeTour = () => {
+    const [threeTours, setThreeTours] = useState([]);
+    useEffect(() => {
+      const fetchThreeTour = async () => {
+        try {
+          const response = await axios.get('http://vivutravel.net/api/Home/random-tours');
+          setThreeTours(response.data);
+        } catch (error) {
+          console.error('Lỗi khi lấy dữ liệu 3 tour:', error);
+        }
+      };
+
+      fetchThreeTour();
+    }, []);
+    return (
+      <div className="threeTour-container" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "30px", marginTop: "100px", backgroundColor: "#daefff", padding: "30px 0" }}>
+        <h1 style={{ color: "#0b5da7" }}>Tour giá rẻ</h1>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '20px',
+            flexWrap: 'wrap',
+          }}
+        >
+          {threeTours.map((tour) => (
+            <div
+              key={tour.tourId}
+              style={{
+                width: '350px',
+                height: '250px',
+                perspective: '1000px',
+              }}
+            >
+              <div
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  position: 'relative',
+                  transformStyle: 'preserve-3d',
+                  transition: 'transform 0.8s',
+                }}
+                className="flip-card-inner"
+              >
+                {/* Mặt trước */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    width: '100%',
+                    height: '100%',
+                    backfaceVisibility: 'hidden',
+                    backgroundColor: 'white',
+                    border: '1px solid #ddd',
+                    borderRadius: '10px',
+                    overflow: 'hidden',
+                    boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                  }}
+                  className="flip-card-front"
+                >
+                  <div style={{ padding: '15px' }}>
+                    <h3 style={{ marginTop: 0 }}>{tour.tourName}</h3>
+                    <p style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <FaClock /> <strong>Thời gian:</strong> {tour.durationDays}
+                    </p>
+                    <p style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <FaMapMarkerAlt /> <strong>Điểm đến:</strong> {tour.destinationName}
+                    </p>
+                    <p style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <FaMapSigns /> <strong>Khởi hành từ:</strong> {tour.departurePointName}
+                    </p>
+                    <p style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <FaBus /> <strong>Phương tiện:</strong> {tour.vehicle}
+                    </p>
+                  </div>
+
+                  <div style={{ padding: '0 15px 15px 15px' }}>
+                    <p
+                      style={{
+                        margin: 0,
+                        color: 'red',
+                        fontWeight: 'bold',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        fontSize: "large"
+                      }}
+                    >
+                      <strong>Giá:</strong> {tour.price.toLocaleString()}₫
+                    </p>
+                  </div>
+                </div>
+
+                {/* Mặt sau */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    width: '100%',
+                    height: '100%',
+                    backfaceVisibility: 'hidden',
+                    transform: 'rotateY(180deg)',
+                    backgroundImage: `url(${fixDriveUrl(tour.imageUrl)})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    borderRadius: '10px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  className="flip-card-back"
+                >
+                  {/* Lớp phủ mờ đen */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '100%',
+                      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                      borderRadius: '10px',
+                      zIndex: 1,
+                    }}
+                  ></div>
+
+                  {/* Nút ở giữa */}
+                  <button
+                    style={{
+                      backgroundColor: '#0b5da7',
+                      color: 'white',
+                      border: 'none',
+                      cursor: 'pointer',
+                      borderRadius: '5px',
+                      padding: '10px 20px',
+                      fontWeight: 'bold',
+                      zIndex: 2,
+                    }}
+                    onClick={() => navigate(`/tour/tour-detail/${tour.tourId}`)}
+                  >
+                    Xem chi tiết
+                
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
   const Posts = () => {
     return (
       <div className="posts-container">
@@ -283,11 +439,11 @@ function Home(props) {
         </p>
         <div className="post-list">
           {fourPosts.map((post) => (
-            <div key={post.id} className="post-card">
+            <div key={post.articleId} className="post-card" onClick={() => navigate(`/posts/post-detail/${post.articleId}`)}>
               <img
                 src={fixDriveUrl(post.imageUrl)}
                 alt={post.title}
-                className="post-image"
+                className="post-image-home"
               />
               <div className="post-overlay">
                 <h2 className="post-title">{post.title}</h2>
@@ -392,7 +548,7 @@ function Home(props) {
                       loading="lazy"
                     />
                     <div className="tour-info" style={{ paddingTop: "8px" }}>
-                      <h2>{tour.tourName}</h2>
+                      <h2 className="tourNameTitle">{tour.tourName}</h2>
                       <p>
                         <FaCalendarAlt
                           style={{ marginRight: "6px", color: "#0b5da7" }}
@@ -464,9 +620,11 @@ function Home(props) {
       )}
       <ImageBanner />
       <SearchBar />
-      <ThreeImages></ThreeImages>
+      {/* <ThreeImages></ThreeImages> */}
+      <ThreeTour></ThreeTour>
       <Posts></Posts>
       <Tours></Tours>
+      <RegionTabs></RegionTabs>
       <Footer></Footer>
     </div>
   );
