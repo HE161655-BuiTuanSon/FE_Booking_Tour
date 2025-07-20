@@ -46,9 +46,11 @@ function PostDetail() {
         <h2 className="banner-title">{post.title}</h2>
       </div>
       <div className="post-container">
+        <h1 className="post-title-detail">{post.title}</h1>
+
         {/* Ảnh đại diện bài viết */}
         {post.imageUrl && (
-          <div className="post-cover-wrapper">
+          <div className="post-cover-wrapper" >
             <img
               src={fixDriveUrl(post.imageUrl)}
               alt="Ảnh bài viết"
@@ -57,10 +59,6 @@ function PostDetail() {
             />
           </div>
         )}
-
-        {/* Tiêu đề bài viết */}
-        <h1 className="post-title-detail">{post.title}</h1>
-
         {/* Thông tin meta */}
         <div className="post-meta">
           <span className="post-author">✍ {post.authorName}</span>

@@ -94,7 +94,7 @@ function Contact(props) {
             />
           </div>
           <div className="title-contact">Address</div>
-          <div className="des-contact">Vietnam</div>
+          <div className="des-contact">278 Nguyễn Trãi, Thanh Xuân Hà Nội</div>
         </div>
         <div className="item-contact">
           <div className="icon">
@@ -105,7 +105,7 @@ function Contact(props) {
             />
           </div>
           <div className="title-contact">Mail</div>
-          <div className="des-contact">blackpink@gmail.com</div>
+          <div className="des-contact">Vivutraveltour@gmail.com</div>
         </div>
         <div className="item-contact">
           <div className="icon">
@@ -116,7 +116,7 @@ function Contact(props) {
             />
           </div>
           <div className="title-contact">Phone</div>
-          <div className="des-contact">+84936367710</div>
+          <div className="des-contact">0779991838</div>
         </div>
       </div>
       <div

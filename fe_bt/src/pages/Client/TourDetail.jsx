@@ -147,7 +147,6 @@ function TourDetail() {
                 <div className="tour-info-grid">
                 <div className="tour-info-column">
                     <p className="info-price-detail">
-                      <strong>Giá:</strong>
                       <span
                         className="price"
                         style={{ fontWeight: "bold", fontSize: "40px" }}
@@ -258,6 +257,7 @@ function TourDetail() {
 
                   <button
                     className="book-now-btn"
+                    style={{border:"none"}}
                     onClick={() => {
                       if (!selectedDeparture) {
                         alert(
