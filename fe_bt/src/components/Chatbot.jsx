@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import "./Chatbot.css";
+import mascot from "../assets/mascot.jpg"; 
 
 const Chatbot = () => {
   const [userInput, setUserInput] = useState("");
@@ -166,6 +167,7 @@ const Chatbot = () => {
                 <path d="M2 17L12 22L22 17" fill="#ffffff" />
                 <path d="M2 12L12 17L22 12" fill="#ffffff" />
               </svg>
+              {/* <img src={mascot} alt="" /> */}
             </div>
             <h2 className="chatbot-title">Trò Chuyện Du Lịch</h2>
             <button

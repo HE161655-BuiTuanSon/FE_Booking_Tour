@@ -126,26 +126,37 @@ function TourDetail() {
               {dataTour.images?.length > 0 && (
                 <div className="tour-image-slider">
                   <motion.img
-                      key={dataTour.images[currentIndex]}
-                      src={fixDriveUrl(dataTour.images[currentIndex])}
-                      alt={`${dataTour.tourName} - ${currentIndex + 1}`}
-                      className="tour-image-detail"
-                      initial={{opacity: 0, x: 100}}
-                      animate={{opacity: 1, x: 0}}
-                      exit={{opacity: 0, x: -100}}
-                      transition={{duration: 0.5}}
+                    key={dataTour.images[currentIndex]}
+                    src={fixDriveUrl(dataTour.images[currentIndex])}
+                    alt={`${dataTour.tourName} - ${currentIndex + 1}`}
+                    className="tour-image-detail"
+                    initial={{ opacity: 0, x: 100 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -100 }}
+                    transition={{ duration: 0.5 }}
                   />
 
                   <div className="slider-controls">
                     <button onClick={prevImage}>‹</button>
                     <button onClick={nextImage}>›</button>
                   </div>
+                  <div className="thumbnail-list">
+                    {dataTour.images.map((img, index) => (
+                      <img
+                        key={index}
+                        src={fixDriveUrl(img)}
+                        alt={`Thumbnail ${index + 1}`}
+                        className={`thumbnail-image ${index === currentIndex ? "active" : ""}`}
+                        onClick={() => setCurrentIndex(index)}
+                      />
+                    ))}
+                  </div>
                 </div>
               )}
 
               <div className="tour-info">
                 <div className="tour-info-grid">
-                <div className="tour-info-column">
+                  <div className="tour-info-column">
                     <p className="info-price-detail">
                       <span
                         className="price"
@@ -257,7 +268,7 @@ function TourDetail() {
 
                   <button
                     className="book-now-btn"
-                    style={{border:"none"}}
+                    style={{ border: "none" }}
                     onClick={() => {
                       if (!selectedDeparture) {
                         alert(
@@ -289,11 +300,10 @@ function TourDetail() {
                   {dataTour.departureDates.map((date) => (
                     <motion.div
                       key={date.departureId}
-                      className={`departure-card ${
-                        selectedDeparture?.departureId === date.departureId
+                      className={`departure-card ${selectedDeparture?.departureId === date.departureId
                           ? "selected"
                           : ""
-                      } ${date.isActive ? "active" : "inactive"}`}
+                        } ${date.isActive ? "active" : "inactive"}`}
                       whileHover={{ scale: 1.03 }}
                       onClick={() => {
                         if (date.isActive) setSelectedDeparture(date);
