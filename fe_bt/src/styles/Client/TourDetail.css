@@ -242,6 +242,16 @@
   margin: 0 auto;
   overflow: hidden;
 }
+.tour-description-below {
+  margin: 10px 30px;
+  white-space: pre-wrap;
+  font-size: 1.1rem;
+  color: #333;
+}
+.tour-description-title{
+  color: #0b5da7;
+  text-align: center  ;
+}
 
 .tour-image-detail {
   width: 100%;
