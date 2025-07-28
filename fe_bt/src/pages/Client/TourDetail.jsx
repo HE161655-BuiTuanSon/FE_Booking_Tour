@@ -119,7 +119,6 @@ function TourDetail() {
               transition={{ delay: 0.2 }}
             >
               <h1>{dataTour.tourName}</h1>
-              <p>{dataTour.description}</p>
             </motion.div>
 
             <div className="tour-content-detail">
@@ -330,6 +329,10 @@ function TourDetail() {
                 </div>
               </div>
             )}
+            <h1 className="tour-description-title">Mô tả tour</h1>
+            <p className="tour-description-below">
+              {dataTour.description}
+            </p>
           </div>
         ) : (
           <p className="no-data">Không có thông tin tour</p>
