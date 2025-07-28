@@ -90,7 +90,7 @@ function Contact(props) {
           <div className="icon">
             <FontAwesomeIcon
               icon={faMapMarkerAlt}
-              style={{ color: "#dc5a26", fontSize: "50px" }}
+              style={{ color: "#091e55", fontSize: "50px" }}
             />
           </div>
           <div className="title-contact">Address</div>
@@ -101,7 +101,7 @@ function Contact(props) {
             <FontAwesomeIcon
               icon={faEnvelope}
               className="contact-icon"
-              style={{ color: "#dc5a26", fontSize: "50px" }}
+              style={{ color: "#091e55", fontSize: "50px" }}
             />
           </div>
           <div className="title-contact">Mail</div>
@@ -112,7 +112,7 @@ function Contact(props) {
             <FontAwesomeIcon
               icon={faPhone}
               className="contact-icon"
-              style={{ color: "#dc5a26", fontSize: "50px" }}
+              style={{ color: "#091e55", fontSize: "50px" }}
             />
           </div>
           <div className="title-contact">Phone</div>
@@ -121,7 +121,7 @@ function Contact(props) {
       </div>
       <div
         className="send-review"
-        style={{ backgroundImage: `url(${background})` }}
+        style={{ backgroundColor:"rgb(218, 239, 255)" }}
       >
         <div className="review-title">Send us a Review</div>
         <form className="review-form" onSubmit={handleSubmit}>

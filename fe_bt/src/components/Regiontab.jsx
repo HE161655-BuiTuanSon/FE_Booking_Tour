@@ -63,7 +63,7 @@ const RegionTabs = () => {
             style={{ backgroundImage: `url(${place.image})` }}
           >
             <div className="place-title">{place.name}</div>
-            <div className="overlay">
+            <div className="overlay-content">
               <button onClick={() => navigate(`/tours?destination=${encodeURIComponent(place.name)}`)}>Khám phá</button>
             </div>
           </div>

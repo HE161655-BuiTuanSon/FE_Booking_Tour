@@ -4,7 +4,7 @@ import aboutBanner from "../../assets/about_banner.jpg";
 import Footer from "../../components/footer/Footer";
 import LoginRegisterPopup from "../../components/authorization/LoginRegisterPopup";
 import { getAllPosts } from "../../services/Client/PostService";
-import background from "../../assets/background.png";
+// import background from "../../assets/background.png";
 import { useNavigate } from "react-router-dom";
 import {
   Grid,
@@ -86,7 +86,7 @@ function Posts() {
       <Box
         className="allposts-container"
         sx={{
-          backgroundImage: `url(${background})`,
+          backgroundColor:"rgb(218, 239, 255)",
           backgroundSize: "cover",
           backgroundAttachment: "fixed",
           padding: 5,

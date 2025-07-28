@@ -167,10 +167,10 @@
 }
 .promo-popup-content {
   background: linear-gradient(135deg, #fbf6f2, #ffff);
-  border: 2px solid #dc5a26;
+  border: 2px solid #091e55;
 }
 .promo-popup-content button {
-  background: linear-gradient(135deg, #dc5a26, #e67e22);
+  background: linear-gradient(135deg, #091e55, #e67e22);
   color: #ffff;
   border: none;
   padding: 0.75rem 2rem;
@@ -183,7 +183,7 @@
   opacity: 0.9;
 }
 .promo-popup-content h2 {
-  color: #dc5a26;
+  color: #091e55;
   font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 1rem;

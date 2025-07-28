@@ -22,7 +22,7 @@
   line-height: 1.6;
 }
 .section p span {
-  color: #dc5a26;
+  color: #091e55;
   font-weight: bold;
 }
 .banner-section-about img {
@@ -50,7 +50,7 @@
   padding: 20px;
 }
 .text-section p span {
-  color: #dc5a26;
+  color: #091e55;
   font-weight: bold;
 }
 
@@ -61,5 +61,5 @@
   top: 0;
   width: 20px;
   height: 100%;
-  background: linear-gradient(to bottom, #dc5a26, #ffcc00);
+  background: linear-gradient(to bottom, #091e55, #ffcc00);
 }

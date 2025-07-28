@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import "./Chatbot.css";
-import mascot from "../assets/mascot.jpg"; 
+import mascot from "../assets/chat.png"; 
 
 const Chatbot = () => {
   const [userInput, setUserInput] = useState("");
@@ -136,7 +136,7 @@ const Chatbot = () => {
         onClick={() => setIsOpen(!isOpen)}
         aria-label={isOpen ? "Đóng chatbot" : "Mở chatbot"}
       >
-        <svg
+        {/* <svg
           className="chatbot-icon"
           fill="none"
           stroke="currentColor"
@@ -149,7 +149,9 @@ const Chatbot = () => {
             strokeWidth="2"
             d={isOpen ? closeIconPath : chatIconPath}
           />
-        </svg>
+        </svg> */}
+        <img src={mascot} alt="Chatbot Icon" className="chatbot-icon-img" />
+
       </button>
 
       {isOpen && (
@@ -169,7 +171,7 @@ const Chatbot = () => {
               </svg>
               {/* <img src={mascot} alt="" /> */}
             </div>
-            <h2 className="chatbot-title">Trò Chuyện Du Lịch</h2>
+            <h2 className="chatbot-title">Vivi Bot</h2>
             <button
               className="chatbot-clear-button"
               onClick={handleClearChat}
