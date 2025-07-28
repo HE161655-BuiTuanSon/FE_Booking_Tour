@@ -40,7 +40,7 @@
 
 .post-title {
   font-size: 20px;
-  color: #dc5a26;
+  color: #091e55;
   margin: 0 0 10px;
 }
 
@@ -58,8 +58,8 @@
 
 .pagination button {
   background-color: transparent;
-  color: #dc5a26;
-  border: 2px solid #dc5a26;
+  color: #091e55;
+  border: 2px solid #091e55;
   padding: 8px 16px;
   margin: 0 4px;
   font-size: 14px;
@@ -69,12 +69,12 @@
 }
 
 .pagination button:hover {
-  background-color: #dc5a26;
+  background-color: #091e55;
   color: white;
 }
 
 .pagination .active {
-  background-color: #dc5a26;
+  background-color: #091e55;
   color: white;
   font-weight: bold;
 }

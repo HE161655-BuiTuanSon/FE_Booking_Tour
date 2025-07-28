@@ -55,7 +55,7 @@
   grid-column: span 2;
   height: 100%;
 }
-.overlay {
+.overlay-content {
   position: absolute;
   width:100%;
   inset: 0;   
@@ -69,16 +69,16 @@
   transition: opacity 0.3s ease;
 }
 
-.place-card:hover .overlay {
+.place-card:hover .overlay-content {
   opacity: 1;
 }
 
-.overlay h3 {
+.overlay-content h3 {
   font-size: 20px;
   font-weight: bold;
 }
 
-.overlay button {
+.overlay-content button {
   margin-top: 10px;
   padding: 8px 16px;
   background-color: #0047ab;
