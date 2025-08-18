@@ -83,7 +83,7 @@ function Contact(props) {
         className="about-banner"
         style={{ backgroundImage: `url(${aboutBanner})` }}
       >
-        Contacts
+        Liên hệ
       </div>
       <div className="info-contact">
         <div className="item-contact">
@@ -93,7 +93,7 @@ function Contact(props) {
               style={{ color: "#091e55", fontSize: "50px" }}
             />
           </div>
-          <div className="title-contact">Address</div>
+          <div className="title-contact">Địa chỉ</div>
           <div className="des-contact">278 Nguyễn Trãi, Thanh Xuân Hà Nội</div>
         </div>
         <div className="item-contact">
@@ -115,7 +115,7 @@ function Contact(props) {
               style={{ color: "#091e55", fontSize: "50px" }}
             />
           </div>
-          <div className="title-contact">Phone</div>
+          <div className="title-contact">Hotline</div>
           <div className="des-contact">0779991838</div>
         </div>
       </div>
@@ -123,7 +123,7 @@ function Contact(props) {
         className="send-review"
         style={{ backgroundColor:"rgb(218, 239, 255)" }}
       >
-        <div className="review-title">Send us a Review</div>
+        <div className="review-title">Gửi cho chúng tôi đánh giá</div>
         <form className="review-form" onSubmit={handleSubmit}>
           <div className="form-group">
             <select

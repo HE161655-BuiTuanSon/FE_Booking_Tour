@@ -164,12 +164,12 @@ function Home(props) {
       <div className="promo-popup" onClick={handleClickOutside}>
         <div className="promo-popup-content" ref={popupRef}>
           <img src={tour} alt="Promo Tour" className="promo-image" />
-          <h2>Get 10% Off Your Next Tour!</h2>
+          <h2>Giảm 10% cho tour tiếp theo!</h2>
           <p>
-            Book now and save on your dream Vietnam adventure. Limited offer!
+            Khám phá nét đẹp văn hoá Việt Nam, trải nghiệm đời sống mộc mạc, bình dị!
           </p>
           <button onClick={handleBookNow} className="book-button">
-            Book Now
+            Đặt ngay
           </button>
         </div>
       </div>

@@ -161,12 +161,12 @@ function TourDetail() {
                         className="price"
                         style={{ fontWeight: "bold", fontSize: "40px" }}
                       >
-                        {dataTour.price.toLocaleString("vi-VN")} VND / Khách
+                        {dataTour.price.toLocaleString("vi-VN")} VND / Khách 
                       </span>
                     </p>
                     <p>
                       <FaMapMarkerAlt
-                        style={{ marginRight: "5px", color: "#0b5da7" }}
+                        style={{ marginRight: "5px", color: "#091e55" }}
                       />
                       <strong>Điểm đến:</strong>{" "}
                       <span className="info-detail-tour">
@@ -175,7 +175,7 @@ function TourDetail() {
                     </p>
                     <p>
                       <FaPlaneDeparture
-                        style={{ marginRight: "5px", color: "#0b5da7" }}
+                        style={{ marginRight: "5px", color: "#091e55" }}
                       />
                       <strong>Khởi hành:</strong>{" "}
                       <span className="info-detail-tour">
@@ -184,7 +184,7 @@ function TourDetail() {
                     </p>
                     <p>
                       <FaClock
-                        style={{ marginRight: "5px", color: "#0b5da7" }}
+                        style={{ marginRight: "5px", color: "#091e55" }}
                       />
                       <strong>Thời gian:</strong>{" "}
                       <span className="info-detail-tour">
@@ -192,19 +192,19 @@ function TourDetail() {
                       </span>
                     </p>
                     <p>
-                      <FaBinoculars
-                        style={{ marginRight: "5px", color: "#0b5da7" }}
+                      <div><FaBinoculars
+                        style={{ marginRight: "5px", color: "#091e55" }}
                       />
-                      <strong>Tham quan:</strong>{" "}
+                      <strong>Tham quan:</strong>{"  "}
                       <span className="info-detail-tour">
                         {dataTour.sightseeingSpot || "N/A"}
-                      </span>
+                      </span></div>
                     </p>
                   </div>
                   <div className="tour-info-column">
                     <p>
                       <FaUtensils
-                        style={{ marginRight: "5px", color: "#0b5da7" }}
+                        style={{ marginRight: "5px", color: "#091e55" }}
                       />
                       <strong>Ẩm thực:</strong>
                       <span className="info-detail-tour">
@@ -213,7 +213,7 @@ function TourDetail() {
                     </p>
                     <p>
                       <FaUsers
-                        style={{ marginRight: "5px", color: "#0b5da7" }}
+                        style={{ marginRight: "5px", color: "#091e55" }}
                       />
                       <strong>Phù hợp:</strong>{" "}
                       <span className="info-detail-tour">
@@ -222,7 +222,7 @@ function TourDetail() {
                     </p>
                     <p>
                       <FaCalendarAlt
-                        style={{ marginRight: "5px", color: "#0b5da7" }}
+                        style={{ marginRight: "5px", color: "#091e55" }}
                       />
                       <strong>Thời điểm lý tưởng:</strong>{" "}
                       <span className="info-detail-tour">
@@ -231,7 +231,7 @@ function TourDetail() {
                     </p>
                     <p>
                       <FaPlane
-                        style={{ marginRight: "5px", color: "#0b5da7" }}
+                        style={{ marginRight: "5px", color: "#091e55" }}
                       />
                       <strong>Phương tiện:</strong>
                       <span className="info-detail-tour">
@@ -240,7 +240,7 @@ function TourDetail() {
                     </p>
                     <p>
                       <FaTags
-                        style={{ marginRight: "5px", color: "#0b5da7" }}
+                        style={{ marginRight: "5px", color: "#091e55" }}
                       />
                       <strong>Khuyến mãi:</strong>{" "}
                       <span className="info-detail-tour">
@@ -289,7 +289,7 @@ function TourDetail() {
                 <h2
                   style={{
                     textAlign: "start",
-                    color: "#0b5da7",
+                    color: "#091e55",
                     fontWeight: "700",
                   }}
                 >
