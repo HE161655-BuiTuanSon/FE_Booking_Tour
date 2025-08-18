@@ -22,7 +22,7 @@
   transition: all 0.3s ease;
 }
 .tour-header {
-  background: linear-gradient(90deg, #2563eb, #1e40af);
+  background: linear-gradient(90deg, #091e55, #1e40af);
   padding: 30px;
   color: #ffffff;
 }
@@ -63,7 +63,6 @@
 .info-price-detail {
   display: flex;
   justify-content: start;
-  flex-direction: column;
 }
 .tour-image:hover {
   transform: scale(1.05);
@@ -82,21 +81,22 @@
 }
 .info-detail-tour {
   font-weight: 800;
-  color: #0b5da7;
+  color: #091e55;
 }
 .info-extra {
-  border: #0b5da7 2px solid;
+  border: #091e55 2px solid;
   padding: 10px;
   border-radius: 7px;
   display: flex;
   justify-content: center;
   background-color: #ffffff;
-  color: #0b5da7;
+  color: #091e55;
   font-size: 20px;
   width: 400px;
   font-weight: 600;
 }
 .tour-info-column p {
+  max-width: 600px;
   margin: 12px 0;
   font-size: 1rem;
   color: #4b5563;
@@ -126,14 +126,14 @@
 }
 
 .tour-info p i {
-  color: #2563eb;
+  color: #091e55;
   font-size: 1.2rem;
 }
 
 .book-now-btn {
   margin-top: 20px;
   width: 400px;
-  background-color: #2563eb;
+  background-color: #091e55;
   text-align: center;
   align-content: center;
   color: #ffffff;
@@ -249,7 +249,7 @@
   color: #333;
 }
 .tour-description-title{
-  color: #0b5da7;
+  color: #091e55;
   text-align: center  ;
 }
 
@@ -271,7 +271,7 @@
 
 .slider-controls button {
   pointer-events: all;
-  background: rgba(11, 93, 167, 0.7);
+  background: #091e55;
   border: none;
   color: white;
   font-size: 2rem;
@@ -288,7 +288,7 @@
 }
 
 .notes-section h2 {
-  color: #0b5da7;
+  color: #091e55;
   font-weight: 700;
   margin-bottom: 15px;
 }
@@ -316,7 +316,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #0b5da7;
+  color: #091e55;
 }
 
 .note-title:hover {
@@ -397,9 +397,19 @@
 }
 
 .thumbnail-image:hover {
-  border-color: #0b5da7;
+  border-color: #091e55;
 }
 
 .thumbnail-image.active {
-  border-color: #0b5da7;
+  border-color: #091e55;
+}
+.tour-info-colum p strong {
+  color: #091e55;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+.tour-info-colum p div strong {
+  color: #bbbfca;
+  font-weight: 600;
+  font-size: 1.2rem;
 }
