@@ -100,9 +100,9 @@ function Shop(props) {
                         <p>
                             <strong>Tour:</strong> {item.tourName}
                         </p>
-                        <p>
+                        {/* <p>
                             <strong>Giá:</strong> {item.price.toLocaleString()}đ
-                        </p>
+                        </p> */}
                     </div>
                 ))}
             </div>

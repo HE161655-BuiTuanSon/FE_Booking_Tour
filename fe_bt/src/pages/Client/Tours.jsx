@@ -60,6 +60,7 @@ function Tours() {
     endDate: "",
     sortBy: "all",
   });
+  const [isReady, setIsReady] = useState(false);
   const [destinations, setDestinations] = useState([]);
   const [categories, setCategories] = useState([]);
   const [departurePoints, setDeparturePoints] = useState([]);
@@ -113,18 +114,18 @@ function Tours() {
         setCategories(catData.data || []);
         setDeparturePoints(depData.data || []);
 
-        // const destinationParam = searchParams.get("destination");
-        // if (destinationParam) {
-        //   const matched = destData.data.find(
-        //     (d) => d.destinationName === destinationParam
-        //   );
-        //   if (matched) {
-        //     setFilters((prev) => ({
-        //       ...prev,
-        //       destinationId: matched.destinationId.toString(),
-        //     }));
-        //   }
-        // }
+        const destinationParam = searchParams.get("destination");
+        if (destinationParam) {
+          const matched = destData.data.find(
+            (d) => d.destinationName === destinationParam
+          );
+          if (matched) {
+            setFilters((prev) => ({
+              ...prev,
+              destinationId: matched.destinationId.toString(),
+            }));
+          }
+        }
       } catch (error) {
         console.error("Error fetching dropdown data:", error);
       }
@@ -162,9 +163,17 @@ function Tours() {
     setLocalMinPrice(newFilters.minPrice);
     setLocalMaxPrice(newFilters.maxPrice);
     setCurrentPage(1);
+    setIsReady(true);
   }, [location.search]);
 
   useEffect(() => {
+    if (!isReady) return;
+  //   const destinationParam = searchParams.get("destination");
+  // if (destinationParam && filters.destinationId === "") {
+  //   setAllTour([]);
+  //   setTotalPages(1);
+  //   return;
+  // }
     console.log("Filters sent to API:", filters);
     const fetchTours = async () => {
       setLoading(true);
@@ -179,7 +188,7 @@ function Tours() {
       }
     };
     fetchTours();
-  }, [currentPage, filters]);
+  }, [currentPage, filters, isReady, searchParams]);
 
   const formatVND = (value) => {
     if (typeof value === "number" && !isNaN(value)) {
@@ -448,7 +457,9 @@ function Tours() {
           <div className="tour-card-grid">
             {allTour.length > 0 ? (
               allTour.map((tour) => (
-                <div className="tour-card-all" key={tour.tourId}>
+                <div className="tour-card-all" key={tour.tourId} onClick={() => {
+                          navigate(`/tour/tour-detail/${tour.tourId}`);
+                        }} style={{ cursor: "pointer" }}>
                   <img
                     src={
                       tour.imageUrl

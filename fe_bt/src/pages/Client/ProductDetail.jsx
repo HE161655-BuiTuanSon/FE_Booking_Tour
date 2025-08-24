@@ -73,12 +73,12 @@ function ProductDetail() {
                                 </p>
                             </div>
 
-                            <p>
+                            {/* <p>
                                 <strong style={{ fontSize: "30px" }}>Giá:</strong>{" "}
                                 <span className="highlight-price">
                   {product.price.toLocaleString()}đ
                 </span>
-                            </p>
+                            </p> */}
                         </div>
                     </div>
                     <div className="description-section">
