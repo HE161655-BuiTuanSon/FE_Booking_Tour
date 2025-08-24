@@ -40,50 +40,63 @@ const Chatbot = () => {
         { userInput: userInput },
         { headers: { "Content-Type": "application/json" } }
       );
-      const tour = response.data;
+      
+      const botResponse = response.data;
+      let botMessageContent = "";
+      let isTourRecommendation = false;
 
-      // Construct bot message content with highlighted fields
-      const price =
-        tour.price != null
+      // Kiểm tra xem có phải là tour recommendation không
+      if (botResponse.isTourRecommendation && botResponse.tourRecommendation) {
+        // Hiển thị tour recommendation
+        isTourRecommendation = true;
+        const tour = botResponse.tourRecommendation;
+        
+        const price = tour.price != null
           ? tour.price.toLocaleString("vi-VN", {
               style: "currency",
               currency: "VND",
             })
           : "Không có thông tin";
-      const tourLink = tour.tourId
-        ? `\n[🔗 Xem chi tiết tour](/tour/tour-detail/${tour.tourId})`
-        : "";
-      const botMessageContent = [
-        "**Gợi ý tour**:",
-        `- **Tên Tour**: <span class="highlight-tour">${tour.tourName}</span>`,
-        `- **Điểm Đến**: <span class="highlight-destination">${tour.destinationName}</span>`,
-        `- **Điểm Khởi Hành**: ${tour.departurePointName}`,
-        `- **Giá**: <span class="highlight-price">${price}</span>`,
-        `- **Thời Gian**: ${tour.durationDays}`,
-        `- **Ngày Khởi Hành**: <span class="highlight-date">${tour.departureDate}</span>`,
-        tourLink,
-      ]
-        .filter(Boolean)
-        .join("\n");
+
+        botMessageContent = [
+          "🎯 **Gợi ý tour phù hợp**:",
+          `**${tour.tourName}**`,
+          "",
+          "📍 **Thông tin chi tiết**:",
+          `• **Điểm đến**: ${tour.destinationName}`,
+          `• **Khởi hành từ**: ${tour.departurePointName}`,
+          `• **Thời gian**: ${tour.durationDays}`,
+          `• **Giá**: ${price}`,
+          `• **Ngày khởi hành**: ${tour.departureDate}`,
+          "",
+          "💡 Bạn có muốn tìm hiểu thêm về tour này hoặc tìm tour khác không?"
+        ].join("\n");
+      } else {
+        // Hiển thị general chat response
+        botMessageContent = botResponse.message || "Xin lỗi, tôi không hiểu yêu cầu của bạn.";
+      }
 
       const botMessage = {
         type: "bot",
-        content: tour.tourName
-          ? botMessageContent
-          : "Không tìm thấy tour phù hợp với yêu cầu của bạn.",
-        tourId: tour.tourId,
+        content: botMessageContent,
+        isTourRecommendation: isTourRecommendation,
+        tourId: isTourRecommendation ? botResponse.tourRecommendation?.tourId : null,
         timestamp: new Date().toLocaleTimeString("vi-VN", {
           hour: "2-digit",
           minute: "2-digit",
         }),
       };
+      
       setMessages((prev) => [...prev, botMessage]);
     } catch (err) {
-      const errorMessage =
-        err.response?.data?.Message || "Đã xảy ra lỗi khi lấy gợi ý tour.";
+      const errorMessage = err.response?.data?.Message || 
+                          err.response?.data?.message || 
+                          "Đã xảy ra lỗi khi xử lý yêu cầu của bạn.";
+      
       const botMessage = {
         type: "bot",
-        content: `**Lỗi**: ${errorMessage}`,
+        content: `❌ **Lỗi**: ${errorMessage}`,
+        isTourRecommendation: false,
         timestamp: new Date().toLocaleTimeString("vi-VN", {
           hour: "2-digit",
           minute: "2-digit",
@@ -115,6 +128,18 @@ const Chatbot = () => {
       });
   };
 
+  // Format message content with proper styling
+  const formatMessageContent = (content) => {
+    return content
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br />')
+      .replace(/🎯/g, '<span class="emoji">🎯</span>')
+      .replace(/📍/g, '<span class="emoji">📍</span>')
+      .replace(/💡/g, '<span class="emoji">💡</span>')
+      .replace(/❌/g, '<span class="emoji">❌</span>')
+      .replace(/•/g, '<span class="bullet">•</span>');
+  };
+
   // SVG paths for readability
   const closeIconPath = "M6 18L18 6M6 6l12 12";
   const chatIconPath = `
@@ -136,22 +161,7 @@ const Chatbot = () => {
         onClick={() => setIsOpen(!isOpen)}
         aria-label={isOpen ? "Đóng chatbot" : "Mở chatbot"}
       >
-        {/* <svg
-          className="chatbot-icon"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d={isOpen ? closeIconPath : chatIconPath}
-          />
-        </svg> */}
         <img src={mascot} alt="Chatbot Icon" className="chatbot-icon-img" />
-
       </button>
 
       {isOpen && (
@@ -169,7 +179,6 @@ const Chatbot = () => {
                 <path d="M2 17L12 22L22 17" fill="#ffffff" />
                 <path d="M2 12L12 17L22 12" fill="#ffffff" />
               </svg>
-              {/* <img src={mascot} alt="" /> */}
             </div>
             <h2 className="chatbot-title">Vivi Bot</h2>
             <button
@@ -212,13 +221,23 @@ const Chatbot = () => {
               </svg>
             </button>
           </div>
+          
           <div className="chatbot-content" ref={chatContentRef}>
             {messages.length === 0 && (
               <div className="chatbot-welcome">
-                Chào bạn! Hãy nhập yêu cầu (ví dụ: "Tôi muốn đi Đà Lạt") để tôi
-                gợi ý tour nhé!
+                <div className="welcome-header">👋 Chào bạn! Tôi là Vivi Bot</div>
+                <div className="welcome-content">
+                  Tôi có thể giúp bạn:
+                  <ul>
+                    <li>🔍 Tìm kiếm tour phù hợp</li>
+                    <li>💬 Trò chuyện về du lịch</li>
+                    <li>📅 Tư vấn thời gian đi</li>
+                    <li>💰 Gợi ý tour theo ngân sách</li>
+                  </ul>
+                </div>
               </div>
             )}
+            
             {messages.map((message, index) => (
               <div
                 key={index}
@@ -229,25 +248,27 @@ const Chatbot = () => {
                 }`}
               >
                 <div className="chat-message-content">
-                  {message.type === "bot" && message.tourId ? (
+                  {message.type === "bot" ? (
                     <div
                       dangerouslySetInnerHTML={{
-                        __html: message.content
-                          .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-                          .replace(/\n/g, "<br />"),
+                        __html: formatMessageContent(message.content),
                       }}
                     />
                   ) : (
                     <>{message.content}</>
                   )}
-                  {message.type === "bot" && message.tourId && (
-                    <Link
-                      to={`/tour/tour-detail/${message.tourId}`}
-                      className="chat-tour-link"
-                    >
-                      Xem chi tiết tour
-                    </Link>
+                  
+                  {message.isTourRecommendation && message.tourId && (
+                    <div className="tour-actions">
+                      <Link
+                        to={`/tour/tour-detail/${message.tourId}`}
+                        className="chat-tour-link"
+                      >
+                        🔗 Xem chi tiết tour
+                      </Link>
+                    </div>
                   )}
+                  
                   <button
                     className="chat-copy-button"
                     onClick={() => handleCopyMessage(message.content)}
@@ -268,12 +289,14 @@ const Chatbot = () => {
                       />
                     </svg>
                   </button>
+                  
                   <div className="chat-message-timestamp">
                     {message.timestamp}
                   </div>
                 </div>
               </div>
             ))}
+            
             {isLoading && (
               <div className="chat-message chat-message-bot">
                 <div className="chat-message-content chat-typing-indicator">
@@ -284,6 +307,7 @@ const Chatbot = () => {
               </div>
             )}
           </div>
+          
           <div className="chatbot-form">
             <div className="input-group">
               <textarea
@@ -294,6 +318,12 @@ const Chatbot = () => {
                 placeholder="Nhập yêu cầu của bạn..."
                 disabled={isLoading}
                 rows="1"
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSubmit(e);
+                  }
+                }}
               />
               <button
                 type="submit"
@@ -301,7 +331,7 @@ const Chatbot = () => {
                 disabled={isLoading}
                 className="submit-button"
               >
-                Gửi
+                {isLoading ? "Đang xử lý..." : "Gửi"}
               </button>
             </div>
           </div>
