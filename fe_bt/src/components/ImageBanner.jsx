@@ -53,7 +53,9 @@ function ImageBanner() {
                 textAlign: "center",
               }}
             >
-              <h3>{item.caption}</h3>
+            <h3 style={{ textShadow: "5px 5px 10px rgb(0,0,0)" }}>
+  {item.caption}
+</h3>
             </div>
           </div>
         ))}

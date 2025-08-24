@@ -31,6 +31,7 @@
   font-size: 14px;
 }
 .search-bar-container label {
+  font-family: sans-serif;
   font-weight: bold;
 }
 
@@ -69,6 +70,7 @@
   width: 100%; /* Ensures the input takes full width of the search-field */
   padding: 10px;
   box-sizing: border-box;
+  font-family: sans-serif;
 }
 
 .dropdown-container {
@@ -459,3 +461,4 @@
 .flip-card-inner:hover {
   transform: rotateY(180deg);
 }
+

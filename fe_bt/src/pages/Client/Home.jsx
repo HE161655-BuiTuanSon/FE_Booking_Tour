@@ -5,7 +5,7 @@ import LoginRegisterPopup from "../../components/authorization/LoginRegisterPopu
 import ImageBanner from "../../components/ImageBanner";
 import "../../styles/Client/Home.css";
 import { useNavigate } from "react-router-dom";
-import tour from "../../assets/tour.png";
+import tour from "../../assets/discount.jpg";
 import {
   FaBus,
   FaCalendarAlt,
@@ -207,6 +207,7 @@ function Home(props) {
               value={destination}
               onChange={(e) => setDestination(e.target.value)}
               onClick={handleInputClick}
+              className="placeholder-custom"
             />
             {isDropdownOpen && (
               <div className="dropdown-container">
@@ -239,18 +240,22 @@ function Home(props) {
             <label>Ngày đi</label>
             <input
               type="date"
+              placeholder="Ngày đi"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
               min={getTodayDateString()}
+              className="placeholder-custom"
             />
           </div>
           <div className="search-field">
             <label>Ngày về</label>
             <input
               type="date"
+              placeholder="Ngày về"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
               min={startDate || getTodayDateString()}
+              className="placeholder-custom"
             />
           </div>
           <button
@@ -488,7 +493,7 @@ function Home(props) {
   };
   const Tours = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const visibleCount = 3.5;
+    const visibleCount = 4.5;
     const maxIndex = tourData.length - Math.floor(visibleCount);
 
     const handleNext = () => {
@@ -519,7 +524,7 @@ function Home(props) {
             className="tour-list"
             style={{
               overflow: "hidden",
-              width: "1250px", // 3.5 cards × 340px + 3 gaps × 20px
+              width: "1590px", // 3.5 cards × 340px + 3 gaps × 20px
             }}
           >
             <div
@@ -540,6 +545,9 @@ function Home(props) {
                   <div
                     key={tour.tourId}
                     className={`tour-card ${isHalfVisible ? "half" : ""}`}
+                    onClick={() => {
+                          navigate(`/tour/tour-detail/${tour.tourId}`);
+                        }}
                   >
                     <img
                       src={fixDriveUrl(tour.imageUrl)}
@@ -576,7 +584,6 @@ function Home(props) {
                         className="book-btn"
                         onClick={() => {
                           navigate(`/tour/tour-detail/${tour.tourId}`);
-                          console.log(tour.tourId);
                         }}
                       >
                         Đặt ngay
