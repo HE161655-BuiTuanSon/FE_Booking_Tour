@@ -209,7 +209,7 @@ function Booking(props) {
                 <td>{tourData?.tourName}</td>
                 <td>{departureDateText || "Đang tải..."}</td>
                 <td>
-                  <input
+                  {/* <input
                     type="number"
                     value={participants}
                     min={1}
@@ -230,7 +230,23 @@ function Booking(props) {
                         setParticipants(val);
                       }
                     }}
-                  />
+                  /> */}
+                      {loading ? (
+    <span>Đang tải số lượng chỗ trống...</span>
+) : (
+  <input
+    type="number"
+    value={participants}
+    min={1}
+    max={availableSlots || 1}
+    onChange={(e) => {
+      let val = parseInt(e.target.value);
+      if (val > availableSlots) val = availableSlots;
+      if (val < 1 || isNaN(val)) val = 1;
+      setParticipants(val);
+    }}
+  />
+)}
                 </td>
                 <td>
                   {(tourData?.price * participants).toLocaleString("vi-VN")} VND
