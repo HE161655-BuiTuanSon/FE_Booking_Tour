@@ -12,6 +12,7 @@ function Booking(props) {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const { tourId } = useParams();
   const [searchParams] = useSearchParams();
+  const [loading, setLoading] = useState(true);
   const departureId = searchParams.get("departureId");
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [tourData, setTourData] = useState(null);
@@ -55,6 +56,8 @@ function Booking(props) {
         }
       } catch (error) {
         console.error("Lỗi khi lấy thông tin tour:", error);
+      } finally {
+        setLoading(false); // fetch xong
       }
     };
 
@@ -231,22 +234,22 @@ function Booking(props) {
                       }
                     }}
                   /> */}
-                      {loading ? (
-    <span>Đang tải số lượng chỗ trống...</span>
-) : (
-  <input
-    type="number"
-    value={participants}
-    min={1}
-    max={availableSlots || 1}
-    onChange={(e) => {
-      let val = parseInt(e.target.value);
-      if (val > availableSlots) val = availableSlots;
-      if (val < 1 || isNaN(val)) val = 1;
-      setParticipants(val);
-    }}
-  />
-)}
+                  {loading ? (
+                    <span>Đang tải số lượng chỗ trống...</span>
+                  ) : (
+                    <input
+                      type="number"
+                      value={participants}
+                      min={1}
+                      max={availableSlots || 1}
+                      onChange={(e) => {
+                        let val = parseInt(e.target.value);
+                        if (val > availableSlots) val = availableSlots;
+                        if (val < 1 || isNaN(val)) val = 1;
+                        setParticipants(val);
+                      }}
+                    />
+                  )}
                 </td>
                 <td>
                   {(tourData?.price * participants).toLocaleString("vi-VN")} VND
