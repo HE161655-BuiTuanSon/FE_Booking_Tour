@@ -4,7 +4,6 @@ import aboutBanner from "../../assets/about_banner.jpg";
 import Footer from "../../components/footer/Footer";
 import LoginRegisterPopup from "../../components/authorization/LoginRegisterPopup";
 import { getAllPosts } from "../../services/Client/PostService";
-// import background from "../../assets/background.png";
 import { useNavigate } from "react-router-dom";
 import {
   Grid,
@@ -23,7 +22,7 @@ function Posts() {
   const navigate = useNavigate();
   const [pagination, setPagination] = useState({
     currentPage: 1,
-    pageSize: 8,
+    pageSize: 9,
     totalArticles: 0,
     totalPages: 1,
   });
@@ -86,7 +85,7 @@ function Posts() {
       <Box
         className="allposts-container"
         sx={{
-          backgroundColor:"rgb(218, 239, 255)",
+          backgroundColor: "rgb(218, 239, 255)",
           backgroundSize: "cover",
           backgroundAttachment: "fixed",
           padding: 5,
@@ -99,15 +98,15 @@ function Posts() {
             Không có bài viết nào.
           </Typography>
         ) : (
-          <Grid container spacing={3}>
+          <Grid container spacing={2} columns={12}>
             {articles.map((post) => (
-              <Grid item xs={12} sm={6} md={4} key={post.articleId}>
+              <Grid item xs={12} sm={4} key={post.articleId}>
                 <Card
                   sx={{
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
-                    height: "100%",
+                    height: "400px", // Fixed height for all cards
                     borderRadius: 2,
                     boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
                     transition: "transform 0.2s, box-shadow 0.2s",
@@ -126,28 +125,62 @@ function Posts() {
                     image={fixDriveUrl(post.imageUrl)}
                     alt={post.title}
                     sx={{
-                      width: 300,
+                      width: "100%",
                       height: 200,
                       objectFit: "cover",
                       borderTopLeftRadius: 8,
                       borderTopRightRadius: 8,
                     }}
                   />
-                  <CardContent sx={{ padding: 2 }}>
-                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
-                      {post.title}
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      color="text.secondary"
-                      sx={{ display: "block", mb: 1 }}
-                    >
-                      ✍ {post.authorName} | 🕒{" "}
-                      {new Date(post.createdDate).toLocaleDateString("vi-VN")}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: "#555" }}>
-                      {post.content?.slice(0, 100)}...
-                    </Typography>
+                  <CardContent
+                    sx={{
+                      padding: 2,
+                      flexGrow: 1,
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between",
+                      maxHeight: "150px", // Limit content height
+                      overflow: "hidden",
+                    }}
+                  >
+                    <Box>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontWeight: 600,
+                          mb: 1,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          maxWidth: "400px",
+                        }}
+                      >
+                        {post.title}
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        sx={{ display: "block", mb: 1 }}
+                      >
+                        ✍ {post.authorName} | 🕒{" "}
+                        {new Date(post.createdDate).toLocaleDateString("vi-VN")}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: "#555",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          display: "-webkit-box",
+                          WebkitLineClamp: 3,
+                          WebkitBoxOrient: "vertical",
+                          lineHeight: "1.4em",
+                          maxHeight: "4.2em", // 3 lines * lineHeight
+                        }}
+                      >
+                        {post.content?.slice(0, 100)}...
+                      </Typography>
+                    </Box>
                   </CardContent>
                 </Card>
               </Grid>
