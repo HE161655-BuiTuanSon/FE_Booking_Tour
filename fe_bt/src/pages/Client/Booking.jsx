@@ -39,9 +39,15 @@ function Booking(props) {
       try {
         const res = await getTourById(tourId);
         setTourData(res);
-        setOrderCode(
-          "ORDER" + crypto.randomUUID().replace(/-/g, "").slice(0, 12)
-        );
+        // setOrderCode(
+        //   "ORDER" + crypto.randomUUID().replace(/-/g, "").slice(0, 12)
+        // );
+        const generateOrderCode = () => {
+          const array = new Uint32Array(1);
+          window.crypto.getRandomValues(array);
+          return "ORDER" + array[0].toString(16).padStart(12, "0").slice(0, 12);
+        };
+        setOrderCode(generateOrderCode());
         const selectedDeparture = res.departureDates.find(
           (d) => d.departureId === parseInt(departureId)
         );
