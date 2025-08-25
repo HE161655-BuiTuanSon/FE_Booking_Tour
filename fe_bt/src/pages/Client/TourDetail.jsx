@@ -145,7 +145,9 @@ function TourDetail() {
                         key={index}
                         src={fixDriveUrl(img)}
                         alt={`Thumbnail ${index + 1}`}
-                        className={`thumbnail-image ${index === currentIndex ? "active" : ""}`}
+                        className={`thumbnail-image ${
+                          index === currentIndex ? "active" : ""
+                        }`}
                         onClick={() => setCurrentIndex(index)}
                       />
                     ))}
@@ -154,16 +156,16 @@ function TourDetail() {
               )}
 
               <div className="tour-info">
+                <p className="info-price-detail">
+                  <span
+                    className="price"
+                    style={{ fontWeight: "bold", fontSize: "40px" }}
+                  >
+                    {dataTour.price.toLocaleString("vi-VN")} VND / Khách
+                  </span>
+                </p>
                 <div className="tour-info-grid">
                   <div className="tour-info-column">
-                    <p className="info-price-detail">
-                      <span
-                        className="price"
-                        style={{ fontWeight: "bold", fontSize: "40px" }}
-                      >
-                        {dataTour.price.toLocaleString("vi-VN")} VND / Khách 
-                      </span>
-                    </p>
                     <p>
                       <FaMapMarkerAlt
                         style={{ marginRight: "5px", color: "#091e55" }}
@@ -192,13 +194,16 @@ function TourDetail() {
                       </span>
                     </p>
                     <p>
-                      <div><FaBinoculars
-                        style={{ marginRight: "5px", color: "#091e55" }}
-                      />
-                      <strong>Tham quan:</strong>{"  "}
-                      <span className="info-detail-tour">
-                        {dataTour.sightseeingSpot || "N/A"}
-                      </span></div>
+                      <div>
+                        <FaBinoculars
+                          style={{ marginRight: "5px", color: "#091e55" }}
+                        />
+                        <strong>Tham quan:</strong>
+                        {"  "}
+                        <span className="info-detail-tour">
+                          {dataTour.sightseeingSpot || "N/A"}
+                        </span>
+                      </div>
                     </p>
                   </div>
                   <div className="tour-info-column">
@@ -299,10 +304,11 @@ function TourDetail() {
                   {dataTour.departureDates.map((date) => (
                     <motion.div
                       key={date.departureId}
-                      className={`departure-card ${selectedDeparture?.departureId === date.departureId
+                      className={`departure-card ${
+                        selectedDeparture?.departureId === date.departureId
                           ? "selected"
                           : ""
-                        } ${date.isActive ? "active" : "inactive"}`}
+                      } ${date.isActive ? "active" : "inactive"}`}
                       whileHover={{ scale: 1.03 }}
                       onClick={() => {
                         if (date.isActive) setSelectedDeparture(date);
@@ -330,9 +336,7 @@ function TourDetail() {
               </div>
             )}
             <h1 className="tour-description-title">Mô tả tour</h1>
-            <p className="tour-description-below">
-              {dataTour.description}
-            </p>
+            <p className="tour-description-below">{dataTour.description}</p>
           </div>
         ) : (
           <p className="no-data">Không có thông tin tour</p>
